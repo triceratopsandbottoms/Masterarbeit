@@ -12,7 +12,7 @@ Instead of creating relations of each sentence, it uses E2E-German or CorZu for 
 
 [online demo for English and German](http:/www.cs.biu.ac.il/~stanovg/props.html)  
 
-Contact person: Christian Hesels, s0553310@htw-berlin.de
+Contact person: Christian Hesels, christianhesels@gmail.com
 
 
 > This repository contains experimental software and is published for the sole purpose of giving additional background details on the respective publication. 
