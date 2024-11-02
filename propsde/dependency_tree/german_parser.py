@@ -128,4 +128,3 @@ class ParserDE(object):
         res.close()
 
         return file.replace('.conll09','.conll')       
-        

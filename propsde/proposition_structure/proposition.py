@@ -79,4 +79,3 @@ class Proposition:
     
     def __getitem__(self,key):
         return self.__toDic__()[key]
-    

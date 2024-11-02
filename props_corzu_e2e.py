@@ -16,7 +16,7 @@ from propsde.graph_representation import proposition
 from propsde.applications.viz_tree import DepTreeVisualizer
 import os
 import nltk
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 nltk.download("punkt")
 from nltk.tokenize import sent_tokenize, word_tokenize
 
