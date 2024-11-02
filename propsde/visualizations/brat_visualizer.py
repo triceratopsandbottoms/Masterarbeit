@@ -21,10 +21,10 @@ class BratVisualizer:
         entities, relations = gr.getJson()
         ret = self.visualize_html.replace('SENTENCE_STUB', sent.replace('"', '\\"'))
         ret = ret.replace('ENTITIES_STUB', '\n'.join(["['W{0}', '{1}', [[{2}, {3}]]],".format(uid, self.get_label(d), d['charIndices'][0], d['charIndices'][1]) 
-                                                      for uid, d in entities.items()]))
+                                                      for uid, d in list(entities.items())]))
         
         ret = ret.replace('ATTRIBUTES_STUB', '\n'.join([self.get_attributes(uid, d) 
-                                                      for uid, d in entities.items()]))
+                                                      for uid, d in list(entities.items())]))
         
         ret = ret.replace('RELATIONS_STUB', '\n'.join(["['R{0}', '{1}', [['head', 'W{2}'], ['dep', 'W{3}']]],".format(i, rel, head, dep) 
                                                        for i, (head, dep, rel) in enumerate(relations)]))

@@ -33,7 +33,7 @@ class NodeViz:
         #self.width = node.length() * self.letter_width 
         self.width = len(node.form) * self.letter_width
         if node.tag:
-            self.width += (len("/" + unicode(node.tag)) * self.letter_width)
+            self.width += (len("/" + str(node.tag)) * self.letter_width)
         self.height = self.fontsize
         self.rotate = ""
         if rotate:
@@ -50,10 +50,10 @@ class NodeViz:
         n = et.SubElement(ctx, 'text', 
                 {  'font-family':'monospace',
                     'font-size':'%s' % self.fontsize}, 
-                x=unicode(self.x),
-                y=unicode(self.y), transform=self.rotate)
+                x=str(self.x),
+                y=str(self.y), transform=self.rotate)
         n.text = self.nodeinfo.form
-        if self.nodeinfo.tag: n.text += "/" + unicode(self.nodeinfo.tag)
+        if self.nodeinfo.tag: n.text += "/" + str(self.nodeinfo.tag)
         #et.SubElement(ctx,'rect',x=unicode(self.x),y=unicode(self.y),width=unicode(self.width),height='16')
 
 def point_on_bazier(f,x0,y0,x1,y1,x2,y2,x3,y3):
@@ -93,7 +93,7 @@ class ArcViz:
             x = 10
             marker = "marker-end"
 
-        pathid = unicode(hash(self)).replace("-","A")
+        pathid = str(hash(self)).replace("-","A")
         yh = self.head_node.top()
         ym = self.mod_node.top()
         if (yh == ym):
@@ -119,7 +119,7 @@ class ArcViz:
             lblanc = "middle"
 
         arc = et.SubElement(ctx, "path", {"stroke-width":"2px", marker: 'url(#marker)'}, d=path, fill='none', stroke=self.color(),id=pathid)
-        lbl = et.SubElement(ctx, "text", {"font-size":"10","text-anchor":lblanc,"font-family":"sans-serif"}, y=unicode(lbly), x=unicode(lblx),fill="red")
+        lbl = et.SubElement(ctx, "text", {"font-size":"10","text-anchor":lblanc,"font-family":"sans-serif"}, y=str(lbly), x=str(lblx),fill="red")
         lbl.text = self.label
 
         et.SubElement(lbl, 'set', attributeName="font-weight", to="bold", begin="%s.mousemove" % pathid, end="%s.mouseout" % pathid)
@@ -193,15 +193,15 @@ class DepTreeVisualizer:
 
         #et.SubElement(doc,'line',x1="0",x2="100",y1=unicode(max_y),y2=unicode(max_y),stroke="black")
 
-        for n in viz_nodes.values():
+        for n in list(viz_nodes.values()):
             n.svg(doc)
 
         for arc in self.arcs:
             a = ArcViz(arc, viz_nodes, d=alens.index(arc.length()))
             a.svg(doc)
 
-        doc.attrib["width"] = unicode(max_x)
-        doc.attrib["height"] = unicode(max_y)
+        doc.attrib["width"] = str(max_x)
+        doc.attrib["height"] = str(max_y)
         
         return doc
     #}}}
@@ -223,7 +223,7 @@ class DepTreeVisualizer:
         marker = et.XML("""<defs><marker id="marker" viewBox="0 0 10 10" refX="7" refY="5" markerUnits="strokeWidth" orient="auto" markerWidth="4" markerHeight="5"> <polyline points="0,0 10,5 0,10 1,5" stroke="currentColor" /> </marker></defs>""")
         doc.append(marker)
 
-        for n in viz_nodes.values():
+        for n in list(viz_nodes.values()):
             n.svg(doc)
 
         #ArcViz = ArcVizDirColor
@@ -231,8 +231,8 @@ class DepTreeVisualizer:
             a = ArcViz(arc, viz_nodes, d=0)
             a.svg(doc)
 
-        doc.attrib["width"] = unicode(max_x)
-        doc.attrib["height"] = unicode(max_y)
+        doc.attrib["width"] = str(max_x)
+        doc.attrib["height"] = str(max_y)
         
         return doc
     #}}}
@@ -273,7 +273,7 @@ class DepTreeVisualizer:
         marker = et.XML("""<defs><marker id="marker" viewBox="0 0 10 10" refX="7" refY="5" markerUnits="strokeWidth" orient="auto" markerWidth="4" markerHeight="5"> <polyline points="0,0 10,5 0,10 1,5" stroke="currentColor" /> </marker></defs>""")
         doc.append(marker)
 
-        for n in viz_nodes.values():
+        for n in list(viz_nodes.values()):
             n.svg(doc)
             #et.SubElement(doc, "circle", cx=unicode(n.center_x()), cy=unicode(n.top()), r='3')
 
@@ -285,8 +285,8 @@ class DepTreeVisualizer:
             a = ArcViz(arc, viz_nodes, d=alens.index(arc.length()))
             a.svg(doc)
 
-        doc.attrib["width"] = unicode(max_x)
-        doc.attrib["height"] = unicode(max_y + max_word_height)
+        doc.attrib["width"] = str(max_x)
+        doc.attrib["height"] = str(max_y + max_word_height)
         
         if as_obj:
             return doc
@@ -360,5 +360,5 @@ if __name__ == '__main__':
 18     in     _     IN     IN     _     12     ADV     _     _
 19     1990     _     CD     CD     _     18     PMOD     _     _
 20     .     _     .     .     _     5     P     _     _ """)
-    print("<div>",d.as_svg(compact=True,flat=True),"</div>")
+    print(("<div>",d.as_svg(compact=True,flat=True),"</div>"))
   # print "<div>",d.as_svg(compact=False),"</div>"

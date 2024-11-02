@@ -27,17 +27,40 @@ import os.path
 from io import StringIO
 from subprocess import call
 
-
+import pydot
 from docopt import docopt
 from propsde.applications.viz_tree import DepTreeVisualizer
+from propsde.dependency_tree.tree_readers import *
+from propsde.dependency_tree.german_parser import ParserDE
+from propsde.graph_representation.graph_wrapper import GraphWrapper
+from propsde.graph_representation.convert import convert
+from propsde.graph_representation.proposition import Proposition
 
-import propsde.applications.run as run
 import sys
 if sys.version_info[0] >= 3:
     str = str
     
     
 stdout_encoding = sys.stdout.encoding or sys.getfilesystemencoding()
+
+#import propsde.applications.run as run
+def parseConll(conll):
+    
+    # read and process output
+    graphs = read_dep_graphs(None, conll)
+    
+    ret = []
+    i = 0
+    for graph in graphs:  
+        g = convert(graph)
+        ret.append((g,g.tree_str))
+        i += 1
+
+    if not graphs:#Berkley bug?
+        ret.append((GraphWrapper("",""),""))
+    #print(ret)
+    return ret
+
     
 def main(arguments):
     
@@ -49,9 +72,10 @@ def main(arguments):
         
     graphical = (outputType=='html')
     
-    gs = run.parseSentences(arguments["file"])
+    gs = parseConll(arguments["file"])
         
     i = 0
+
     for g,tree in gs: 
     
         if arguments['INPUT']:
@@ -59,49 +83,19 @@ def main(arguments):
         else: 
             file_name = 'output' + str(i)
         
-        # print sentence (only if in graphical mode)
-        if (arguments["--original"]):
-            sent = g.originalSentence
-            print((sent+sep).encode('utf-8'))
-            
-        #print dependency tree
-        if (arguments['--dep']):
-            if graphical:
-                f = codecs.open(file_name + '_dep.svg', 'w', encoding='utf-8')
-                try:
-                    d = DepTreeVisualizer.from_conll_unicode(tree)
-                    f.write(d.as_svg(compact=True,flat=True))
-                except:
-                    print(('error creating dep svg', file_name))
-                f.close()
-            #else:
-            print((tree).encode('utf-8'))
-        
-        #print PropS output
-        if (arguments['--props']):
-            if graphical: 
-                try:
-                    dot = g.drawToFile("","svg")        
-                    f = codecs.open(file_name + '_props.svg', 'w', encoding='utf-8')
-                    f.write(dot.create(format='svg'))
-                    f.close()
-                except:
-                    print(('error creating props svg', file_name))
-            #else:
-
-            print((str(g)))
+        #print(g.getJson())
         
         #print open ie like extractions
         if (arguments["--oie"]):
             for prop in g.getPropositions('pdf'):
-                print((str(prop)))
+                print(str(prop))
         i += 1
         
 
 if __name__ == "__main__":
     arguments = docopt(__doc__)
     if arguments["INPUT"]:
-        arguments["file"] = open(arguments["INPUT"])
+        arguments["file"] = arguments["INPUT"]
     else:
         arguments["file"] = sys.stdin
     main(arguments)

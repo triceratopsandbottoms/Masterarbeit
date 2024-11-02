@@ -29,7 +29,7 @@ from propsde.utils.utils import encode_german_characters, encode_german_chars
 import propsde.graph_representation.raising_subj_verbs as raising_subj_verbs
 import sys
 if sys.version_info[0] >= 3:
-    unicode = str
+    str = str
 
 FIRST_ENTITY_LABEL = "sameAs_arg"  # "first_entity"
 SECOND_ENTITY_LABEL = "sameAs_arg"  # "second_entity"
@@ -127,7 +127,7 @@ class GraphWrapper(digraph):
 
     def get_components(self):
         graph_components = accessibility(self)
-        return {self.nodesMap[key.uid]:[self.nodesMap[v.uid] for v in value] for key, value in graph_components.items() }
+        return {self.nodesMap[key.uid]:[self.nodesMap[v.uid] for v in value] for key, value in list(graph_components.items()) }
 
     def add_node(self, node):
         """
@@ -148,7 +148,7 @@ class GraphWrapper(digraph):
         """
         del(self.nodesMap[node.uid])
         # remove this node from any future propagation
-        for curNode in self.nodesMap.values():
+        for curNode in list(self.nodesMap.values()):
             if node in curNode.propagateTo:
                 curNode.propagateTo.remove(node)
         digraph.del_node(self, node.uid)
@@ -309,8 +309,8 @@ class GraphWrapper(digraph):
             curNode = self.nodesMap[uid]
             dotNode = pygraph.readwrite.dot.pydot.Node()
             dotNode.set_shape(curNode.nodeShape)
-            dotNode.set_name(unicode(uid))
-            label = str(encode_german_chars(u"<{0}>".format(curNode.text[0])))
+            dotNode.set_name(str(uid))
+            label = str(encode_german_chars("<{0}>".format(curNode.text[0])))
 
             dotNode.set_label(label)
             if curNode.isPredicate:
@@ -367,7 +367,7 @@ class GraphWrapper(digraph):
         entities = dict([(uid, {'predicate': bool(node.isPredicate), 
                                 'feats': self.getFeatsDic(node),  
                                 'charIndices': (0,0) if not node.text else self.nodeToCharIndices(node)})
-                         for uid, node in self.nodesMap.items()])
+                         for uid, node in list(self.nodesMap.items())])
         edges = [(src, dest, self.edge_label((src, dest))) for (src, dest) in digraph.edges(self)]
         return (entities, edges)
 
@@ -434,7 +434,7 @@ class GraphWrapper(digraph):
                                 self.add_edge((u,child), child_rel)
                     self.del_node(v)
         # dass
-        edges = find_edges(self, lambda u_v:(self.edge_label(u_v) == "CP") and u_v[1].pos() in ['KOUS'] and (u_v[1].text[0].word.lower() in [u"dass",u"daß"]))
+        edges = find_edges(self, lambda u_v:(self.edge_label(u_v) == "CP") and u_v[1].pos() in ['KOUS'] and (u_v[1].text[0].word.lower() in ["dass","daß"]))
         for u, v in edges:
             if v.uid in self.nodesMap and len(v.neighbors()) == 0:
                 self.del_node(v)
@@ -580,7 +580,7 @@ class GraphWrapper(digraph):
         edges = find_edges(self, lambda u_v:(self.edge_label(u_v) in ["MNR","MO","OP"]) and (len(self.neighbors(u_v[1])) == 1) and u_v[1].pos() in ['APPR','APPRART'])
         if edges:
             for u, v in edges:
-                pobj = next(iter(v.neighbors().values()))[0]
+                pobj = next(iter(list(v.neighbors().values())))[0]
                 if not (self.has_edge((u, pobj))):
                     w = v.text[0]
                     u.surface_form += [w]
@@ -667,6 +667,7 @@ class GraphWrapper(digraph):
                     #print [[w.word for w in x[1].text] for x in nlist]
                     argList = []
                     all_neighbours = [n for _, n in nlist]
+                    print(nlist)
                     for k, curNeighbour in sorted(nlist, key=lambda k_n:get_min_max_span(self, k_n[1])[0]):
                         curExclude = [n for n in all_neighbours if n != curNeighbour] + [topNode]
                         if self.edge_label((topNode,curNeighbour)) != "dep":
@@ -867,7 +868,7 @@ class GraphWrapper(digraph):
     
     def _do_conditionals(self):
         # find conditionals constructions
-        edges = find_edges(self, lambda u_v:(self.edge_label(u_v) == "CP") and u_v[1].pos() in ['KOUS','KOUI'] and (u_v[1].text[0].word.lower() in [u"falls",u"wenn",u"sofern",u"da",u"weil",u"obwohl",u"um",u"waehrend"]))
+        edges = find_edges(self, lambda u_v:(self.edge_label(u_v) == "CP") and u_v[1].pos() in ['KOUS','KOUI'] and (u_v[1].text[0].word.lower() in ["falls","wenn","sofern","da","weil","obwohl","um","waehrend"]))
         for (markFather,markNode) in edges:
             neighbors = markFather.neighbors()
             incidents = markFather.incidents()
@@ -1075,7 +1076,7 @@ class GraphWrapper(digraph):
         
         slots = dict([(n,min([w.index for w in n.text])) for n in self.nodes()])
         
-        reveresed_slots = {v-1:k for k,v in slots.items()}
+        reveresed_slots = {v-1:k for k,v in list(slots.items())}
         
         for i in range(numOfwords):
             if i not in reveresed_slots:
@@ -1216,10 +1217,10 @@ def dumpGraphsToTexFile(graphs, appendix, graphsPerFile, lib, outputType='pdf'):
     numOfGraphs = len(graphs)
     iterCount = int(math.ceil(numOfGraphs / float(graphsPerFile)))
     for r in range(iterCount):
-        curRange = range(graphsPerFile * r, min(graphsPerFile * (r + 1), numOfGraphs))
-        filename = "autogen" + unicode(r) + ".tex"
+        curRange = list(range(graphsPerFile * r, min(graphsPerFile * (r + 1), numOfGraphs)))
+        filename = "autogen" + str(r) + ".tex"
         if HTML:
-            filename = "autogen" + unicode(r) + ".html"
+            filename = "autogen" + str(r) + ".html"
         fout = open(lib + filename, 'w')
         fout.write(BOILER_START)
 
@@ -1230,7 +1231,7 @@ def dumpGraphsToTexFile(graphs, appendix, graphsPerFile, lib, outputType='pdf'):
             elif HTML:
                 fout.write("<h2>{0}</h2>\n".format(key))
 
-            for indind, curInd in enumerate(filter(lambda x:x in curRange, appendix[key])):
+            for indind, curInd in enumerate([x for x in appendix[key] if x in curRange]):
                 if PDF:
                     fout.write("\\hyperref[fig:{0}]{{{1}}}$\\;$\n".format(curInd,
                                                                tex_escape(graphs[curInd].gTag.tree.report())))
@@ -1244,18 +1245,18 @@ def dumpGraphsToTexFile(graphs, appendix, graphsPerFile, lib, outputType='pdf'):
             fout.write("<br><br><br>")
         for i, g in enumerate(graphs[graphsPerFile * r:min(graphsPerFile * (r + 1), numOfGraphs)]):
             curPicInd = (graphsPerFile * r) + i
-            g.drawToFile(filename=lib + unicode(curPicInd),
+            g.drawToFile(filename=lib + str(curPicInd),
                          filetype=imageType)
 
             if PDF:
-                fout.write(FIGURE.format(unicode(curPicInd),
+                fout.write(FIGURE.format(str(curPicInd),
                                      tex_escape(g.originalSentence)))
             if HTML:
-                fin = open(lib + unicode(curPicInd) + ".svg")
+                fin = open(lib + str(curPicInd) + ".svg")
                 fout.write(fin.read() + "<br>")
                 fin.close()
                 fout.write('<font size="5">')
-                fout.write('<br>'.join([unicode(prop) for prop in graphs[curPicInd].getPropositions(outputType)]))
+                fout.write('<br>'.join([str(prop) for prop in graphs[curPicInd].getPropositions(outputType)]))
                 fout.write("</font><br><br>")
 
 
@@ -1263,7 +1264,7 @@ def dumpGraphsToTexFile(graphs, appendix, graphsPerFile, lib, outputType='pdf'):
             if PDF:
                 fout.write("\\clearpage")
 
-        print ("finished " + unicode(r))
+        print(("finished " + str(r)))
         fout.write(BOILER_END)
         fout.close()
         if PDF:
@@ -1292,7 +1293,7 @@ def tex_escape(text):
         '<': r'\textless',
         '>': r'\textgreater',
     }
-    regex = re.compile('|'.join(re.escape(unicode(key)) for key in sorted(conv.keys(), key=lambda item:-len(item))))
+    regex = re.compile('|'.join(re.escape(str(key)) for key in sorted(list(conv.keys()), key=lambda item:-len(item))))
     return regex.sub(lambda match: conv[match.group()], text)
     
 

@@ -6,6 +6,12 @@ from subprocess import call
 import urllib.request
 import urllib.parse
 
+# Google introduced an incompatibility into protobuf-4.21.0
+# that is not backwards compatible with many libraries.  
+# Once those libraries have updated to rebuild their _pb2.py files,
+# this can be removed.
+os.environ["PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"] = "python"
+
 import codecs, os, sys
 from propsde.dependency_tree.tree_readers import *
 from propsde.dependency_tree.german_parser import ParserDE
@@ -35,9 +41,9 @@ else:
     exit(1)
 parser = None
 
-def parse_conll_with_props(file):
+def parse_conll_with_props(file): #input file conll09 propably ?
     global parser
-    parser = ParserDE(False)
+    parser = ParserDE(False) #not in use, was done with corzu
 
     # read and process output
     graphs = read_dep_graphs(None, file)
@@ -189,12 +195,12 @@ if coref_parser == "corzu":
         print("Error:", err)
         if err == 0:
             print("Extract mables from ParZu")
-            cmd = "python ext/CorZu_v2.0/extract_mables_from_parzu.py " + conll + " > " + markables
+            cmd = "python3.7 ext/CorZu_v2.0/extract_mables_from_parzu.py " + conll + " > " + markables
             err = os.system(cmd)
             print("Error:", err)
         
         print("Using CorZu for Coreference Resolution ")
-        cmd = "python ext/CorZu_v2.0/corzu.py " + markables + " " + conll + " " + output    
+        cmd = "python3.7 ext/CorZu_v2.0/corzu.py " + markables + " " + conll + " " + output    
         err = os.system(cmd)
         print("Error:", err)
         print("Using Props DE to parse Output")

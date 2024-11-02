@@ -4,7 +4,7 @@ from propsde.utils.utils import encode_german_characters
 NO_INDEX = -1 # index used in cases where there's no such word in the sentence
 import sys
 if sys.version_info[0] >= 3:
-    unicode = str
+    str = str
 class Word:
     """
     word container class, to add the index of the word in addition to the word 
@@ -25,7 +25,7 @@ class Word:
         self.word = encode_german_characters(word)
     
     def to_conll_like(self):
-        return u",".join([str(self.index),self.word])
+        return ",".join([str(self.index),self.word])
     
     def __str__(self):
         ret = cgi.escape(self.word)
@@ -54,4 +54,4 @@ def strip_punctuations(ls):
 
 
 if __name__ == "__main__":
-    print (Word(0,"test"))
+    print((Word(0,"test")))

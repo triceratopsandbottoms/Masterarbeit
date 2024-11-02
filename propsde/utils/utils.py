@@ -15,13 +15,13 @@ def encode_german_characters(string):
 # new method, call for pydot only        
 def encode_german_chars(string):
     de_ascii = [
-        (u'ä', 'ae'),
-        (u'Ä', 'Ae'),
-        (u'ö', 'oe'),
-        (u'Ö', 'Oe'),
-        (u'ü', 'ue'),
-        (u'Ü', 'Ue'),
-        (u'ß', 'ss')
+        ('ä', 'ae'),
+        ('Ä', 'Ae'),
+        ('ö', 'oe'),
+        ('Ö', 'Oe'),
+        ('ü', 'ue'),
+        ('Ü', 'Ue'),
+        ('ß', 'ss')
     ]
     for rep in de_ascii:
         string = string.replace(rep[0], rep[1])

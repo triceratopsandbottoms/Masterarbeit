@@ -14,7 +14,7 @@ import time
 from propsde.graph_representation import newNode
 import sys
 if sys.version_info[0] >= 3:
-    unicode = str
+    str = str
 
 def accessibility_wo_self(graph):
     ret = accessibility(graph)
@@ -89,7 +89,7 @@ def findChain(graph, func_ls):
     def inner(nodes, func_ls):
         if (len(func_ls) == 0):
             return []
-        remaining_nodes = filter(func_ls[0], nodes)
+        remaining_nodes = list(filter(func_ls[0], nodes))
         for node in remaining_nodes:
             curAns = inner(graph.neighbors(node), func_ls[1:])
             if (len(curAns) == len(func_ls) - 1):
@@ -460,16 +460,16 @@ def merge_nodes(gr, node1, node2):
    
     if new.isPredicate:
         if rel_type == 'PM':
-            predicate_form = u''.join([w.word for w in node2.text]) + ' ' + u''.join([w.word for w in node1.text])
+            predicate_form = ''.join([w.word for w in node2.text]) + ' ' + ''.join([w.word for w in node1.text])
             new.features["Lemma"] = predicate_form
         elif rel_type == 'SVP':
-            predicate_form = u''.join([w.word for w in node2.text]) + node1.features.get("Lemma")
+            predicate_form = ''.join([w.word for w in node2.text]) + node1.features.get("Lemma")
             new.features["Lemma"] = predicate_form
         elif rel_type == 'MO':
-            predicate_form = u' '.join([w.word for w in node2.text]) + ' ' + node1.features.get("Lemma")
+            predicate_form = ' '.join([w.word for w in node2.text]) + ' ' + node1.features.get("Lemma")
             new.features["Lemma"] = predicate_form
         if "cvc" in new.features:
-            new.features["Lemma"] = u' '.join([w.word for w in node1.text]) + ' ' + node2.features["Lemma"] 
+            new.features["Lemma"] = ' '.join([w.word for w in node1.text]) + ' ' + node2.features["Lemma"] 
     return new
 
 def replace_head(gr, head, dependent):
@@ -490,7 +490,7 @@ def replace_head(gr, head, dependent):
                     gr.add_edge((parent,dependent), parent_rel)
         # add features
         print("UFF")
-        dependent.features.update({k:x for k,x in head.features.items() if k not in dependent.features})
+        dependent.features.update({k:x for k,x in list(head.features.items()) if k not in dependent.features})
         gr.del_node(head)                
 
 def subgraph_to_string(graph,node,exclude=[]):

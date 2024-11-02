@@ -5,7 +5,7 @@ from propsde.dependency_tree.definitions import time_prep, definite_label,\
     adjectival_mod_dependencies
 import sys
 if sys.version_info[0] >= 3:
-    unicode = str
+    str = str
 
 
 
@@ -161,7 +161,7 @@ class Node:
         
         self.str = strip_punctuations(self.str)
             
-        ret += "  ".join([unicode(x) for x in self.str])
+        ret += "  ".join([str(x) for x in self.str])
         
         ret += "</TD></TR>"
         for feat, printFunc in PRINT_FEATURES:
@@ -182,10 +182,10 @@ class Node:
     
     
     def to_conll_like(self):
-        ret = u"\t".join([unicode(self.uid),
-                          u";".join([w.to_conll_like() for w in self.text]),self.pos(),unicode(int(bool(self.isPredicate))),
-                          unicode(int(self.features.get("top",False))),
-                          u";".join([u",".join([self.gr.edge_label((father,self)),unicode(father.uid)]) for father in self.gr.incidents(self)])
+        ret = "\t".join([str(self.uid),
+                          ";".join([w.to_conll_like() for w in self.text]),self.pos(),str(int(bool(self.isPredicate))),
+                          str(int(self.features.get("top",False))),
+                          ";".join([",".join([self.gr.edge_label((father,self)),str(father.uid)]) for father in self.gr.incidents(self)])
                           ])
         
         return ret

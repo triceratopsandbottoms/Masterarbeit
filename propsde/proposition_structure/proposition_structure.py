@@ -1,10 +1,10 @@
-from __future__ import division
-from proposition import Proposition
+
+from .proposition import Proposition
 from propsde.constituency_tree.definitions import *
 from propsde.dependency_tree.definitions import *
 from propsde.dependency_tree.tree import DepTree
 import propsde.dependency_tree
-import syntactic_item
+from . import syntactic_item
 
 PROPS = "Propositions"
 ORIG_SENTENCE = "Original Sentence"
@@ -229,14 +229,14 @@ class PropositionStructure:
         subTreeDic = self.depTree._get_subtree_nodes(includeHead = False)
         sortedWords = [subTreeDic[k].word for k in sorted(subTreeDic)]
         # init return value to none covered
-        coveredMap = dict([(k,False) for k in subTreeDic.keys()])
+        coveredMap = dict([(k,False) for k in list(subTreeDic.keys())])
         
         for prop in self.propositions:
             # get covered spans from predicate
-            coveredSpans = [feat["Span"] for feat in prop.pred.feats.values() if feat["Span"]]
+            coveredSpans = [feat["Span"] for feat in list(prop.pred.feats.values()) if feat["Span"]]
             # get covered spans from args
             for arg in prop.arguments:
-                coveredSpans.extend(feat["Span"] for feat in arg.feats.values() if feat["Span"])
+                coveredSpans.extend(feat["Span"] for feat in list(arg.feats.values()) if feat["Span"])
             
             # iterate over covered spans and update return value
             for span in coveredSpans:

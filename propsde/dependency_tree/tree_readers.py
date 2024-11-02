@@ -45,7 +45,7 @@ def get_conll_from_parser_file(file_parsed):
     #   1	Dieser	dies	PDAT	PDAT	_	2	NK	_	_
     sentences = []
     sent = []
-    for line in codecs.open(file_parsed, encoding='utf-8'):
+    for line in open(file_parsed, encoding='utf-8'):
         cols = line.strip().split('\t')
         if len(cols) == 10:
             cols = cols[0:6] + ['_','_'] + cols[6:7] + ['_'] + cols[7:8] + [cols[-1]]
@@ -176,7 +176,7 @@ def create_dep_trees_from_conll(sentences_conll, sent_id):
                 dep_trees_nodes[id]=DepTree(pos=node[4],word=node[1],id=node[0],parent=None,parent_relation=node[10],children=[],sent_id = int(sent_id),lemma=node[2],morph=node[7])
                 
         # Going through all nodes and update connections between them
-        for i in filter(lambda x:x,dep_trees_nodes.keys()):
+        for i in [x for x in list(dep_trees_nodes.keys()) if x]:
            node_data = dep_trees_data[i]
            node = dep_trees_nodes[i]
            if node_data[8] != '_':
@@ -189,7 +189,7 @@ def create_dep_trees_from_conll(sentences_conll, sent_id):
                dep_trees_nodes[parent_id].add_child(node)
                    
         # Add parsed DepTree to the list
-        dep_trees_nodes[0].original_sentence = u" ".join(words)
+        dep_trees_nodes[0].original_sentence = " ".join(words)
         dep_trees.append(copy.copy(dep_trees_nodes))
         
     return dep_trees
@@ -216,7 +216,7 @@ def read_dep_graphs(sent_ids,file_parsed):
     for i,t in enumerate(trees):
         curGraph,nodesMap = graphsFromFile[i]
         curGraph.set_original_sentence(t[0].original_sentence)
-        curGraph.tree_str = u"\n".join(t[0].to_original_format().split("\n")[1:])
+        curGraph.tree_str = "\n".join(t[0].to_original_format().split("\n")[1:])
         for node_id in nodesMap:
             int_node_id = node_id
             treeNode = t[int_node_id]

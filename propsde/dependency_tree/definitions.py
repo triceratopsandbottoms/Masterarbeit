@@ -150,7 +150,7 @@ copular_verbs = ["be", "am", "is", "are", "being", "was", "were", "been","'s","'
 #modal_list = [u"mögen",u"mag",u"müssen",u"muss",u"sollen",u"soll",u"dürfen",u"darf"] # "may","might","must","shall","should"
 time_prep = ["at","in","on"]
 location_prep = ["at","in","on","of"]
-negating_words = [u"nicht",u"nein"] # "not","no"
+negating_words = ["nicht","nein"] # "not","no"
 
 # conditional marks
 #   looks like these lists are not used, conjunctions are listed directly in graph_wrapper

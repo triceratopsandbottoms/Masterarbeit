@@ -16,12 +16,15 @@ def loadParser():
     global parser
     parser = ParserDE(True)
 
-def parseSentences(output_file):
+def parseSentences(sentences):
     global parser
 
     if not parser:
         parser = ParserDE(False)
 
+    # call the dependency parser => output_file ist ein conll09 file mit dependencies, aber ohne Propositions
+    output_file = parser.parse(sentences)
+    
     # read and process output
     graphs = read_dep_graphs(None, output_file)
     

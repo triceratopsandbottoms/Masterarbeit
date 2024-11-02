@@ -50,8 +50,8 @@ class ParserDE(object):
         conll = []
         for sent in sentences:
         
-            sent = sent.replace(u"“"," ").replace(u"”","")
-            tokens = [u'<root>'] + word_tokenize(sent, language="german")
+            sent = sent.replace("“"," ").replace("”","")
+            tokens = ['<root>'] + word_tokenize(sent, language="german")
             
             s = self.is2.data.SentenceData09()
             s.init(tokens)
@@ -74,12 +74,12 @@ class ParserDE(object):
     def parse_external(self, sentences):
 
         # save sentence to file 
-        input = codecs.open(self.tmp+'/input.conll09', 'w', encoding='utf-8')
+        input = open(self.tmp+'/input.conll09', 'w', encoding='utf-8')
         for sent in sentences:
             sent = sent.replace(u"“"," ").replace(u"”","")
             i = 1
             for token in word_tokenize(sent, language="german"):
-                input.write(u"\t".join([str(i),token] + ["_"]*13) + "\n")
+                input.write("\t".join([str(i),token] + ["_"]*13) + "\n")
                 i += 1
             input.write("\n")
         input.close()

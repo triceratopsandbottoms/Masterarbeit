@@ -44,12 +44,12 @@ def tree_to_graph(tree):
 
     ret = GraphWrapper(tree[0].original_sentence,HOME_DIR)
     graphNodes = {}
-    for t in tree.values():
+    for t in list(tree.values()):
         if t.id:
             if t.parent_relation != "erased":
 
                 graphNodes[t.id]=treeNode_to_graphNode(t,ret)
-    for t in tree.values():
+    for t in list(tree.values()):
         if t.id:
             curParent =t.parent.id
             if curParent:
@@ -110,7 +110,7 @@ class appendix_types:
     def add(self,obj):
         self._update(obj, add=+1)
     def getSet(self):
-        return set([k for k in self.d.keys() if self.d[k]>0])
+        return set([k for k in list(self.d.keys()) if self.d[k]>0])
     def union(self,other):
         for k in other.d:
             self._update(obj=k, add=other.d[k])

@@ -1,4 +1,4 @@
-from syntactic_item import *
+from .syntactic_item import *
 from propsde.dependency_tree.definitions import *
 
 # class to represent a single proposition, holds a predicate and its arguments
@@ -19,13 +19,13 @@ class Proposition:
         subTreeDic = self.predSubtree._get_subtree_nodes(includeHead = True)
         sortedWords = [subTreeDic[k].word for k in sorted(subTreeDic)]
         # init return value to none covered
-        coveredMap = dict([(k,False) for k in subTreeDic.keys()])
+        coveredMap = dict([(k,False) for k in list(subTreeDic.keys())])
         
         # get covered spans from predicate
-        coveredSpans = [feat["Span"] for feat in self.pred.feats.values() if feat["Span"]]
+        coveredSpans = [feat["Span"] for feat in list(self.pred.feats.values()) if feat["Span"]]
         # get covered spans from args
         for arg in self.arguments:
-            coveredSpans.extend(feat["Span"] for feat in arg.feats.values() if feat["Span"])
+            coveredSpans.extend(feat["Span"] for feat in list(arg.feats.values()) if feat["Span"])
         
         # iterate over covered spans and update return value
         for span in coveredSpans:

@@ -132,7 +132,7 @@ class SyntacticItem:
                 else:
                     continue
                 self.feats["Tense"] = {"Value":value,
-                          "Span":range(ta.begin_token_index, ta.end_token_index+1)}
+                          "Span":list(range(ta.begin_token_index, ta.end_token_index+1))}
                 break
 
 
@@ -145,7 +145,7 @@ class SyntacticItem:
         if self.tmp_function_tag_of_verb:
             for node in self.tmp_function_tag_of_verb:
                 node_min_span, node_max_span = node.get_tree_span()
-                span += range(node_min_span,node_max_span+1)
+                span += list(range(node_min_span,node_max_span+1))
                 values_list.append(node.get_original_sentence(False))
             span.sort()
         # tmod (dependency tree)
@@ -156,7 +156,7 @@ class SyntacticItem:
         # stanford time-annotator
         elif self.time_ann_of_verb:
             for ta in self.time_ann_of_verb:
-                span = range(ta.begin_token_index, ta.end_token_index+1)
+                span = list(range(ta.begin_token_index, ta.end_token_index+1))
                 values_list.append(ta.time_expression)
         else:
             return

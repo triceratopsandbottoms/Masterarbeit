@@ -4,7 +4,7 @@ from propsde.dependency_tree.definitions import subject_dependencies, ARG_LABEL,
 
 import sys
 if sys.version_info[0] >= 3:
-    unicode = str
+    str = str
     
 class Proposition:
     def __init__(self,pred,args,outputType):
