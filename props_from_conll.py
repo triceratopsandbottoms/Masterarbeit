@@ -82,9 +82,7 @@ def main(arguments):
             file_name = os.path.splitext(arguments['INPUT'])[0] + str(i)
         else: 
             file_name = 'output' + str(i)
-        
-        #print(g.getJson())
-        
+                
         #print open ie like extractions
         if (arguments["--oie"]):
             for prop in g.getPropositions('pdf'):

@@ -6,7 +6,7 @@ from pygraph.classes.digraph import digraph
 from propsde.graph_representation.newNode import Node, isDefinite, getCopular, \
     getPossesive, EXISTENSIAL
 from pygraph.algorithms.accessibility import accessibility
-from propsde.graph_representation.graph_utils import get_min_max_span, find_nodes, \
+from propsde.graph_representation.graph_utils import get_min_max_span, find_nodes, get_node_dic,\
     find_edges, merge_nodes, multi_get, duplicateEdge, accessibility_wo_self, \
     subgraph_to_string, replace_head, find_marker_idx
 from propsde.graph_representation.word import Word
@@ -664,13 +664,21 @@ class GraphWrapper(digraph):
                     neigboursList.append(curNeigbourList)
                 
                 for nlist in neigboursList:
-                    #print [[w.word for w in x[1].text] for x in nlist]
+                    print([[w.word for w in x[1].text] for x in nlist])
                     argList = []
                     all_neighbours = [n for _, n in nlist]
-                    print(nlist)
+                    #print(sorted(nlist, key=lambda k_n:get_min_max_span(self, k_n[1])[0]))
                     for k, curNeighbour in sorted(nlist, key=lambda k_n:get_min_max_span(self, k_n[1])[0]):
                         curExclude = [n for n in all_neighbours if n != curNeighbour] + [topNode]
                         if self.edge_label((topNode,curNeighbour)) != "dep":
+                            print(list(map(lambda node: node.uid, curExclude)), get_min_max_span(self, curNeighbour))
+                            (minInd,maxInd) = get_min_max_span(self, curNeighbour)
+                            argNodeList = []
+                            for i in range(minInd, maxInd+1):
+                                if i not in list(map(lambda node: node.uid, curExclude)):
+                                    argNodeList.append(i)
+                            #argNodeList = list(set(range(minInd, maxInd+1)) - set(map(lambda node: node.uid, curExclude)))                               
+                            print(argNodeList)
                             argList.append([k, subgraph_to_string(self, curNeighbour, exclude=curExclude)])
                     if topNode.features.get("Lemma"):
                         topNodeText = encode_german_characters(topNode.features.get("Lemma"))
