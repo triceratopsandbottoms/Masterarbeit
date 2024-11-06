@@ -664,21 +664,12 @@ class GraphWrapper(digraph):
                     neigboursList.append(curNeigbourList)
                 
                 for nlist in neigboursList:
-                    print([[w.word for w in x[1].text] for x in nlist])
+                    #print([[w.word for w in x[1].text] for x in nlist])
                     argList = []
                     all_neighbours = [n for _, n in nlist]
-                    #print(sorted(nlist, key=lambda k_n:get_min_max_span(self, k_n[1])[0]))
                     for k, curNeighbour in sorted(nlist, key=lambda k_n:get_min_max_span(self, k_n[1])[0]):
                         curExclude = [n for n in all_neighbours if n != curNeighbour] + [topNode]
                         if self.edge_label((topNode,curNeighbour)) != "dep":
-                            print(list(map(lambda node: node.uid, curExclude)), get_min_max_span(self, curNeighbour))
-                            (minInd,maxInd) = get_min_max_span(self, curNeighbour)
-                            argNodeList = []
-                            for i in range(minInd, maxInd+1):
-                                if i not in list(map(lambda node: node.uid, curExclude)):
-                                    argNodeList.append(i)
-                            #argNodeList = list(set(range(minInd, maxInd+1)) - set(map(lambda node: node.uid, curExclude)))                               
-                            print(argNodeList)
                             argList.append([k, subgraph_to_string(self, curNeighbour, exclude=curExclude)])
                     if topNode.features.get("Lemma"):
                         topNodeText = encode_german_characters(topNode.features.get("Lemma"))
@@ -691,6 +682,62 @@ class GraphWrapper(digraph):
                         curProp = Proposition(topNodeText, argList, outputType)
                         ret.append(curProp)
                     
+        return ret
+    
+    def getArgumentSpans(self):
+        ret = []
+        for topNode in [n for n in self.nodes() if n.features.get("top", False)]:
+                #print [w.word for w in topNode.text]
+#             if "dups" in topNode.features:
+                dups = topNode.features.get("dups", [])
+                allDups = reduce(lambda x, y:list(x) + list(y), dups, [])
+                rest = [n for n in self.neighbors(topNode) if n not in allDups]
+                neigboursList = []
+                for combination in product(*dups):
+                    curNeigbourList = []
+                    ls = list(combination) + rest
+                    for curNode in ls:
+                        curNeigbourList.append((self.edge_label((topNode, curNode)), curNode))
+                    neigboursList.append(curNeigbourList)
+                
+                for nlist in neigboursList:
+                    print([[w.word for w in x[1].text] for x in nlist])
+                    argSpanList = []
+                    all_neighbours = [n for _, n in nlist]
+                    #print(sorted(nlist, key=lambda k_n:get_min_max_span(self, k_n[1])[0]))
+                    for k, curNeighbour in sorted(nlist, key=lambda k_n:get_min_max_span(self, k_n[1])[0]):
+                        curExclude = [n for n in all_neighbours if n != curNeighbour] + [topNode]
+                        if self.edge_label((topNode,curNeighbour)) != "dep":
+                            print(list(map(lambda node: node.uid, curExclude)), get_min_max_span(self, curNeighbour))
+                            argSpan = get_min_max_span(self, curNeighbour)
+                            (minInd,maxInd) = argSpan
+                            minInd_ = -1
+                            maxInd_ = -1
+                            argSubSpan = (-1,-1)
+                            argNodeList = []
+                            for i in range(minInd, maxInd+1):
+                                if i not in list(map(lambda node: node.uid, curExclude)):
+                                    argNodeList.append(i)
+                            for i in list(map(lambda node: node.uid, curExclude)):
+                                if i == minInd:
+                                    minInd = minInd+1
+                                if i == maxInd:
+                                    maxInd = maxInd-1
+                                if i == maxInd_:
+                                    maxInd_ = maxInd_-1
+                                if i == minInd_:
+                                    minInd_ = minInd_+1
+                                if minInd < i > maxInd and argSubSpan != (-1,-1):
+                                    maxInd_ = i-1
+                                    minInd_ = i+1
+                                    argSpan = (minInd,maxInd_)
+                                    argSubSpan = (minInd_,maxInd)
+                            argSpanList.append([k, argSpan])
+                            if argSubSpan != (-1,-1):
+                                argSpanList.append([k, argSubSpan])
+                            print(argSpanList)
+                    if not len(argSpanList) == 0:
+                        ret.append(argSpan)
         return ret
     
     def normalize_labels(self):
