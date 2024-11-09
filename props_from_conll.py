@@ -43,6 +43,21 @@ if sys.version_info[0] >= 3:
     
 stdout_encoding = sys.stdout.encoding or sys.getfilesystemencoding()
 
+"""
+Wir brauchen folgende Recommender bzw. Funktionen:
+
+- getArgumentSpans -> Layer SemArg
+- getPredicateSpan -> SemPred
+- linkArguments (to Predicate) -> SemPred
+- linkSubPredicates (to Predicate) -> SemPred?
+- linkSubArguments (to their head Argument) -> SemArg?
+- getFullPredicateStatement (with verb lemma) -> SemPred?
+- getFinalProposition with rating options -> ??? SemPred?
+- getAttributes
+ 
+
+"""
+
 #import propsde.applications.run as run
 def parseConll(conll):
     
@@ -87,6 +102,8 @@ def main(arguments):
         if (arguments["--oie"]):
             for prop in g.getPropositions('pdf'):
                 print(str(prop))
+            for span in g.getArgumentSpans():
+                print(str(span))
         i += 1
         
 
