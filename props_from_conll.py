@@ -47,7 +47,7 @@ stdout_encoding = sys.stdout.encoding or sys.getfilesystemencoding()
 Wir brauchen folgende Recommender bzw. Funktionen:
 
 - getArgumentSpans -> Layer SemArg
-- getPredicateSpan -> SemPred
+-  -> SemPred
 - linkArguments (to Predicate) -> SemPred
 - linkSubPredicates (to Predicate) -> SemPred?
 - linkSubArguments (to their head Argument) -> SemArg?
@@ -102,8 +102,8 @@ def main(arguments):
         if (arguments["--oie"]):
             for prop in g.getPropositions('pdf'):
                 print(str(prop))
-            for span in g.getArgumentSpans():
-                print(str(span))
+            #for span in g.getArgumentSpans():
+                #print(str(span))
         i += 1
         
 
