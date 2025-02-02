@@ -2,3 +2,5 @@
 *.jar
 *.model
 tmp
+*Zone.Identifier
+*.bak
