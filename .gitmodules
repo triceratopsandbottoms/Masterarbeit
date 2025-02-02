@@ -1,0 +1,3 @@
+[submodule "inception_external_recommender"]
+	path = inception_external_recommender
+	url = https://github.com/triceratopsandbottoms/inception-external-recommender.git
