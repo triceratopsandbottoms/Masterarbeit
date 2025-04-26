@@ -109,6 +109,7 @@ class DepTree:
     
     def get_text(self):
         ret = [Word(index=self.id,word=self.word)]
+        #print(self.children.len())
         for c in self.children:
             ret += c.get_text()
         return ret

@@ -8,10 +8,11 @@ from propsde.graph_representation.word import NO_INDEX, Word, strip_punctuations
 from pygraph.algorithms.traversal import traversal
 from pygraph.algorithms.minmax import minimal_spanning_tree, shortest_path
 import cgi
-# from graph_representation.node import isRcmodProp
+import os
 import time
 # from graph_representation.node import Node
 from propsde.graph_representation import newNode
+
 import sys
 if sys.version_info[0] >= 3:
     str = str
@@ -272,7 +273,6 @@ def generate_possessive_top_node(graph, nodeLs):
 
 
 
-
 def sort_nodes_topologically(graph, nodeLs):
     """
     Get a topological sort of a subset of the nodes of a graph
@@ -288,7 +288,7 @@ def sort_nodes_topologically(graph, nodeLs):
     """
     # uid_dic = dict([(node.uid,node) for node in nodeLs])
     # helperNodes = uid_dic.keys()
-    helperGraph = graph.__class__(originalSentence="")  # TODO: efficiency - this is done this way to avoid circular dependency
+    helperGraph = graph.__class__(originalSentence="", HOME_DIR="./")  # TODO: efficiency - this is done this way to avoid circular dependency
     helperGraph.add_nodes(nodeLs)
     acc = accessibility(graph)
     

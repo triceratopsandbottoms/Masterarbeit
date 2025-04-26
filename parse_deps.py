@@ -37,6 +37,7 @@ def parse_dependencies_to_conll_file(text, path):
                 "format": "conll"
             }
             args = urllib.parse.urlencode(params).encode("utf-8")
+            #TODO: Gibt es eine Möglichkeit, das sentencizing zu überspringen?
             req = "http://localhost:5003/parse/?"+args.decode("utf-8")
             try:
                 f = urllib.request.urlopen(req)
@@ -58,15 +59,22 @@ def parse_dependencies_to_conll_file(text, path):
                 print("\n")
     return errors
 
-def main(arguments):
+def main(arguments): 
     if arguments['INPUT']:
-        file_name = os.path.splitext(arguments['INPUT'])[0] + ".conll"
-    else: 
-        file_name = 'output' + ".conll"
-    f = open(arguments["file"],'r')
-    text = f.read()
-    err = parse_dependencies_to_conll_file(text, file_name)
-    print("Error:", err)
+        inPath = arguments['INPUT']
+        inPaths = []
+        if os.path.isfile(inPath):
+            inPaths = [inPath]
+        else:
+            inPaths = [os.path.join(dirpath,f) for (dirpath, dirnames, filenames) in os.walk(inPath) for f in filenames]
+        for path_ in inPaths:
+            outPath = os.path.splitext(path_)[0] + ".conll"
+            f = open(path_,'r')
+            text = f.read()
+            err = parse_dependencies_to_conll_file(text, outPath)
+            print("Error:", err)
+    #else: 
+    #    outPath = 'output' + ".conll"
     #print(open(conll).read())
     
     # while True:

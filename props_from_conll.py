@@ -55,7 +55,6 @@ Wir brauchen folgende Recommender bzw. Funktionen:
 - getFinalProposition with rating options -> ??? SemPred?
 - getAttributes
  
-
 """
 
 #import propsde.applications.run as run
@@ -76,37 +75,52 @@ def parseConll(conll):
     #print(ret)
     return ret
 
+'''
+def runPropsde(conll, mode):
+    """
+    @type   conll: file in dependency conll format
+    @param  conll: the annotated text you want to analyse
     
-def main(arguments):
-    
-    outputType = 'html'
-    sep = "<br>"
-    if arguments['-t']:
-        outputType = 'pdf'
-    sep = "\n"
-        
-    graphical = (outputType=='html')
-    
-    gs = parseConll(arguments["file"])
-        
-    i = 0
+    @type   mode:   'predicates' or 'arguments'
+    @param  mode:   what kind of spans you want to get
+    """
 
+    gs = parseConll(conll)
+    
+    # Iterate over each graph (sentence?) and append ret with a list of spans per predicate
+    ret = []
     for g,tree in gs: 
     
-        if arguments['INPUT']:
-            file_name = os.path.splitext(arguments['INPUT'])[0] + str(i)
-        else: 
-            file_name = 'output' + str(i)
-                
-        #print open ie like extractions
-        if (arguments["--oie"]):
-            for prop in g.getPropositions('pdf'):
-                print(str(prop))
-            #for span in g.getArgumentSpans():
-                #print(str(span))
-        i += 1
-        
+        if mode == 'arguments':
+            ret.append(g.getArguments4Predicate(startIndex, endIndex))
+        elif mode == 'predicates':
+            ret.append(g.getPredicates())
+        #print(ret)
+    return ret
+'''
+def runPropsDEArguments(conll, sentIdx, tokenIdx):
+    gs = parseConll(conll)
+    #ret = []
+    #for g,tree in gs: 
+    ret = gs[sentIdx][0].getArguments4Predicate(tokenIdx)
+    return ret
+    
+def runPropsDEEnumerations(conll, sentIdx, tokenIdx):
+    gs = parseConll(conll)
+    #ret = []
+    #for g,tree in gs: 
+    ret = gs[sentIdx][0].getEnumerations4Subtree(tokenIdx)
+    return ret
+    
+def runPropsDEPredicates(conll):
+    gs = parseConll(conll)
+    ret = []
+    for g,tree in gs: 
+        ret.append(g.getPredicates())
+    return ret    
 
+#print(runPropsDEArguments("examples.conll", 10, 10))
+"""
 if __name__ == "__main__":
     arguments = docopt(__doc__)
     if arguments["INPUT"]:
@@ -114,5 +128,5 @@ if __name__ == "__main__":
     else:
         arguments["file"] = sys.stdin
     main(arguments)
-
+"""
 

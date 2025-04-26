@@ -6,9 +6,11 @@ from pygraph.classes.digraph import digraph
 from propsde.graph_representation.newNode import Node, isDefinite, getCopular, \
     getPossesive, EXISTENSIAL
 from pygraph.algorithms.accessibility import accessibility
+from pygraph.algorithms.traversal import traversal
+
 from propsde.graph_representation.graph_utils import get_min_max_span, find_nodes, get_node_dic,\
     find_edges, merge_nodes, multi_get, duplicateEdge, accessibility_wo_self, \
-    subgraph_to_string, replace_head, find_marker_idx
+    subgraph_to_string, replace_head, find_marker_idx, find_node_by_index_range, sort_nodes_topologically, deref
 from propsde.graph_representation.word import Word
 from propsde.dependency_tree.definitions import *
 import pygraph.readwrite.dot
@@ -66,11 +68,11 @@ inverse_labels = {"subj":["SB","possessor"], #["xsubj","nsubj","nsubjpass","csub
                     "poss": ["AG","PG"], # new for DE
                      } 
 normalize_labels_dic = {}
-
+''' SKIP normalizing labels for Inception External Recommender
 for k in inverse_labels:
     for v in inverse_labels[k]:
         normalize_labels_dic[v] = k
-        
+'''
 def star(f):
     return lambda args: f(*args)
 
@@ -683,63 +685,185 @@ class GraphWrapper(digraph):
                         ret.append(curProp)
                     
         return ret
-               
-    def getArgumentSpans(self):
+        
+    def getNeighboursList(self, node):
+        dups = node.features.get("dups", [])
+        #print("dups: ", dups)
+        allDups = reduce(lambda x, y:list(x) + list(y), dups, [])
+        #print("allDups: ", allDups)
+        rest = [n for n in self.neighbors(node) if n not in allDups]
+        #print("rest: ", rest)
+        neigboursList = []
+        for combination in product(*dups):
+            curNeigbourList = []
+            ls = list(combination) + rest
+            for curNode in ls:
+                curNeigbourList.append((self.edge_label((node, curNode)), curNode))
+            neigboursList.append(curNeigbourList)
+        #print("neigboursList: ", neigboursList)
+        return neigboursList
+
+    def getArgSpans4Node(self, nlist, topNode, edgeFilter):
         ret = []
-        for topNode in [n for n in self.nodes() if n.features.get("top", False)]:
-            #print([w.word for w in topNode.text])
-#             if "dups" in topNode.features:
-            dups = topNode.features.get("dups", [])
-            allDups = reduce(lambda x, y:list(x) + list(y), dups, [])
-            rest = [n for n in self.neighbors(topNode) if n not in allDups]
-            neigboursList = []
-            for combination in product(*dups):
-                curNeigbourList = []
-                ls = list(combination) + rest
-                for curNode in ls:
-                    curNeigbourList.append((self.edge_label((topNode, curNode)), curNode))
-                neigboursList.append(curNeigbourList)
+        all_neighbours = [n for _, n in nlist]
+        #print(sorted(nlist, key=lambda k_n:get_min_max_span(self, k_n[1])[0]))
+        for k, curNeighbour in sorted(nlist, key=lambda k_n:get_min_max_span(self, k_n[1])[0]):
             
+            #get all nodes which belong to another argument plus the topNode, so we can exclude them from the span later
+            curExclude = [n for n in all_neighbours if n != curNeighbour] + [topNode]
+            
+            #if the dependency relation between topNode and argument passes the filter given to this function
+            edge = (topNode,curNeighbour)
+            #print(edge[0].pos(), edge[1].pos())
+            #print(self.edge_label(edge).upper(), topNode.text[0].word, " - ", curNeighbour.text[0].word, edgeFilter(edge))
+            if edgeFilter(edge): 
+                #getting the span covered by the subtree of curNeighbour and initializing variables
+                argSpan = get_min_max_span(self, curNeighbour)
+                (minimum, maximum) = argSpan
+                minToken = minimum - 1
+                maxToken = maximum - 1
+                minToken_ = -1
+                maxToken_ = -1
+                split = False
+                
+                #checking all nodes in curExclude, whether they are part of the span and if so, remove them
+                for i in list(map(lambda node: node.uid, curExclude)):
+                    if i == minToken: 
+                        minToken = minToken+1
+                    if i == maxToken:
+                        maxToken = maxToken-1
+                    if i == maxToken_:
+                        maxToken_ = maxToken_-1
+                    if i == minToken_:
+                        minToken_ = minToken_+1
+                    if minToken < i < maxToken:
+                        maxToken_ = i-1
+                        minToken_ = i+1
+                        split = True
+                if split:
+                    argTokenSpan = (minToken, maxToken_)
+                    argTokenSubSpan = (minToken_, maxToken)
+                else:
+                    argTokenSpan = (minToken, maxToken)
+                ret.append([k, argTokenSpan])
+                if split:
+                    ret.append([k + "_" + str(minToken), argTokenSubSpan])
+        return ret
+    
+    def getEnumerations4Subtree(self, tokenIdx):
+        helperGraph = self
+        nodeLs = None
+        edgesLs = []
+        node = find_node_by_index_range(self, tokenIdx, tokenIdx)
+        curNode = node
+        #print("getEnumerations4Subtree, first node:", curNode.text[0].word)
+        i = 0
+        while curNode:
+            edge_ = find_edges(helperGraph, lambda u_v: curNode in u_v and helperGraph.edge_label(u_v).upper() in ["KON", "CJ"])
+            if edge_ == []:
+                curNode = None
+            else:
+                edge = edge_[0]
+                if nodeLs == None: nodeLs = [curNode]
+                #print(list(map(lambda n: n.text[0].word, nodeLs)))
+                if edge[0] == curNode:
+                    secNode = edge[1]
+                    #print("secNode:", secNode.text[0].word)
+                else:
+                    secNode = edge[0]
+                    #print("secNode:", secNode.text[0].word)
+                
+                if secNode in nodeLs:
+                    curNode = None
+                else:
+                    nextNode = secNode
+                    nodeLs.append(nextNode)
+                    #print(nextNode == curNode)
+                    curNode = nextNode
+                helperGraph.del_edge(edge)
+            i += 1
+            
+        if nodeLs:
+            #print(list(map(lambda n: n.text[0].word, nodeLs)))
+            conj = list(filter(lambda n: n.text[0].word == "und", nodeLs))
+            if len(conj) == 1:
+                conjNode = conj[0]
+                #TODO: conjType ist redundant -> immer "und"
+                conjType = conjNode.text[0].word
+                #print(conjNode.text[0].word, totalSpan)
+                nodeLs.remove(conjNode)
+                elemSpans = []
+                minTokens = []
+                maxTokens = []
+                for elemNode in nodeLs:
+                    tokenRange = get_min_max_span(helperGraph, elemNode)
+                    
+                    minNode = helperGraph.nodes()[tokenRange[0]-1]
+                    maxNode = helperGraph.nodes()[tokenRange[1]-1]
+                    
+                    #minChar = helperGraph.nodeToCharIndices(minNode)[0]
+                    #maxChar = helperGraph.nodeToCharIndices(maxNode)[1]
+                                    
+                    elemSpan = (minNode, maxNode)
+                    elemSpans.append(elemSpan)
+                    minTokens.append(minChar)
+                    maxTokens.append(maxChar)
+                    #print(elemNode.text[0].word, elemSpan)
+                totalSpan = (min(minTokens), max(maxTokens))
+                ret = [conjType, totalSpan, elemSpans]
+                #print(ret)
+                return ret
+        else: 
+            return None
+    
+    def getPredicates(self):
+        ret = []
+        edgeFilter = lambda edge: self.edge_label(edge).upper() in ["AUX", "AVZ", "PRED", "ADV", "OBJI", "OBJC", "OBJP", "PART"] or edge[0].pos() == "PRF" or edge[1].pos() == "PRF"
+        for predNode in [n for n in self.nodes() if n.pos().endswith("FIN")]:
+            neigboursList = self.getNeighboursList(predNode)
             for nlist in neigboursList:
-                #print([[w.word for w in x[1].text] for x in nlist])
-                argSpanList = []
-                all_neighbours = [n for _, n in nlist]
-                #print(sorted(nlist, key=lambda k_n:get_min_max_span(self, k_n[1])[0]))
+                predSubSpanList = []
                 for k, curNeighbour in sorted(nlist, key=lambda k_n:get_min_max_span(self, k_n[1])[0]):
-                    curExclude = [n for n in all_neighbours if n != curNeighbour] + [topNode]
-                    if self.edge_label((topNode,curNeighbour)) != "dep":
-                        #print(list(map(lambda node: node.uid, curExclude)), get_min_max_span(self, curNeighbour))
-                        argSpan = get_min_max_span(self, curNeighbour)
-                        (minInd,maxInd) = argSpan
-                        minInd_ = -1
-                        maxInd_ = -1
-                        argSubSpan = (-1,-1)
-                        for i in list(map(lambda node: node.uid, curExclude)):
-                            if i == minInd:
-                                minInd = minInd+1
-                            if i == maxInd:
-                                maxInd = maxInd-1
-                            if i == maxInd_:
-                                maxInd_ = maxInd_-1
-                            if i == minInd_:
-                                minInd_ = minInd_+1
-                            if minInd < i > maxInd and argSubSpan != (-1,-1):
-                                maxInd_ = i-1
-                                minInd_ = i+1
-                                argSpan = (minInd,maxInd_)
-                                argSubSpan = (minInd_,maxInd)
-                        argSpanList.append([k, argSpan])
-                        if argSubSpan != (-1,-1):
-                            argSpanList.append([k + "_" + minInd, argSubSpan])
-                        #print(argSpanList)
-                if not len(argSpanList) == 0:                        
-                    neg = topNode.features.get("Negation",False)
-                    predSpan = [neg, (topNode.uid, topNode.uid)]
-                    ret.append([predSpan, argSpanList])
+                    #if the dependency relation between predNode and argument passes the filter
+                    edge = (predNode,curNeighbour)
+                    if edgeFilter(edge): 
+                        curNeighboursNeigboursList = self.getNeighboursList(curNeighbour)
+                        for cnlist in curNeighboursNeigboursList:
+                            #print(k, curNeighbour.text[0].word)
+                            predSubToken = self.nodes().index(curNeighbour)
+                            predSubSpan = [k, (predSubToken,predSubToken)]
+                            
+                            predSubSpanList = self.getArgSpans4Node(cnlist, curNeighbour, edgeFilter)
+                            
+                            predSubSpanList.append(predSubSpan)
+                predToken = self.nodes().index(predNode)
+                ret.append([predToken, predSubSpanList])
+        return ret
+        
+    def getArguments4Predicate(self, tokenIdx):
+        ret = []
+        #print(tokenIdx)
+        predNode = find_node_by_index_range(self, tokenIdx, tokenIdx)
+        #print(predNode)
+        #if type(predNode) != Node:
+            #return []
+        #print(type(predNode))
+        neigboursList = self.getNeighboursList(predNode)
+        edgeFilter = lambda edge: self.edge_label(edge).upper() not in ["AUX", "AVZ", "PRED", "ADV", "OBJI", "OBJC", "OBJP", "PART"] or edge[0].pos() == "PRF" or edge[1].pos() == "PRF"
+        #edgeFilter = lambda label: label.upper() not in ["AUX", "AVZ", "PRED", "ADV", "OBJI", "OBJC", "OBJP", "PART"]
+        for nlist in neigboursList:
+            argSpanList = self.getArgSpans4Node(nlist, predNode, edgeFilter)
+            #print([[w.word for w in x[1].text] for x in nlist])
+            if not len(argSpanList) == 0:                        
+                #neg = predNode.features.get("Negation",False)
+                predToken = self.nodeToCharIndices(predNode)
+                #print(predToken)
+                ret.append([predToken, argSpanList])
+        #print(ret)
         return ret
     
     def normalize_labels(self):
-        for edge in self.edges():
+        '''for edge in self.edges():
             edgeLabel = self.edge_label(edge)
             if edgeLabel in normalize_labels_dic:
                 self.del_edge(edge)
@@ -747,7 +871,7 @@ class GraphWrapper(digraph):
             # catch all
             elif re.match("[A-Z]+", edgeLabel):
                 self.del_edge(edge)
-                self.add_edge(edge, label = "dep")
+                self.add_edge(edge, label = "dep")'''
     
     def do_vmod_relclause(self):
         # not needed for german at all in the first step

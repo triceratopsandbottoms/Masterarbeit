@@ -70,7 +70,7 @@ class Node:
     @type uid: int
     @var  uid: unique id for this node, to be able to distinguish nodes with identical features
     """
-    def __init__(self,text,isPredicate,coreference,features,gr,orderText = True,uid=-1):
+    def __init__(self,text,isPredicate, coreference=None, features={}, gr = None, orderText = True, uid=-1):
         """
         initialize a node object
         
