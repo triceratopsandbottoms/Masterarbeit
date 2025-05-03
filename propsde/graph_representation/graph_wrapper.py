@@ -798,16 +798,18 @@ class GraphWrapper(digraph):
                 for elemNode in nodeLs:
                     tokenRange = get_min_max_span(helperGraph, elemNode)
                     
-                    minNode = helperGraph.nodes()[tokenRange[0]-1]
-                    maxNode = helperGraph.nodes()[tokenRange[1]-1]
+                    #minNode = helperGraph.nodes()[tokenRange[0]-1]
+                    #maxNode = helperGraph.nodes()[tokenRange[1]-1]
                     
+                    minToken = tokenRange[0]
+                    maxToken = tokenRange[1]
                     #minChar = helperGraph.nodeToCharIndices(minNode)[0]
                     #maxChar = helperGraph.nodeToCharIndices(maxNode)[1]
                                     
-                    elemSpan = (minNode, maxNode)
+                    elemSpan = (minToken, maxToken)
                     elemSpans.append(elemSpan)
-                    minTokens.append(minChar)
-                    maxTokens.append(maxChar)
+                    minTokens.append(minToken)
+                    maxTokens.append(maxToken)
                     #print(elemNode.text[0].word, elemSpan)
                 totalSpan = (min(minTokens), max(maxTokens))
                 ret = [conjType, totalSpan, elemSpans]
@@ -845,9 +847,9 @@ class GraphWrapper(digraph):
         #print(tokenIdx)
         predNode = find_node_by_index_range(self, tokenIdx, tokenIdx)
         #print(predNode)
-        #if type(predNode) != Node:
-            #return []
-        #print(type(predNode))
+        if type(predNode) != Node:
+            print(type(predNode))
+            return []
         neigboursList = self.getNeighboursList(predNode)
         edgeFilter = lambda edge: self.edge_label(edge).upper() not in ["AUX", "AVZ", "PRED", "ADV", "OBJI", "OBJC", "OBJP", "PART"] or edge[0].pos() == "PRF" or edge[1].pos() == "PRF"
         #edgeFilter = lambda label: label.upper() not in ["AUX", "AVZ", "PRED", "ADV", "OBJI", "OBJC", "OBJP", "PART"]

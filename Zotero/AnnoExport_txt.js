@@ -8,7 +8,7 @@ for (let item of items) {
         var annoPage = annotation.annotationPageLabel;
         var annoText = annotation.annotationText;
         var title = `${bookID}_${annoID}_${annoPage}`;
-        var path = `C:\\Users\\annik\\ZoteroExports\\${title}.txt`;
+        var path = `C:\\Users\\annik\\ZoteroExports\\${bookID}\\${title}.txt`;
         await Zotero.File.putContentsAsync(path, annoText);
     }
 }
