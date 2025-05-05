@@ -1,4 +1,7 @@
-
+inception_docker/repository
+inception_docker/log
+inception_docker/version
+Zotero/Textstellen
 *.jar
 *.model
 tmp

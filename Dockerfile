@@ -11,6 +11,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install \
     python3-flask \
     python-is-python3
 
+ADD https://api.github.com/repos/triceratopsandbottoms/ParZu/git/refs/heads/master version.json
 RUN git clone https://github.com/triceratopsandbottoms/ParZu.git
 
 RUN (cd ParZu; bash install.sh)

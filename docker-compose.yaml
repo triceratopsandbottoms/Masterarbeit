@@ -7,7 +7,7 @@ networks:
   
 services:
   parzu:
-   build: parzu.Dockerfile
+   build: .
    ports:
      - 5003:5003
    restart: unless-stopped
@@ -34,7 +34,7 @@ services:
   INCEpTION:
     image: "${INCEPTION_IMAGE:-ghcr.io/inception-project/inception}:${INCEPTION_VERSION:-latest}"
     ports:
-      - "${INCEPTION_PORT:-8081}:8080"
+      - "${INCEPTION_PORT:-8080}:8080"
     environment:
       - INCEPTION_DB_DIALECT=org.hibernate.dialect.MariaDB106Dialect
       - INCEPTION_DB_URL=jdbc:mariadb://inception-db:3306/inception?useSSL=false&useUnicode=true&characterEncoding=UTF-8

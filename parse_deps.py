@@ -19,12 +19,23 @@ from io import StringIO
 import urllib.request
 import urllib.parse
 from docopt import docopt
+from pycaprio import Pycaprio
+from pycaprio.mappings import InceptionFormat, DocumentState
 
+INCEPTION_URL = "http://localhost:8080"
+INCEPTION_USER = "remote-api"
+INCEPTION_PW = "MDT2azx-qae0fbg*uhz"
+PROJECT_ID = 2
+INCEPTION_FORMAT = InceptionFormat.CONLL2006
+
+client = Pycaprio(INCEPTION_URL, authentication=(INCEPTION_USER, INCEPTION_PW))
+    
 if sys.version_info[0] >= 3:
     str = str
 stdout_encoding = sys.stdout.encoding or sys.getfilesystemencoding()
 
-def parse_dependencies_to_conll_file(text, path):
+# @deprecated
+def old_parse_dependencies_to_conll_file(text, path):
     if path:
         file = open(path,'w')
         file.write("")
@@ -37,8 +48,7 @@ def parse_dependencies_to_conll_file(text, path):
                 "format": "conll"
             }
             args = urllib.parse.urlencode(params).encode("utf-8")
-            #TODO: Gibt es eine Möglichkeit, das sentencizing zu überspringen?
-            req = "http://localhost:5004/parse/?"+args.decode("utf-8")
+            req = "http://localhost:5003/parse/?"+args.decode("utf-8")
             try:
                 f = urllib.request.urlopen(req)
                 if path:
@@ -59,6 +69,48 @@ def parse_dependencies_to_conll_file(text, path):
                 print("\n")
     return errors
 
+def parse_dependencies_to_conll_file(text, path=None):
+    if path:
+        file = open(path,'w')
+        file.write("")
+    text = text.replace("\r\n"," ")
+    conll = ""
+    errors = 0
+    counter = 0
+    success = True
+    while len(text) > len(conll) and counter < 3:
+        params = {
+            "text": text,
+            "format": "conll"
+        }
+        args = urllib.parse.urlencode(params).encode("utf-8")
+        req = "http://localhost:5003/parse/?"+args.decode("utf-8")
+        try:
+            f = urllib.request.urlopen(req)
+            conll = f.read().decode('utf-8')
+            if path:
+                file = open(path,'a')
+                file.write(conll)
+            else:
+                print(conll)
+            #return 0
+        except Exception as ex:
+            print(ex, "\n", text)
+            errors += 1
+        counter += 1
+        if counter == 3 and errors == 3: success = False
+    return success, conll
+
+def postDocumentToInception(title, filepath):
+    doc_file = open(filepath,'rb')
+    new_document = None
+    try:
+        new_document = client.api.create_document(PROJECT_ID, title, doc_file, document_format=INCEPTION_FORMAT)
+        return(new_document) # <Document #5: Test document name (Project: 1)>
+    except Exception as ex:
+        print(ex)
+        return None
+
 def main(arguments): 
     if arguments['INPUT']:
         inPath = arguments['INPUT']
@@ -68,11 +120,21 @@ def main(arguments):
         else:
             inPaths = [os.path.join(dirpath,f) for (dirpath, dirnames, filenames) in os.walk(inPath) for f in filenames]
         for path_ in inPaths:
-            outPath = os.path.splitext(path_)[0] + ".conll"
+            f = os.path.splitext(path_)[0]
+            filename = os.path.split(f)[1]
+            outPath = "./tmp/" + filename + ".conll"
             f = open(path_,'r')
             text = f.read()
-            err = parse_dependencies_to_conll_file(text, outPath)
-            print("Error:", err)
+            parsed = parse_dependencies_to_conll_file(text, outPath)
+            if parsed[0]:                 
+                #print(filename)
+                new_document = postDocumentToInception(filename, outPath)
+                if new_document:
+                    os.remove(outPath)
+                else:
+                    print("Posting to Inception failed for document:", filename)
+            else:
+                print("Parsing to conll failed for document:", filename)
     #else: 
     #    outPath = 'output' + ".conll"
     #print(open(conll).read())
