@@ -38,7 +38,7 @@ def parse_dependencies_to_conll_file(text, path):
             }
             args = urllib.parse.urlencode(params).encode("utf-8")
             #TODO: Gibt es eine Möglichkeit, das sentencizing zu überspringen?
-            req = "http://localhost:5003/parse/?"+args.decode("utf-8")
+            req = "http://localhost:5004/parse/?"+args.decode("utf-8")
             try:
                 f = urllib.request.urlopen(req)
                 if path:

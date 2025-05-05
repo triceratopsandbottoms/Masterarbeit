@@ -4,12 +4,13 @@
 ##
 networks:
   inception-net:
-
+  
 services:
-  ParZu:
-    image: rsennrich/parzu
-    ports:
-      - 5003:5003
+  parzu:
+   build: parzu.Dockerfile
+   ports:
+     - 5003:5003
+   restart: unless-stopped
       
   inception-db:
     image: "mariadb:11.4"
