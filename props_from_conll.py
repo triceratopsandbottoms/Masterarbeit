@@ -113,11 +113,16 @@ def runPropsDEEnumerations(conll, sentIdx, tokenIdx):
     return ret
     
 def runPropsDEPredicates(conll):
+    #print("runPropsDEPredicates(conll); conll:",conll)
     gs = parseConll(conll)
     ret = []
+    strProps = []
     for g,tree in gs: 
         ret.append(g.getPredicates())
-    return ret    
+        props = g.getPropositions('pdf')
+        for prop in props:
+            print((str(prop)))
+    return ret
 
 #print(runPropsDEArguments("examples.conll", 10, 10))
 """

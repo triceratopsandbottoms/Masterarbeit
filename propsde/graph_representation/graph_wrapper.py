@@ -651,7 +651,7 @@ class GraphWrapper(digraph):
     
     def getPropositions(self, outputType):
         ret = []
-        for topNode in [n for n in self.nodes() if n.features.get("top", False)]:
+        for topNode in [n for n in self.nodes() if n.features.get("top", False) or n.pos().endswith("FIN")]:
                 #print [w.word for w in topNode.text]
 #             if "dups" in topNode.features:
                 dups = topNode.features.get("dups", [])
@@ -821,7 +821,17 @@ class GraphWrapper(digraph):
     def getPredicates(self):
         ret = []
         edgeFilter = lambda edge: self.edge_label(edge).upper() in ["AUX", "AVZ", "PRED", "ADV", "OBJI", "OBJC", "OBJP", "PART"] or edge[0].pos() == "PRF" or edge[1].pos() == "PRF"
-        for predNode in [n for n in self.nodes() if n.pos().endswith("FIN")]:
+        """
+        finVerbNodes = [n for n in self.nodes() if n.pos().endswith("FIN")]
+        topNodes = [n for n in self.nodes() if n.features.get("top", False)]
+        onlyFinVerbNodes = [n for n in finVerbNodes if n not in topNodes]
+        onlyTopNodes = [n for n in topNodes if n not in finVerbNodes]
+        if onlyFinVerbNodes != []:
+            print("These Nodes were only find by searching for finite verbs:", "\n", [" ".join([w.word for w in n.text]) for n in onlyFinVerbNodes])
+        if onlyTopNodes != []:
+            print("These Nodes were only find by searching for topNodes:", "\n", [" ".join([w.word for w in n.text]) for n in onlyTopNodes])
+        """
+        for predNode in [n for n in self.nodes() if n.pos().endswith("FIN") or n.features.get("top", False)]:
             neigboursList = self.getNeighboursList(predNode)
             for nlist in neigboursList:
                 predSubSpanList = []
@@ -1190,37 +1200,49 @@ class GraphWrapper(digraph):
                     
                     
         # find appositions
-        for subj, obj in find_edges(self, lambda edge:self.edge_label(edge) == "APP"):
+        for subj, obj in find_edges(self, lambda edge:self.edge_label(edge).upper() == "APP"):
             # duplicate relations
-            for curFather in self.incidents(subj):
-                curIndex = curFather.features.get("apposIndex", 0) + 1
-#                 curLabel = "{0},{1}".format(curIndex,self.edge_label((curFather,subj)))
-                curLabel = self.edge_label((curFather, subj))
-                self.del_edge((curFather, subj))
-                self.add_edge((curFather, subj), curLabel)
-                self.add_edge((curFather, obj), curLabel)
-                ls = curFather.features.get("dups", [])
-                ls.append((subj, obj))
-                curFather.features["dups"] = ls
-                
-                curFather.features["apposIndex"] = curIndex
-            # TF: example for this scenario - acomp
-            if (not isDefinite(subj) and not isDefinite(obj)) or (obj in subj.neighbors().get("acomp", [])):
-                self.createPropRel(domain=subj, mod=obj)
-                obj.features["top"] = True
-            else:
-                # add new node
-                # TODO: subj here is a problem - should point to the comma or something
-                self.types.add("SameAs")
-                copularNode = getCopular(self, subj.text[0].index, features={})
-                copularNode.surface_form = []
-                self.add_edge((copularNode, subj),
-                              label=FIRST_ENTITY_LABEL)
-                self.add_edge((copularNode, obj),
-                              label=SECOND_ENTITY_LABEL)
-                
-                    
-            self.del_edge((subj, obj))
+            firstId = self.nodes().index(subj)
+            secondId = self.nodes().index(obj)
+            if firstId > secondId: firstId,secondId = secondId,firstId
+            betweenNodes = [n for n in self.nodes() if self.nodes().index(n) > firstId and self.nodes().index(n) < secondId]
+            # ONLY if there ist a punctuation token (mainly "," or "(") between subj and obj, duplicate relations and do the magic --condition added by triceratopsandbottoms
+            appoBetweenNodes = [n for n in betweenNodes if n.pos().startswith("$") or n.pos().upper() == "KON"]
+            if appoBetweenNodes != []:
+                dummyTopNode = appoBetweenNodes[0]
+                for curFather in self.incidents(subj):
+                    curIndex = curFather.features.get("apposIndex", 0) + 1
+    #                 curLabel = "{0},{1}".format(curIndex,self.edge_label((curFather,subj)))
+                    curLabel = self.edge_label((curFather, subj))
+                    self.del_edge((curFather, subj))
+                    self.add_edge((curFather, subj), curLabel)
+                    self.add_edge((curFather, obj), curLabel)
+                    ls = curFather.features.get("dups", [])
+                    ls.append((subj, obj))
+                    curFather.features["dups"] = ls
+                    #print("subj:",[w.word for w in subj.text], "obj:", [w.word for w in obj.text], "curFather:", [w.word for w in curFather.text])
+                    curFather.features["apposIndex"] = curIndex
+                # TF: example for this scenario - acomp
+                if (not isDefinite(subj) and not isDefinite(obj)) or (obj in subj.neighbors().get("acomp", [])):
+                    self.createPropRel(domain=subj, mod=obj)
+                    obj.features["top"] = True
+                    print([w.word for w in obj.text], "is now a topNode!")
+                else:
+                    # add new node
+                    # TODO: subj here is a problem - should point to the comma or something -> DONE: introduced dummyTopNode --triceratopsandbottoms
+                    self.types.add("SameAs")
+                    #copularNode = getCopular(self, subj.text[0].index, features={})
+                    #copularNode.surface_form = []
+                    #ind = dummyTopNode.text[0].index
+                    dummyTopNode.features["Lemma"] = "SameAs"
+                    dummyTopNode.isPredicate = True
+                    dummyTopNode.features["implicit"] = True
+                    dummyTopNode.surface_form = []
+                    self.add_edge((dummyTopNode, subj),
+                                  label=FIRST_ENTITY_LABEL)
+                    self.add_edge((dummyTopNode, obj),
+                                  label=SECOND_ENTITY_LABEL)
+                self.del_edge((subj, obj))
     
     def to_mctest_representation(self):
         ret = ""

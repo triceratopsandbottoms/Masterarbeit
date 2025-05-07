@@ -521,7 +521,9 @@ def subgraph_to_string(graph,node,exclude=[]):
                 if parent_rel.startswith("prep_") and n.incidents()[parent_rel][0] in nodes:
                     idx = get_min_max_span(graph,n)[0] - 1
                     w = Word(idx,parent_rel.replace("prep_",""))
-                    words += [w]    
+                    words += [w] 
+                    print("n.surface_form:",n.surface_form.word)
+                    print("Added word:", w.word)
         words = list(set(words))
         ret = " ".join([w.word for w in strip_punctuations(sorted(words,key=lambda w:w.index))])+" "
     except:

@@ -95,11 +95,11 @@ def parse_dependencies_to_conll_file(text, path=None):
                 print(conll)
             #return 0
         except Exception as ex:
-            print(ex, "\n", text)
+            print(ex)
             errors += 1
         counter += 1
         if counter == 3 and errors == 3: success = False
-    return success, conll
+    return success, errors
 
 def postDocumentToInception(title, filepath):
     doc_file = open(filepath,'rb')
@@ -126,15 +126,17 @@ def main(arguments):
             f = open(path_,'r')
             text = f.read()
             parsed = parse_dependencies_to_conll_file(text, outPath)
+            print(filename)
             if parsed[0]:                 
-                #print(filename)
+                print("    Parsing completed at",parsed[1]+1,". try.")
                 new_document = postDocumentToInception(filename, outPath)
                 if new_document:
                     os.remove(outPath)
+                    print("    Posted to Inception.")
                 else:
-                    print("Posting to Inception failed for document:", filename)
+                    print("    ERROR: Posting to Inception failed.")
             else:
-                print("Parsing to conll failed for document:", filename)
+                print("    ERROR: Parsing to conll failed.")
     #else: 
     #    outPath = 'output' + ".conll"
     #print(open(conll).read())

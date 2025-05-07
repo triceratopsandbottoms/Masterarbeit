@@ -11,30 +11,30 @@ POSSESSED_LABEL = "possessed"
 ARG_LABEL = "arg"
 domain_label = "prop_of"
 
-determiner_dependencies = ["NK"] # det
-determiner_pos = ["ART"] # new
-conjunction_dependencies = ["CD"] # cc
-aux_dependencies = ["aux", "auxpass"] # TBD
+determiner_dependencies = ["NK", "DET", "det"] # det
+determiner_pos = ["ART", "art"] # new
+conjunction_dependencies = ["CD", "KON", "kon","cj"] # cc
+aux_dependencies = ["aux", "auxpass", "AUX"] # TBD
 aux_cop_dependencies = aux_dependencies + ["cop"] # TBD
 passive_dependencies = ["SBP"] # "auxpass"
 # "csubjpass", "nsubjpass" also indicate passive, but must come with auxpass in the general case. For other cases see json_files/not_auxpass.json
 negation_dependencies = ["NG"] # neg
 time_dependencies = ["tmod"]
-subject_dependencies = ["SB","subj"] #["subj","nsubj","nsubjpass","csubj","csubjpass","xsubj"]
-object_dependencies = ["obj","dobj","iobj","pobj"]
-clausal_complements = ["acomp","xcomp","comp","ccomp"]#"vmod"]#"dep"]
+subject_dependencies = ["SB","subj", "SUBJC", "SUBJ", "subjc", "np2"] #["subj","nsubj","nsubjpass","csubj","csubjpass","xsubj"]
+object_dependencies = ["obj","dobj","iobj","pobj","objp","obji","objg","objd","objc","obja2","obja"]
+clausal_complements = ["acomp","xcomp","comp","ccomp","objc","subjc"]#"vmod"]#"dep"]
 rare_dependencies = ["dep","parataxis","expl"]
 arguments_dependencies = ["arg","agent"] + object_dependencies + subject_dependencies + [domain_label,FIRST_ENTITY_LABEL,SECOND_ENTITY_LABEL,POSSESSED_LABEL,POSSESSOR_LABEL,OUTCOME_LABEL,REASON_LABEL,CONDITION_LABEL,EVENT_LABEL]
-clausal_complement = ["xcomp"]
-adverb_dependencies = ["advmod", "advcl"]
-appositional_dependencies = ["appos"]
+clausal_complement = ["xcomp","objc","subjc"]
+adverb_dependencies = ["advmod", "advcl","adv"]
+appositional_dependencies = ["appos","app"]
 prepositions_dependencies = ["prep"]
-prt_dependency = "prt"
+prt_dependency = "adv" #prt
 adjectival_mod_dependencies = ["amod","acomp"]
 mod_labels = ["amod", "vmod"] + adverb_dependencies
 determined_labels = ["NE"] # NNP
 definite_determiners = ["der","die","das","des","dem","den","diese","dieser","dieses","diesen"] # "the","this","that","these","those","another"
-relclause_dependencies = ["rcmod"]
+relclause_dependencies = ["rcmod","rel"]
 relclause_markers = ["that","which","who","whom"]
 mark_labels = ["mark","advmod"]
 clausal_modifiers_labels = ["advcl","dep"]
@@ -123,11 +123,11 @@ FUTURE_MODALS = [WILL, WONT, WOULD, ll, D, "may", "might"] # "wo" is the Modal p
 FUTURE_Signs = ["going", "about"]
 #PREP
 
-AS = "as"
+AS = "wie" #"as"
 
 #conditionals
-COND_IF = "if"
-COND_AFTER = "after"
+COND_IF = "wenn" #"if"
+COND_AFTER = "nachdem" #"after"
 # comparators for DepTree._get_span_of_filtered_children() method
 
 TO_child_func = aux_children_with_pos(TO)
