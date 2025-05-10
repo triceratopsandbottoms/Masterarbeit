@@ -503,14 +503,14 @@ class GraphWrapper(digraph):
         return None
         
     def do_comp_de(self):
-        edges = find_edges(self, lambda u_v: self.edge_label(u_v) == 'CM')
+        edges = find_edges(self, lambda u_v: self.edge_label(u_v).upper() in ['CM','KOM']) #added CDG-Tag
         if edges:
             for u, v in edges:
                 # find CC
                 try:
                     incidents = u.incidents()
-                    if "CC" in incidents:
-                        cc = incidents["CC"][0]
+                    if "CC" in incidents or "CJ" in incidents:
+                        cc = incidents["CC"or"CJ"][0]
                         self.del_edge((u, v))
                         self.add_edge((cc,v),"tmp")
                         merge_nodes(self,cc,v)
