@@ -3,7 +3,9 @@ from pycaprio.mappings import InceptionFormat
 from zipfile import ZipFile
 from io import BytesIO
 from cassis import *
-import json, itertools
+from inspect import currentframe, getframeinfo
+from string import Template
+import json, itertools, warnings, time
 import pandas as pd
 
 INCEPTION_URL = "http://localhost:8080"
@@ -27,6 +29,9 @@ CLITORIS_ENTITY_TYPE = "webanno.custom.ClitorisEntities"
 SURFACE_FORM_TYPE = "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.SurfaceForm"
 SEMARG_TYPE = "de.tudarmstadt.ukp.dkpro.core.api.semantics.type.SemArg"
 SEMPRED_TYPE = "de.tudarmstadt.ukp.dkpro.core.api.semantics.type.SemPred"
+
+NAMED_TO_CLIT_ENT_DICT = {'A. bulbi vestibuli': 'art', 'A. bulbi vestibuli vaginae': 'art', 'A. clitoridis': 'art', 'A. profunda clitoridis': 'art', 'Bulbus/-i vestibularis': 'bul', 'Corpus cavernosum urethrae': 'cau', 'Corpusc': '!', 'Klitoris (Organ mit C. cavernosum)': 'kli', 'Lig. fundiforme clitoridis': 'lig', 'N. cavernosus clitoridis': 'ner', 'V. bulbi vestibuli': 'ven', 'V. dorsalis clitoridis': 'ven', 'V. dorsalis clitoridis subfascialis': 'ven', 'V. dorsalis superficialis clitoridis': 'ven', 'V. profunda clitoridis': 'ven', 'Klitoris (Organ mit C. cavernosum + spongiosum)': 'kli', 'Klitoris (Organ mit C. cavernosum + spongiosum + cav. urethrae)': 'kli', 'Klitoris (Organ mit unklarem Umfang)': 'kli', 'Klitoriskomplex (Organkomplex/-gruppe)': '?', 'Schwellkörper (C. cavernosum + spongiosum)': '?', 'Schwellkörper (C. cavernosum + spongiosum + cav. urethrae)': '?', 'Schwellgewebe': '?', 'Corpus cavernosum clitoridis': 'cac', 'Crus/Crura clitoridis': 'cru', 'Corpus clitoridis (gesamt)': 'cor', 'Corpus clitoridis ascendenz': 'asz', 'Corpus clitoridis descendenz': 'des', 'Septum media des Corpus clitoridis': 'sep', 'Septum media des RSP': '?', 'Tunica albuginea': 'tac/tas', 'Corpus spongiosum clitoridis': 'spo', 'Bulbus/-i vestibuli': 'bul', 'Bulbuskommissur': 'kom', 'Glans clitoridis': 'gla', 'Frenulum/-a': 'fre', 'Infra-corporeal Residual Spongy Part (RSP)': 'rsp', 'Pars intermedia, Kobeltscher Venenplexus': 'int', 'Ligamentum suspensorium clitoridis': 'lig', 'Präputium clitoridis': 'pra', 'Fascia retrocruralis': 'frc', 'N. dorsalis clitoridis': 'ner', 'A. dorsalis clitoridis': 'art', 'V. dorsalis profunda clitoridis': 'ven', 'Angulus clitoridis': '?', 'Smegma clitoridis': '?'}
+
 
 def key_elemType(propElem):
     elemOrder = ["zus", "narg", "farg", "pspez", "gspez"]
@@ -168,7 +173,7 @@ def get_elem_clitents(elem, runType='default'):
         for item in elem:
             output = get_elem_clitents(item, runType='raw')
             for clitEnt in output[0]: clitEnts.append(clitEnt)
-            for begin in output[1]: begins.append(begin) 
+            for begin in output[1]: begins.append(begin)
             for end in output[2]: ends.append(end)
     else:
         if elem.clitEnt: 
@@ -192,6 +197,40 @@ def get_elem_clitents(elem, runType='default'):
         return ret
     else:
         return clitEnts, begins, ends
+
+def get_elem_comments(elem, runType='default'):
+    comments = []
+    begins = []
+    ends = []
+    if type(elem)==tuple:
+        for span in elem:
+            if span.Anmerkungen: 
+                comments.append((span.Anmerkungen, span.begin, span.end))
+                begins.append(span.begin)
+                ends.append(span.end)
+    elif type(elem)==list:
+        for item in elem:
+            output = get_elem_comments(item, runType='raw')
+            for comment in output[0]: comments.append(comment)
+            for begin in output[1]: begins.append(begin) 
+            for end in output[2]: ends.append(end)
+    else:
+        if elem.Anmerkungen: 
+            comments.append((elem.Anmerkungen, elem.begin, elem.end))
+            begins.append(elem.begin)
+            ends.append(elem.end)
+            
+    if runType=='default':
+        ret = []
+        for coref in set(comments):
+            if coref[1] <= min(begins) and coref[2] >= max(ends):
+                fullCoverage = True
+            else:
+                fullCoverage = False
+            ret.append((coref[0], fullCoverage))
+        return ret
+    else:
+        return comments, begins, ends
 
 def get_surface_text(span):
     if 'SurfaceForm' in span.type._features.keys():
@@ -231,8 +270,10 @@ def makePartProps(subLemmata, propZuss, propNargs, propElems):
         prop['elements'] = {}
         prop['elements']['lemmaHead'] = pred
         i=1
-        for zus in propZuss:
-                prop['elements'][f"zus{i}"] = zus
+        zusElems = [e for e in propElems if getElemType(e)=='zus']
+        for zus in zusElems:
+                i_ = i if len(zusElems)>1 else ""
+                prop['elements'][f"zus{i_}"] = zus
                 i+=1
         c_ = chr(c_lemma) if len(subLemmata) > 1 else ""
         if len(subLemmata) > 0: prop['elements'][f"lemmaSubs{c_}"] = subLemma
@@ -246,10 +287,10 @@ def makePartProps(subLemmata, propZuss, propNargs, propElems):
                 c_ = chr(c) if narg.label.endswith("Elem") else ""
                 prop['elements'][f"narg{i_}{c_}"] = narg
                 i+=1
-            partProps.append(prop.copy())
+            partProps.append({'elements': prop['elements'].copy()})
             c_nargs+=1
             
-            for elem in propElems:
+            for elem in [e for e in propElems if getElemType(e)!='zus']:
                 #print(getElemTypes(propElems))
                 try:
                     sameTypeElems = list(filter(lambda e: getElemType(e)==getElemType(elem), propElems))
@@ -261,19 +302,17 @@ def makePartProps(subLemmata, propZuss, propNargs, propElems):
                 if len(elem) > 1:
                     c_elems=ord('A')
                     for enum in elem:
-                        try:
-                            type_ = enum.label.split()[0]
-                        except:
-                            type_ = enum[0].label.split()[0]
+                        type_ = getElemType(enum)
                         prop['elements'][f"{type_}{i_}{chr(c_elems)}"] = enum
-                        partProps.append(prop.copy())
+                        partProps.append({'elements': prop['elements'].copy()})
                         prop['elements'].popitem()
                         c_elems+=1
                     prop['elements'][f"{type_}{i_}"] = elem
                 else:
-                    type_ = elem[0].label.split()[0]
+                    type_ = getElemType(elem)
                     prop['elements'][f"{type_}{i_}"] = elem[0]
-                    partProps.append(prop.copy())
+                    #saveProp = {'elements': prop['elements'].copy()}
+                    partProps.append({'elements': prop['elements'].copy()})
                     
     return partProps
     
@@ -305,6 +344,20 @@ def addClitorisEntities(prop):
         if clitEnts==[]: prop['clitorisEntities'][key] = ''
     return
     
+def addInformationDict(prop, dictKey, func_get_elem_info):
+    prop[dictKey] = {}
+    for key, value in prop['elements'].items():
+        i=1
+        infos = func_get_elem_info(value)
+        for info in infos:
+            i_= i if len(infos)>1 else ''
+            newKey = key + f"_{i_}"
+            if info[1]==False: newKey+="*"
+            prop[dictKey][newKey] = info[0]
+            i+=1
+        if infos==[]: prop[dictKey][key] = ''
+    return
+    
 def addMetaInformation(dict_, cas):
     bookId = cas.get_document_annotation().documentTitle.split('_')[0]
     excerptId = cas.get_document_annotation().documentTitle.split('_')[1]
@@ -328,7 +381,7 @@ def makeStrPartProp(prop, mergeLemma=True):
     newProp['elements'] = {}
     newProp['coreferences'] = {}
     newProp['clitorisEntities'] = {}
-    partPropStrs.append(newProp)
+    newProp['comments'] = prop['comments'].copy()
     
     #get strings for all prop entries, coreferences and clitEnts
     lemmaSubs = False
@@ -349,12 +402,11 @@ def makeStrPartProp(prop, mergeLemma=True):
                 valueStr += " <- "
                 valueStr += get_surface_text(curValue.head)
                 curValue = curValue.head
-                
-            newProp['coreferences'][key] = valueStr
             if key.find('*')>0: 
                 valueStr += ' ("'
                 valueStr += get_surface_text(value)
                 valueStr += '")'
+            newProp['coreferences'][key] = valueStr
         else:
             newProp['coreferences'][key] = ''
                 
@@ -389,31 +441,33 @@ def makeStrPartProp(prop, mergeLemma=True):
     sortedPropElems = dict(sorted(list(newProp['elements'].items()), key=key_dictKey))
     sortedPropCorefs = dict(sorted(list(newProp['coreferences'].items()), key=key_dictKey))
     sortedPropClitEnts = dict(sorted(list(newProp['clitorisEntities'].items()), key=key_dictKey))
+    sortedPropComments = dict(sorted(list(newProp['comments'].items()), key=key_dictKey))
     newProp['elements'] = sortedPropElems.copy()
     newProp['coreferences'] = sortedPropCorefs.copy()
     newProp['clitorisEntities'] = sortedPropClitEnts.copy()
-
+    newProp['comments'] = sortedPropComments.copy()
+    
     return newProp
     
 def flattenStrProp(strProp):
     #conversion of dictionaries for elements, corefs and clitEnts into strings 
-    strings = []
-    for key, value in strProp['elements'].items(): strings.append(f'{key: >6}: {value}')
-    strProp['elements'] = f'\n'.join(strings)
-    
-    strings = []
-    for key, value in strProp['coreferences'].items():
-        if value != '': strings.append(f'{value}')
-        else: strings.append('')
-    strProp['coreferences'] = '\n'.join(strings)
-
-    strings = []
-    for key, value in strProp['clitorisEntities'].items(): 
-        if value != '': strings.append(f'{value}')
-        else: strings.append('')
-    strProp['clitorisEntities'] = '\n'.join(strings)
-    
+    strProp['elements'] = dict2string(strProp['elements'], keyWidth=6)
+    strProp['coreferences'] = dict2string(strProp['coreferences'], False)
+    strProp['clitorisEntities'] = dict2string(strProp['clitorisEntities'], False)
+    strProp['comments'] = dict2string(strProp['comments'], False)    
     return
+    
+def dict2string(dict_, includeKey=True, keyWidth=1):
+    strings = []
+    if includeKey:
+        for key, value in dict_.items(): 
+            strings.append(f'{key: >{keyWidth}}: {value}')
+    else:
+        for key, value in dict_.items():
+            strings.append(str(value))
+            
+    ret = None if set(strings)=={''} else '\n'.join(strings)
+    return ret
     
 def prepareDocument(typesystem_xml, annotation_xmi):
     #load/deserialise the typesystem and add a bunch of features, then load the cas
@@ -449,6 +503,8 @@ def prepareDocument(typesystem_xml, annotation_xmi):
             #print(span)
             
     for ent in cas.select(NAMED_ENTITY_TYPE):
+        newValue = NAMED_TO_CLIT_ENT_DICT[ent.value]
+        ent.set('value', newValue)
         for span in cas.select_covering(SPAN_TYPE, ent):
             span.set('clitEnt', ent)
             #print(span)
@@ -480,7 +536,10 @@ for inceptionDocId in range(1,5):
 
     #make a request at Inception and put the response doc into a ZipFile
     annotation_zip = ZipFile(BytesIO(client.api.annotation(PROJECT_ID, inceptionDocId, USER, annotation_format=INCEPTION_FORMAT))) # Downloads annotations on document 1
-
+    
+    retrievalTime = time.strftime('%X %x %Z')
+    print(retrievalTime)
+    
     #recognise and deflate the zipfile contents
     if annotation_zip.filelist[0].filename.endswith(".xmi"):
         annotation_xmi = annotation_zip.read(annotation_zip.filelist[0])
@@ -500,11 +559,11 @@ for inceptionDocId in range(1,5):
     excerpt['elements'] = None
     excerpt['coreferences'] = None
     excerpt['clitorisEntities'] = None
+    excerpt['comments'] = None
     excerpt['excerptString'] = textStr
 
     df = pd.DataFrame([excerpt])
     df.to_csv("partPropStrs.csv", mode='a', header=False, index=False)
-                
 
     #iterate through all predicate heads in the current document / excerpt
     i_pred = 0
@@ -538,19 +597,29 @@ for inceptionDocId in range(1,5):
         
         subLemmata = list(itertools.product(*lemmaSubs))
 
-        #print("LemmaProducts:", len(list(itertools.product(*lemmaSubs))))
-        #print("PropNargsProducts:", len(list(itertools.product(*propNargs))))
-        #print("PropElems:", len(propElems))
+        lemmaProducts = len(list(itertools.product(*lemmaSubs)))
+        propNargsProducts = len(list(itertools.product(*propNargs)))
+        numPropElems = len([e for e in propElems if getElemType(e)!='zus'])
+        minNumInfos = lemmaProducts*propNargsProducts+numPropElems
+        
+        #print(f'{lemmaProducts=:<15}{propNargsProducts=:<15}{numPropElems=:<15}')
+        #print(f'min number of infos:    {minNumInfos}')
         
         partProps = makePartProps(subLemmata, propZuss, propNargs, propElems)
+        if len(partProps)<minNumInfos:
+            warnings.warn_explicit(f'The calculated number of infos ({len(partProps)}) is below the expected amount (min. {minNumInfos})! ({inceptionDocId=}, predHead number {i_pred})', UserWarning, getframeinfo(currentframe()).filename, getframeinfo(currentframe()).lineno-2)
+        
+        #print(f'actual number of infos: {len(partProps)}')
         
         #add additional information to each proposition
         partPropStrs = []
         c_prop=ord('A')
         for prop in partProps:
-            #add corefs + clitEnts for each element, add metainformation
-            addCoreferences(prop)
-            addClitorisEntities(prop)
+            #add corefs, clitEnts, comments from each element, add metainformation
+            addInformationDict(prop, 'coreferences', get_elem_coref)
+            addInformationDict(prop, 'clitorisEntities', get_elem_clitents)
+            addInformationDict(prop, 'comments', get_elem_comments)
+
             prop['inceptionDocId'] = inceptionDocId
             addMetaInformation(prop, cas)
             prop['infoId'] = f"{ str(i_pred).zfill(2) }{ chr(c_prop) }"
@@ -563,13 +632,13 @@ for inceptionDocId in range(1,5):
             #flatten dicts in dict for 2D representation in a table
             flattenStrProp(strProp)
             
-            #for key, value in strProp.items():
-            #    print(key, "\t->\t", value)
-            #print("\n")
+            for key, value in strProp.items():
+                print(f'{key:18} -> {value}')
+            print("\n")
         
         #save propositions on disc
-        df = pd.DataFrame(partPropStrs)
-        df.to_csv("partPropStrs.csv", mode='a', header=False, index=False)
+        #df = pd.DataFrame(partPropStrs)
+        #df.to_csv("partPropStrs.csv", mode='a', header=False, index=False)
         
 """    
     ########
