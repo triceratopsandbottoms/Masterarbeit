@@ -1,10 +1,12 @@
 from pycaprio import Pycaprio
 from pycaprio.mappings import InceptionFormat
+from pycaprio.core.exceptions import InceptionBadResponse
 from zipfile import ZipFile
 from io import BytesIO
 from cassis import *
 from inspect import currentframe, getframeinfo
 from string import Template
+from tqdm import tqdm
 import json, itertools, warnings, time
 import pandas as pd
 
@@ -50,6 +52,13 @@ def key_dictKey(item):
     rank = keyOrder.index(keyword)
     return rank
 
+def key_propDict(item):
+    key = item[0]
+    keyOrder = ["retrievalTime", "inceptionDocId", "bookId", "excerptId", "page", "infoId", "elements", 'coreferences', 'clitorisEntities', 'comments']
+    rank = keyOrder.index(key)
+    return rank
+
+
 def check_for_sub_elems(cas, span):
     subElems = [r.Dependent for r in cas.select(RELATION_TYPE) if r.Governor.xmiID==span[0].xmiID]
     
@@ -63,9 +72,11 @@ def check_for_sub_elems(cas, span):
     
     enumElems = []
     struct_subElems = []
+    enumerations = False
     
     for subElem in rec_subElems:
         if subElem.label.lower().endswith("elem"):
+            enumerations = True
             new_label = span[0].label
             new_label += " /"
             new_label += subElem.label
@@ -82,8 +93,8 @@ def check_for_sub_elems(cas, span):
             struct_subElems.append([subElem])
     if enumElems != []:
         struct_subElems.append(enumElems)
-    elif struct_subElems != []:
-        struct_subElems.append([span])
+    elif struct_subElems != [] and enumerations==False:
+        struct_subElems.append(span)
     
     if struct_subElems == []:
         return span
@@ -112,7 +123,7 @@ def elementString(arg):
 
 def get_elem_text(elem):
     if type(elem)==tuple:
-        ret = " ".join(map(lambda span: get_surface_text(span), elem))
+         ret = " ".join(map(lambda item: get_elem_text(item), elem))
     elif type(elem)==list:
         s = ' '
         ret = f'\n{s: <8}'.join(map(lambda item: get_elem_text(item), elem))
@@ -124,13 +135,13 @@ def get_elem_coref(elem, runType='default'):
     corefs = []
     begins = []
     ends = []
-    if type(elem)==tuple:
-        for span in elem:
-            if span.coreference: 
-                corefs.append((span.coreference, span.coreference.begin, span.coreference.end))
-                begins.append(span.begin)
-                ends.append(span.end)
-    elif type(elem)==list:
+    #if type(elem)==tuple:
+    #    for span in elem:
+    #        if span.coreference: 
+    #            corefs.append((span.coreference, span.coreference.begin, span.coreference.end))
+    #            begins.append(span.begin)
+    #            ends.append(span.end)
+    if type(elem) in [list, tuple]:
         for item in elem:
             output = get_elem_coref(item, runType='raw')
             for coref in output[0]: corefs.append(coref)
@@ -158,18 +169,18 @@ def get_elem_clitents(elem, runType='default'):
     clitEnts = []
     begins = []
     ends = []
-    if type(elem)==tuple:
-        for span in elem:
-            if span.clitEnt:
-                clitEnts.append((span.clitEnt, span.clitEnt.begin, span.clitEnt.end))
-                begins.append(span.begin)
-                ends.append(span.end)
-            elif span.coreference:
-                if span.coreference.head.clitEnt:
-                    clitEnts.append((span.coreference.head.clitEnt, span.coreference.begin, span.coreference.end))
-                    begins.append(span.begin)
-                    ends.append(span.end)
-    elif type(elem)==list:
+    # if type(elem)==tuple:
+        # for span in elem:
+            # if span.clitEnt:
+                # clitEnts.append((span.clitEnt, span.clitEnt.begin, span.clitEnt.end))
+                # begins.append(span.begin)
+                # ends.append(span.end)
+            # elif span.coreference:
+                # if span.coreference.head.clitEnt:
+                    # clitEnts.append((span.coreference.head.clitEnt, span.coreference.begin, span.coreference.end))
+                    # begins.append(span.begin)
+                    # ends.append(span.end)
+    if type(elem) in [list, tuple]:
         for item in elem:
             output = get_elem_clitents(item, runType='raw')
             for clitEnt in output[0]: clitEnts.append(clitEnt)
@@ -202,13 +213,14 @@ def get_elem_comments(elem, runType='default'):
     comments = []
     begins = []
     ends = []
-    if type(elem)==tuple:
-        for span in elem:
-            if span.Anmerkungen: 
-                comments.append((span.Anmerkungen, span.begin, span.end))
-                begins.append(span.begin)
-                ends.append(span.end)
-    elif type(elem)==list:
+    # if type(elem)==tuple:
+        # for span in elem:
+            # if span.Anmerkungen: 
+                # commentStr = '; '.join(span.Anmerkungen.elements)
+                # comments.append((commentStr, span.begin, span.end))
+                # begins.append(span.begin)
+                # ends.append(span.end)
+    if type(elem) in [list, tuple]:
         for item in elem:
             output = get_elem_comments(item, runType='raw')
             for comment in output[0]: comments.append(comment)
@@ -216,18 +228,19 @@ def get_elem_comments(elem, runType='default'):
             for end in output[2]: ends.append(end)
     else:
         if elem.Anmerkungen: 
-            comments.append((elem.Anmerkungen, elem.begin, elem.end))
+            commentStr = '; '.join(elem.Anmerkungen.elements)
+            comments.append((commentStr, elem.begin, elem.end))
             begins.append(elem.begin)
             ends.append(elem.end)
             
     if runType=='default':
         ret = []
-        for coref in set(comments):
-            if coref[1] <= min(begins) and coref[2] >= max(ends):
+        for comment in set(comments):
+            if comment[1] <= min(begins) and comment[2] >= max(ends):
                 fullCoverage = True
             else:
                 fullCoverage = False
-            ret.append((coref[0], fullCoverage))
+            ret.append((comment[0], fullCoverage))
         return ret
     else:
         return comments, begins, ends
@@ -242,19 +255,33 @@ def get_surface_text(span):
     if span.surfaceForm_ext and span.surfaceForm_ext.begin >= span.begin and span.surfaceForm_ext.end <= span.end:
         ret = ""
         if span.begin < span.surfaceForm_ext.begin:
-            ret += Sofa.sofaString[span.begin:span.surfaceForm_ext.begin]
+            ret += cas.sofa_string[span.begin:span.surfaceForm_ext.begin]
         ret += span.surfaceForm_ext.value
         if span.end > span.surfaceForm_ext.end:
-            ret += Sofa.sofaString[span.surfaceForm_ext.end:span.end]
+            ret += cas.sofa_string[span.surfaceForm_ext.end:span.end]
         return ret
     else:
         return span.get_covered_text()
+
+def isEnumElem(elem):
+    if type(elem) in [tuple, list]:
+        try:
+            return [s for s in elem if s.label.endswith('Elem')]!=[]
+        except:
+            for e in elem:
+                print(get_surface_text(e))
+            return [s for s in elem if s[0].label.endswith('Elem')]!=[]
+    else:
+        return elem.label.endswith('Elem')
 
 def getElemType(elem):
     try:
         type_ = elem[0].label.split()[0]
     except:
-        type_ = elem[0][0].label.split()[0]
+        try:
+            type_ = elem[0][0].label.split()[0]
+        except:
+            type_ = elem.label.split()[0]
     return type_
 
 def getElemTypes(elemList):
@@ -284,7 +311,7 @@ def makePartProps(subLemmata, propZuss, propNargs, propElems):
             i=1
             for narg in nargs:
                 i_ = i if len(nargs)>1 else ""
-                c_ = chr(c) if narg.label.endswith("Elem") else ""
+                c_ = chr(c_nargs) if isEnumElem(narg) else ""
                 prop['elements'][f"narg{i_}{c_}"] = narg
                 i+=1
             partProps.append({'elements': prop['elements'].copy()})
@@ -316,34 +343,6 @@ def makePartProps(subLemmata, propZuss, propNargs, propElems):
                     
     return partProps
     
-def addCoreferences(prop):
-    prop['coreferences'] = {}
-    for key, value in prop['elements'].items():
-        i=1
-        corefs = get_elem_coref(value)
-        for coref in corefs:
-            i_= i if len(corefs)>1 else ''
-            newKey = key + f"_{i_}"
-            if coref[1]==False: newKey+="*"
-            prop['coreferences'][newKey] = coref[0]
-            i+=1
-        if corefs==[]: prop['coreferences'][key] = ''
-    return
-    
-def addClitorisEntities(prop):
-    prop['clitorisEntities'] = {}
-    for key, value in prop['elements'].items():    
-        i=1
-        clitEnts = get_elem_clitents(value)
-        for ent in clitEnts:
-            i_= i if len(clitEnts)>1 else ''
-            newKey = key + f"_{i_}"
-            if ent[1]==False: newKey+="*"
-            prop['clitorisEntities'][newKey] = ent[0]
-            i+=1
-        if clitEnts==[]: prop['clitorisEntities'][key] = ''
-    return
-    
 def addInformationDict(prop, dictKey, func_get_elem_info):
     prop[dictKey] = {}
     for key, value in prop['elements'].items():
@@ -369,14 +368,14 @@ def addMetaInformation(dict_, cas):
     return
     
 def makeStrPartProp(prop, mergeLemma=True):
-    newProp = {}
+    newProp = prop.copy()
         
     #copy metainformation
-    newProp['inceptionDocId'] = prop['inceptionDocId']
-    newProp['bookId'] = prop['bookId']
-    newProp['excerptId'] = prop['excerptId']
-    newProp['page'] = prop['page']
-    newProp['infoId'] = prop['infoId']
+    #newProp['inceptionDocId'] = prop['inceptionDocId']
+    #newProp['bookId'] = prop['bookId']
+    #newProp['excerptId'] = prop['excerptId']
+    #newProp['page'] = prop['page']
+    #newProp['infoId'] = prop['infoId']
     
     newProp['elements'] = {}
     newProp['coreferences'] = {}
@@ -385,11 +384,18 @@ def makeStrPartProp(prop, mergeLemma=True):
     
     #get strings for all prop entries, coreferences and clitEnts
     lemmaSubs = False
-    for key, value in prop['elements'].items(): #for 'normal' entries                 
+    for key, value in prop['elements'].items(): #for 'normal' entries
         valueStr = get_elem_text(value)
         if key.startswith("lemmaSubs"):
             lemmaSubs = key
-            if len(value)>0 and value[-1].label!="predAVZ": valueStr+=" "
+            needSpace = False
+            if len(value)>0:
+                try:
+                    needSpace = value[-1].label!="predAVZ"
+                except:
+                    needSpace = value[-1][-1].label!="predAVZ"
+            if needSpace: valueStr+=" "
+            #if len(value)>0 and value[-1].label!="predAVZ": valueStr+=" "
         newProp['elements'][key] = valueStr
             
     for key, value in prop['coreferences'].items(): #for coref entries
@@ -484,7 +490,7 @@ def prepareDocument(typesystem_xml, annotation_xmi):
     cas = load_cas_from_xmi(BytesIO(annotation_xmi), typesystem=typesystem)
 
     #add the relations values to the span labels, because we want to keep the info, but won't refer to relations later on anymore
-    for rel in [r for r in cas.select(RELATION_TYPE) if r.RelationzumPrdikat not in [None, "", "elem"]]:
+    for rel in [r for r in cas.select(RELATION_TYPE) if r.RelationzumPrdikat not in [None, '', 'elem', 'none']]:
         dependent = rel.Dependent
         #print(old_dependent.label)
         new_label = rel.RelationzumPrdikat
@@ -532,13 +538,17 @@ def prepareDocument(typesystem_xml, annotation_xmi):
 #initializing the client
 client = Pycaprio(INCEPTION_URL, authentication=(INCEPTION_USER, INCEPTION_PW))
 
-for inceptionDocId in range(1,5):
+for inceptionDocId in tqdm(range(1,120)):
 
     #make a request at Inception and put the response doc into a ZipFile
-    annotation_zip = ZipFile(BytesIO(client.api.annotation(PROJECT_ID, inceptionDocId, USER, annotation_format=INCEPTION_FORMAT))) # Downloads annotations on document 1
+    try:
+        annotation_zip = ZipFile(BytesIO(client.api.annotation(PROJECT_ID, inceptionDocId, USER, annotation_format=INCEPTION_FORMAT))) # Downloads annotations on document 1
+    except InceptionBadResponse as error:
+        print('An error occurred:', error.args[0])
+        continue
     
-    retrievalTime = time.strftime('%X %x %Z')
-    print(retrievalTime)
+    retrievalTime = time.strftime('%d.%m.%Y %H:%M:%S %Z')
+    #print(retrievalTime)
     
     #recognise and deflate the zipfile contents
     if annotation_zip.filelist[0].filename.endswith(".xmi"):
@@ -553,17 +563,13 @@ for inceptionDocId in range(1,5):
     #safe excerpt string on disc
     textStr = cas.sofa_string
     excerpt = {}
+    excerpt['retrievalTime'] = retrievalTime
     excerpt['inceptionDocId'] = inceptionDocId
     addMetaInformation(excerpt, cas)
-    excerpt['infoId'] = None
-    excerpt['elements'] = None
-    excerpt['coreferences'] = None
-    excerpt['clitorisEntities'] = None
-    excerpt['comments'] = None
     excerpt['excerptString'] = textStr
 
     df = pd.DataFrame([excerpt])
-    df.to_csv("partPropStrs.csv", mode='a', header=False, index=False)
+    df.to_csv("excerpt_strings.csv", mode='a', header=False, index=False)
 
     #iterate through all predicate heads in the current document / excerpt
     i_pred = 0
@@ -620,6 +626,7 @@ for inceptionDocId in range(1,5):
             addInformationDict(prop, 'clitorisEntities', get_elem_clitents)
             addInformationDict(prop, 'comments', get_elem_comments)
 
+            prop['retrievalTime'] = retrievalTime
             prop['inceptionDocId'] = inceptionDocId
             addMetaInformation(prop, cas)
             prop['infoId'] = f"{ str(i_pred).zfill(2) }{ chr(c_prop) }"
@@ -632,13 +639,16 @@ for inceptionDocId in range(1,5):
             #flatten dicts in dict for 2D representation in a table
             flattenStrProp(strProp)
             
-            for key, value in strProp.items():
-                print(f'{key:18} -> {value}')
-            print("\n")
+            strProp = dict(sorted(list(strProp.items()), key=key_propDict))
+
+            #for key, value in strProp.items():
+            #    print(f'{key:18} -> {value}')
+            #print("\n")
         
         #save propositions on disc
-        #df = pd.DataFrame(partPropStrs)
-        #df.to_csv("partPropStrs.csv", mode='a', header=False, index=False)
+        df = pd.DataFrame(partPropStrs)
+        df.to_csv("partPropStrs.csv", mode='a', header=False, index=False)
+        
         
 """    
     ########
