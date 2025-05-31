@@ -1,0 +1,2519 @@
+"   zus: Bei der Frau
+ lemma: werden
+ narg1: der Geschlechtshöcker
+ narg2: zur Klitoris",,"
+
+
+
+kli (""Klitoris"")",,27.05.2025 23:00:23 CEST,1,C8FJ558Z,2575YNWY,275,01A
+" lemma: haben
+ narg1: der M. ischiocavernosus
+ narg2: eine Sonderaufgabe für den Schwellkörper des Penis bzw. der Klitoris",,"
+
+
+cac (""Schwellkörper des Penis bzw. der Klitoris"")",,27.05.2025 23:00:23 CEST,2,C8FJ558Z,2QF72USH,322,01A
+" lemma: auf dem Bulbus vestibuli liegen
+  narg: das","
+
+bildet ein plattes Muskelband <- M. bulbocavernosus","
+bul (""Bulbus vestibuli"")
+",,27.05.2025 23:00:23 CEST,3,C8FJ558Z,3LH4FBVU,325,01A
+" lemma: mit einer Hautfalte , Praeputium clitoridis umgeben
+ narg1: Die letzten
+ narg2: die Klitoris","
+
+kleinen Schamlippen
+","
+pra (""Praeputium clitoridis"")
+
+gla (""Klitoris"")",,27.05.2025 23:00:24 CEST,4,C8FJ558Z,5AARTLLG,321,01A
+" lemma: ,
+ narg1: einer Hautfalte
+ narg2: Praeputium clitoridis",,"
+
+pra (""Hautfalte"")
+pra",,27.05.2025 23:00:24 CEST,4,C8FJ558Z,5AARTLLG,321,02A
+" lemma: .
+ narg1: Unterhalb der Klitoris
+ narg2: das Orificium urethrae ext",,"
+
+gla (""Klitoris"")
+",,27.05.2025 23:00:24 CEST,4,C8FJ558Z,5AARTLLG,321,03A
+" lemma: liegen
+  narg: die Schwellkörper , Bulbi vestibuli",,"
+
+bul (""Bulbi vestibuli"")",,27.05.2025 23:00:24 CEST,4,C8FJ558Z,5AARTLLG,321,04A
+" lemma: liegen
+  narg: die Schwellkörper , Bulbi vestibuli
+ pspez: Hier",,"
+
+bul (""Bulbi vestibuli"")
+",,27.05.2025 23:00:24 CEST,4,C8FJ558Z,5AARTLLG,321,04B
+" lemma: ,
+ narg1: die Schwellkörper
+ narg2: Bulbi vestibuli",,"
+
+bul (""Schwellkörper"")
+bul",,27.05.2025 23:00:24 CEST,4,C8FJ558Z,5AARTLLG,321,05A
+" lemma: auch ansetzen
+ narg1: an den
+ narg2: Fasern","
+
+des bedeckten Schwellkörpers (""den"")
+",,,27.05.2025 23:00:24 CEST,5,C8FJ558Z,99Y5GLZ5,325,01A
+" lemma: unbekannt sein
+  narg: Inwieweit er den Füllungszustand des bedeckten Schwellkörpers beeinflußt","
+
+Der Muskel { M. bulbocavernosus } (""er"")","
+
+bul (""Schwellkörpers"")",,27.05.2025 23:00:24 CEST,5,C8FJ558Z,99Y5GLZ5,325,02A
+" lemma: verlaufen
+ narg1: das
+ narg2: unter der Vena dorsalis penis ( bzw. clitoridis ) subfascialis","
+
+Lig .
+praeurethrale
+","
+
+
+ven (""Vena dorsalis penis ( bzw. clitoridis )"")",,27.05.2025 23:00:24 CEST,6,C8FJ558Z,AIAWGWBX,324f,01A
+" lemma: verlaufen
+ narg1: das
+ narg2: unter der Vena dorsalis penis ( bzw. clitoridis ) subfascialis
+pspez1: in bogenförmigem Verlauf","
+
+Lig .
+praeurethrale
+
+","
+
+
+ven (""Vena dorsalis penis ( bzw. clitoridis )"")
+",,27.05.2025 23:00:24 CEST,6,C8FJ558Z,AIAWGWBX,324f,01B
+" lemma: verlaufen
+ narg1: das
+ narg2: unter der Vena dorsalis penis ( bzw. clitoridis ) subfascialis
+pspez1: am unteren Symphysenrand","
+
+Lig .
+praeurethrale
+
+","
+
+
+ven (""Vena dorsalis penis ( bzw. clitoridis )"")
+",,27.05.2025 23:00:24 CEST,6,C8FJ558Z,AIAWGWBX,324f,01C
+" lemma: ein Analogon des Penis darstellen
+  narg: die","
+
+Klitoris",,,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,01A
+" lemma: erektilist
+  narg: die","
+
+Klitoris",,,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,02A
+" lemma: aufgehängt werden
+  narg: Klitoris",,"
+
+kli",,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,03A
+" lemma: aufgehängt werden
+  narg: Klitoris
+pspez1: am unteren Symphysenrand",,"
+
+kli
+",,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,03B
+" lemma: aufgehängt werden
+  narg: Klitoris
+pspez1: durch das Lig .
+suspensorium clitoridis",,"
+
+kli
+lig (""Lig .
+suspensorium clitoridis"")",,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,03C
+" lemma: entstehen
+ narg1: Sie
+ narg2: aus der Verschmelzung der beiden Crura clitoridis , die als Schwellkörper vom unteren Rand der absteigenden Schambeinäste herkommen und im Orgasmus anschwellen","
+
+Klitoris
+der beiden Crura clitoridis (""die"")","
+
+
+cru (""Crura clitoridis"")",,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,04A
+ lemma: herkommen,,,,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,05A
+ lemma: anschwellen,,,,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,06A
+" lemma: sich vereinigen
+  narg: Die Crura",,"
+
+cru (""Crura"")",,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,07A
+" lemma: sich vereinigen
+  narg: Die Crura
+  farg: zum Corpus clitoridis",,"
+
+cru (""Crura"")
+cor (""Corpus clitoridis"")",,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,07B
+" lemma: sich vereinigen
+  narg: Die Crura
+  farg: zum Corpus clitoridis
+ pspez: in der Mitte",,"
+
+cru (""Crura"")
+cor (""Corpus clitoridis"")
+",,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,07C
+" lemma: entsprechen
+ narg1: Die Crura
+ narg2: den Schwellkörpern des Penis",,"
+
+cru (""Crura"")
+",,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,08A
+" lemma: die Klitoris umschließen
+  narg: Die vorderen Enden der kleinen Schamlippen",,"
+kli (""Klitoris"")
+",,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,09A
+" lemma: die Klitoris umschließen
+  narg: Die vorderen Enden der kleinen Schamlippen
+pspez1: als Hautfalte",,"
+kli (""Klitoris"")
+
+",,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,09B
+" lemma: die Klitoris umschließen
+  narg: Die vorderen Enden der kleinen Schamlippen
+pspez1: indem sie auf deren Rücken das Praeputium .
+clitoridis bilden","
+
+
+die Klitoris (""deren"")","
+kli (""Klitoris"")
+
+pra (""Praeputium .
+clitoridis"")",,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,09C
+" lemma: das Praeputium .
+clitoridis bilden
+  narg: sie","
+
+der kleinen Schamlippen","
+pra (""Praeputium .
+clitoridis"")
+",,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,10A
+" lemma: das Praeputium .
+clitoridis bilden
+  narg: sie
+ pspez: auf deren Rücken","
+
+der kleinen Schamlippen
+die Klitoris (""deren"")","
+pra (""Praeputium .
+clitoridis"")
+
+",,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,10B
+" lemma: ,
+ narg1: die Eichel des Kitzlers
+ narg2: Glans clitoridis",,"
+
+gla
+gla",,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,11A
+" lemma: hervorschauen lassen
+ narg1: das
+ narg2: die Eichel des Kitzlers","
+
+Praeputium .
+clitoridis
+","
+
+
+gla",,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,12A
+" lemma: sich vereinigen
+  narg: sie","
+
+der kleinen Schamlippen",,,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,13A
+" lemma: sich vereinigen
+  narg: sie
+  farg: zum Frenulum clitoridis","
+
+der kleinen Schamlippen
+","
+
+
+fre (""Frenulum clitoridis"")",,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,13B
+" lemma: sich vereinigen
+  narg: sie
+  farg: zum Frenulum clitoridis
+ pspez: unterhalb der Klitoris","
+
+der kleinen Schamlippen
+
+","
+
+
+fre (""Frenulum clitoridis"")
+gla (""Klitoris"")",,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,13C
+"   zus: bei Pseudohermaphreditismus femininus ext
+ lemma: nahe kommen können
+ narg1: Die Klitoris
+ narg2: der Größe eines männlichen Penis",,"
+
+
+kli (""Klitoris"")
+",,27.05.2025 23:00:25 CEST,7,C8FJ558Z,BJRL5U9T,319,14A
+" lemma: liegen
+  narg: die Schwellkörper des Vorhofs , Bulbi vestibuli",,"
+
+bul (""Bulbi vestibuli"")",,27.05.2025 23:00:25 CEST,8,C8FJ558Z,DBNG8FA6,320,01A
+" lemma: liegen
+  narg: die Schwellkörper des Vorhofs , Bulbi vestibuli
+pspez1: Zu beiden Seiten des Scheidenvorhofs",,"
+
+bul (""Bulbi vestibuli"")
+",,27.05.2025 23:00:25 CEST,8,C8FJ558Z,DBNG8FA6,320,01B
+" lemma: liegen
+  narg: die Schwellkörper des Vorhofs , Bulbi vestibuli
+pspez1: an der Basis der kleinen Schamlippen",,"
+
+bul (""Bulbi vestibuli"")
+",,27.05.2025 23:00:25 CEST,8,C8FJ558Z,DBNG8FA6,320,01C
+" lemma: ,
+ narg1: die Schwellkörper des Vorhofs
+ narg2: Bulbi vestibuli",,"
+
+bul
+bul",,27.05.2025 23:00:25 CEST,8,C8FJ558Z,DBNG8FA6,320,02A
+" lemma: entsprechen
+ narg1: die Schwellkörper der Klitoris
+ narg2: den Schwellkörpern des Penis",,"
+
+cac
+",,27.05.2025 23:00:25 CEST,8,C8FJ558Z,DBNG8FA6,320,03A
+" lemma: das Gegenstück bilden
+ narg1: die Bulbi vestibuli
+ narg2: zu dem Corpus cavernosum urethrae des Mannes",,"
+
+bul (""Bulbi vestibuli"")
+",,27.05.2025 23:00:25 CEST,8,C8FJ558Z,DBNG8FA6,320,04A
+"   zus: Denken wir uns die Harnröhre des Mannes von unten her aufgeschlitzt und weit auseinandergedrängt
+ lemma: wieder eröffnet sein
+  narg: der Sinus urogenitalis",,,,27.05.2025 23:00:25 CEST,8,C8FJ558Z,DBNG8FA6,320,05A
+" lemma: in eine ähnliche Lage geraten
+ narg1: die Schwellkörper
+ narg2: wie {die Schwellkörper} bei der Frau",,"
+
+
+bul (""bei der Frau"")",,27.05.2025 23:00:25 CEST,8,C8FJ558Z,DBNG8FA6,320,06A
+" lemma: keulenförmig verdickt sein
+  narg: Die paarigen Bulbi vestibuli",,"
+
+bul (""Bulbi vestibuli"")",,27.05.2025 23:00:25 CEST,8,C8FJ558Z,DBNG8FA6,320,07A
+" lemma: keulenförmig verdickt sein
+  narg: Die paarigen Bulbi vestibuli
+ pspez: am dorsalen Ende",,"
+
+bul (""Bulbi vestibuli"")
+",,27.05.2025 23:00:25 CEST,8,C8FJ558Z,DBNG8FA6,320,07B
+" lemma: sich ventral verjüngen
+  narg: Die paarigen Bulbi vestibuli",,"
+
+bul (""Bulbi vestibuli"")",,27.05.2025 23:00:25 CEST,8,C8FJ558Z,DBNG8FA6,320,08A
+" lemma: sich an der Glans clitoridis verbinden
+  narg: Die paarigen Bulbi vestibuli",,"
+gla (""Glans clitoridis"")
+bul (""Bulbi vestibuli"")",,27.05.2025 23:00:25 CEST,8,C8FJ558Z,DBNG8FA6,320,09A
+" lemma: sich an der Glans clitoridis verbinden
+  narg: Die paarigen Bulbi vestibuli
+pspez1: über die Harnröhrenmündung hinweg",,"
+gla (""Glans clitoridis"")
+bul (""Bulbi vestibuli"")
+",,27.05.2025 23:00:25 CEST,8,C8FJ558Z,DBNG8FA6,320,09B
+" lemma: sich an der Glans clitoridis verbinden
+  narg: Die paarigen Bulbi vestibuli
+pspez1: mit kleinen Venengeflechten",,"
+gla (""Glans clitoridis"")
+bul (""Bulbi vestibuli"")
+",,27.05.2025 23:00:25 CEST,8,C8FJ558Z,DBNG8FA6,320,09C
+" lemma: ,
+ narg1: eine Schmiere
+ narg2: Smegma",,"
+
+
+?",,27.05.2025 23:00:25 CEST,9,C8FJ558Z,DEEJEVGH,320,01A
+" lemma: erzeugen
+narg1A: das Sekret der Talgdrüsen
+ narg2: eine Schmiere , Smegma",,"
+
+
+? (""Smegma"")",,27.05.2025 23:00:25 CEST,9,C8FJ558Z,DEEJEVGH,320,02A
+" lemma: erzeugen
+narg1A: das Sekret der Talgdrüsen
+ narg2: eine Schmiere , Smegma
+ pspez: ähnlich wie in der Vorhauttasche des männlichen Gliedes",,"
+
+
+? (""Smegma"")
+",,27.05.2025 23:00:25 CEST,9,C8FJ558Z,DEEJEVGH,320,02B
+" lemma: erzeugen
+narg1A: das Sekret der Talgdrüsen
+ narg2: eine Schmiere , Smegma
+narg1B: die abgeschilferten Epithelien
+ pspez: ähnlich wie in der Vorhauttasche des männlichen Gliedes",,"
+
+
+? (""Smegma"")
+
+",,27.05.2025 23:00:25 CEST,9,C8FJ558Z,DEEJEVGH,320,02C
+" lemma: erzeugen
+narg1A: das Sekret der Talgdrüsen
+ narg2: eine Schmiere , Smegma
+narg1B: die abgeschilferten Epithelien
+ pspez: ähnlich wie in der Vorhauttasche des männlichen Gliedes",,"
+
+
+? (""Smegma"")
+
+",,27.05.2025 23:00:25 CEST,9,C8FJ558Z,DEEJEVGH,320,02D
+" lemma: gehen
+ narg1: die A. dorsalis clitoridis
+ narg2: zur Glans clitoridis",,"
+
+art (""A. dorsalis clitoridis"")
+gla (""Glans clitoridis"")",,27.05.2025 23:00:25 CEST,10,C8FJ558Z,KBZKCMZT,321,01A
+" lemma: gehen
+ narg1: die A. dorsalis clitoridis
+ narg2: zur Glans clitoridis
+  farg: Aus der A. pudendalis int .",,"
+
+art (""A. dorsalis clitoridis"")
+gla (""Glans clitoridis"")
+",,27.05.2025 23:00:25 CEST,10,C8FJ558Z,KBZKCMZT,321,01B
+" lemma: gehen
+ narg1: die A. profunda clitoridis
+ narg2: zum Crus clitoridis",,"
+
+art (""A. profunda clitoridis"")
+cru (""Crus clitoridis"")",,27.05.2025 23:00:25 CEST,10,C8FJ558Z,KBZKCMZT,321,02A
+" lemma: gehen
+ narg1: die A. profunda clitoridis
+ narg2: zum Crus clitoridis
+  farg: Aus der A. pudendalis int .",,"
+
+art (""A. profunda clitoridis"")
+cru (""Crus clitoridis"")
+",,27.05.2025 23:00:25 CEST,10,C8FJ558Z,KBZKCMZT,321,02B
+" lemma: gehen
+ narg1: die A. bulbi vestibuli
+ narg2: zum Bulbus vestibuli",,"
+
+art (""A. bulbi vestibuli"")
+bul (""Bulbus vestibuli"")",,27.05.2025 23:00:25 CEST,10,C8FJ558Z,KBZKCMZT,321,03A
+" lemma: gehen
+ narg1: die A. bulbi vestibuli
+ narg2: zum Bulbus vestibuli
+  farg: Aus der A. pudendalis int .",,"
+
+art (""A. bulbi vestibuli"")
+bul (""Bulbus vestibuli"")
+",,27.05.2025 23:00:25 CEST,10,C8FJ558Z,KBZKCMZT,321,03B
+" lemma: aufnehmen
+ narg1: Die V. dorsalis clitoridis
+narg2A: das Blut der Glans",,"
+
+ven (""V. dorsalis clitoridis"")
+gla (""Glans"")",,27.05.2025 23:00:25 CEST,10,C8FJ558Z,KBZKCMZT,321,04A
+" lemma: aufnehmen
+ narg1: Die V. dorsalis clitoridis
+narg2A: das Blut der Glans
+narg2B: des Corpus clitoridis",,"
+
+ven (""V. dorsalis clitoridis"")
+gla (""Glans"")
+cor (""Corpus clitoridis"")",,27.05.2025 23:00:25 CEST,10,C8FJ558Z,KBZKCMZT,321,04B
+" lemma: schicken
+ narg1: Der Bulbus vestibuli
+ narg2: seine Venen
+narg3A: zu dem Plexus uterovaginalis",,"
+
+bul (""Bulbus vestibuli"")
+
+",,27.05.2025 23:00:25 CEST,10,C8FJ558Z,KBZKCMZT,321,05A
+" lemma: schicken
+ narg1: Der Bulbus vestibuli
+ narg2: seine Venen
+narg3A: zu dem Plexus uterovaginalis
+ pspez: außerdem bestehen Verbindungen zu den übrigen Venen der äußeren Geschlechtsorgane",,"
+
+bul (""Bulbus vestibuli"")
+
+
+",,27.05.2025 23:00:25 CEST,10,C8FJ558Z,KBZKCMZT,321,05B
+" lemma: schicken
+ narg1: Der Bulbus vestibuli
+ narg2: seine Venen
+narg3A: zu dem Plexus uterovaginalis
+narg3B: zum Teil in die Venae obturatoriae
+ pspez: außerdem bestehen Verbindungen zu den übrigen Venen der äußeren Geschlechtsorgane",,"
+
+bul (""Bulbus vestibuli"")
+
+
+
+",,27.05.2025 23:00:25 CEST,10,C8FJ558Z,KBZKCMZT,321,05C
+" lemma: schicken
+ narg1: Der Bulbus vestibuli
+ narg2: seine Venen
+narg3A: zu dem Plexus uterovaginalis
+narg3B: zum Teil in die Venae obturatoriae
+ pspez: außerdem bestehen Verbindungen zu den übrigen Venen der äußeren Geschlechtsorgane",,"
+
+bul (""Bulbus vestibuli"")
+
+
+
+",,27.05.2025 23:00:25 CEST,10,C8FJ558Z,KBZKCMZT,321,05D
+" lemma: bedecken
+ narg1: Der M. ischiocavernosus
+narg2A: die Wurzeln des paarigen Schwellkörpers",,,,27.05.2025 23:00:26 CEST,11,C8FJ558Z,LX8YD5JT,326,01A
+" lemma: bedecken
+ narg1: Der M. ischiocavernosus
+narg2A: die Wurzeln des paarigen Schwellkörpers
+narg2B: die Crura clitoridis",,"
+
+
+
+cru",,27.05.2025 23:00:26 CEST,11,C8FJ558Z,LX8YD5JT,326,01B
+" lemma: drängen
+ narg1: Der M. ischiocavernosus
+ narg2: das Blut
+ narg3: in die Schwellkörper",,"
+
+
+
+cac (""die Schwellkörper"")",,27.05.2025 23:00:26 CEST,11,C8FJ558Z,LX8YD5JT,326,02A
+" lemma: aus venösen Netzen {d. Bulbi vestibuli} bestehen
+  narg: ie Bulbi vestibuli",,"
+bul (""venösen Netzen"")
+bul (""Bulbi vestibuli"")",,27.05.2025 23:00:26 CEST,12,C8FJ558Z,NL2TX777,320,01A
+" lemma: zusammengehalten werden
+  narg: die","
+
+venösen Netzen {d. Bulbi vestibuli}",,,27.05.2025 23:00:26 CEST,12,C8FJ558Z,NL2TX777,320,02A
+" lemma: zusammengehalten werden
+  narg: die
+ pspez: durch Bindegewebe mit einigen glatten Muskelzellen","
+
+venösen Netzen {d. Bulbi vestibuli}
+",,,27.05.2025 23:00:26 CEST,12,C8FJ558Z,NL2TX777,320,02B
+" lemma: außen eine dünne Bindegewebshülle besitzen
+  narg: die","
+
+venösen Netzen {d. Bulbi vestibuli}",,,27.05.2025 23:00:26 CEST,12,C8FJ558Z,NL2TX777,320,03A
+" lemma: zum Teil kavernös erweitert sein
+  narg: Die Venen {der venösen Netze der Bulbi vestibuli}","
+
+ie Bulbi vestibuli","
+
+bul",,27.05.2025 23:00:26 CEST,12,C8FJ558Z,NL2TX777,320,04A
+"   zus: bei ihrer Füllung
+ lemma: bilden
+ narg1: Die Venen {der venösen Netze der Bulbi vestibuli}
+ narg2: weich geschwellte Kissen , die den Scheideneingang auspolstern","
+
+
+ie Bulbi vestibuli
+","
+
+
+bul
+bul (""weich geschwellte Kissen"")",,27.05.2025 23:00:26 CEST,12,C8FJ558Z,NL2TX777,320,05A
+" lemma: auspolstern
+ narg1: die
+ narg2: den Scheideneingang",,,,27.05.2025 23:00:26 CEST,12,C8FJ558Z,NL2TX777,320,06A
+"   zus: nicht
+ lemma: stattfinden
+  narg: Eine steife Erektion {der Bulbi vestibuli}","
+
+
+ie Bulbi vestibuli","
+
+
+bul",,27.05.2025 23:00:26 CEST,12,C8FJ558Z,NL2TX777,320,07A
+"   zus: nicht
+ lemma: stattfinden
+  narg: Eine steife Erektion {der Bulbi vestibuli}
+ pspez: genau wie bei den entsprechenden Schwellkörpern der Harnröhre des Mannes","
+
+
+ie Bulbi vestibuli
+","
+
+
+bul
+",,27.05.2025 23:00:26 CEST,12,C8FJ558Z,NL2TX777,320,07B
+" lemma: bedecken
+ narg1: er M. ischiocavernosus
+ narg2: die paarigen Schwellkörper , die als Crura corporis cavernosi penis bzw. als Crura clitoridis an die unteren Schambeinäste angeheftet sind","
+
+
+die paarigen Schwellkörper (""die"")","
+
+
+cru (""Crura clitoridis"")",,27.05.2025 23:00:26 CEST,14,C8FJ558Z,S2IQZ76I,325,01A
+" lemma: an die unteren Schambeinäste angeheftet sein
+  narg: die","
+
+die paarigen Schwellkörper",,,27.05.2025 23:00:26 CEST,14,C8FJ558Z,S2IQZ76I,325,02A
+" lemma: an die unteren Schambeinäste angeheftet sein
+  narg: die
+pspezA: als Crura corporis cavernosi penis","
+
+die paarigen Schwellkörper
+",,,27.05.2025 23:00:26 CEST,14,C8FJ558Z,S2IQZ76I,325,02B
+" lemma: an die unteren Schambeinäste angeheftet sein
+  narg: die
+pspezB: als Crura clitoridis","
+
+die paarigen Schwellkörper
+","
+
+
+cru (""Crura clitoridis"")",,27.05.2025 23:00:26 CEST,14,C8FJ558Z,S2IQZ76I,325,02C
+"   zus: Bei hochgradigen Formen
+ lemma: kurz bleiben
+  narg: der Geschl-chtshöcker","Zypospadie
+
+
+",,,27.05.2025 23:00:27 CEST,15,C8FJ558Z,U5RX6Z2G,275,01A
+"   zus: Bei hochgradigen Formen
+ lemma: kurz bleiben
+  narg: der Geschl-chtshöcker
+ pspez: wie eine Klitoris","Zypospadie
+
+
+
+","
+
+
+
+kli (""Klitoris"")",,27.05.2025 23:00:27 CEST,15,C8FJ558Z,U5RX6Z2G,275,01B
+" lemma: zur Glans werden
+  narg: Das vordere Ende","
+
+des unpaaren Geschlechtshöckers ( Tuber genitale oder Phallus )","
+gla (""Glans"")
+",,27.05.2025 23:00:27 CEST,16,C8FJ558Z,WRD2EW97,273,01A
+" lemma: auf den Rücken der Klitoris gelangen
+  narg: Ein R. dorsalis clitoridis",,"
+cor (""Klitoris"")
+ner (""R. dorsalis clitoridis"")",,27.05.2025 23:00:27 CEST,17,C8FJ558Z,XMHHYMIP,321,01A
+" lemma: hintreiben können
+ narg1: er
+ narg2: das Blut im Schwellkörper
+ narg3: nach vorn zur Eichel","
+
+Der M. ischiocavernosus der Frau
+
+","
+
+
+cac (""Schwellkörper"")
+gla (""Eichel"")",,27.05.2025 23:00:28 CEST,18,C8FJ558Z,XWZNHQ9N,326,01A
+" lemma: hintreiben können
+ narg1: er
+ narg2: das Blut im Schwellkörper
+ narg3: nach vorn zur Eichel
+ pspez: Auch","
+
+Der M. ischiocavernosus der Frau
+
+
+","
+
+
+cac (""Schwellkörper"")
+gla (""Eichel"")
+",,27.05.2025 23:00:28 CEST,18,C8FJ558Z,XWZNHQ9N,326,01B
+"   zus: Beim weiblichen Geschlecht ( Abb.16la , b
+ lemma: werden
+ narg1: der Geschlechtshöcker
+ narg2: zur Klitoris",,"
+
+
+
+kli (""Klitoris"")",,27.05.2025 23:00:28 CEST,19,C8FJ558Z,YUGKY9SF,275,01A
+" lemma: Ventral zur Clitoris zeihen
+  narg: kleine Falten",,"
+gla (""Clitoris"")
+",,27.05.2025 23:00:28 CEST,20,ELEVP32P,28FAM7YK,677f,01A
+" lemma: Ventral zur Clitoris zeihen
+  narg: kleine Falten
+ pspez: von den Labia minora",,"
+gla (""Clitoris"")
+
+",,27.05.2025 23:00:28 CEST,20,ELEVP32P,28FAM7YK,677f,01B
+" lemma: kleine Falten sein
+ nargA: das Frenulum clitoridis",,"
+
+fre (""Frenulum clitoridis"")",,27.05.2025 23:00:28 CEST,20,ELEVP32P,28FAM7YK,677f,02A
+" lemma: kleine Falten sein
+ nargA: das Frenulum clitoridis
+ nargB: das Praeputium clitoridis",,"
+
+fre (""Frenulum clitoridis"")
+pra (""Praeputium clitoridis"")",,27.05.2025 23:00:28 CEST,20,ELEVP32P,28FAM7YK,677f,02B
+" lemma: den Bulbus vestibuli versorgen
+  narg: die A. bulbi vestibuli",,"
+bul (""Bulbus vestibuli"")
+art (""A. bulbi vestibuli"")",,27.05.2025 23:00:28 CEST,21,ELEVP32P,64Q9G7MU,679,01A
+" lemma: den Bulbus vestibuli versorgen
+  narg: die A. bulbi vestibuli
+ pspez: Aus der A. pudenda interna",,"
+bul (""Bulbus vestibuli"")
+art (""A. bulbi vestibuli"")
+",,27.05.2025 23:00:28 CEST,21,ELEVP32P,64Q9G7MU,679,01B
+" lemma: die Clitoris versorgen
+ nargA: die A. profunda clitoridis",,"
+kli (""Clitoris"")
+art (""Aa .
+profunda"")",,27.05.2025 23:00:28 CEST,21,ELEVP32P,64Q9G7MU,679,02A
+" lemma: die Clitoris versorgen
+ nargA: die A. profunda clitoridis
+ pspez: Aus der A. pudenda interna",,"
+kli (""Clitoris"")
+art (""Aa .
+profunda"")
+",,27.05.2025 23:00:28 CEST,21,ELEVP32P,64Q9G7MU,679,02B
+" lemma: die Clitoris versorgen
+ nargA: die A. profunda clitoridis
+ nargB: A. dorsalis clitoridis
+ pspez: Aus der A. pudenda interna",,"
+kli (""Clitoris"")
+art (""Aa .
+profunda"")
+art
+",,27.05.2025 23:00:28 CEST,21,ELEVP32P,64Q9G7MU,679,02C
+" lemma: die Clitoris versorgen
+ nargA: die A. profunda clitoridis
+ nargB: A. dorsalis clitoridis
+ pspez: Aus der A. pudenda interna",,"
+kli (""Clitoris"")
+art (""Aa .
+profunda"")
+art
+",,27.05.2025 23:00:28 CEST,21,ELEVP32P,64Q9G7MU,679,02D
+" lemma: zwischen dem ventralen Teil der großen Schamlippen hervorragen
+  narg: Die Glans clitoridis",,"
+
+gla (""Glans clitoridis"")",,27.05.2025 23:00:29 CEST,22,ELEVP32P,6LTWF36Y,678f,01A
+" lemma: zwischen dem ventralen Teil der großen Schamlippen hervorragen
+  narg: Die Glans clitoridis
+ pspez: als kleines rundliches Knöpfchen",,"
+
+gla (""Glans clitoridis"")
+",,27.05.2025 23:00:29 CEST,22,ELEVP32P,6LTWF36Y,678f,01B
+" lemma: umgeben werden
+  narg: Sie","
+
+Glans clitoridis",,,27.05.2025 23:00:29 CEST,22,ELEVP32P,6LTWF36Y,678f,02A
+" lemma: umgeben werden
+  narg: Sie
+  farg: vom Praeputium clitoridis , einer kleinen Hautfalte","
+
+Glans clitoridis
+","
+
+
+pra (""Praeputium clitoridis"")",,27.05.2025 23:00:29 CEST,22,ELEVP32P,6LTWF36Y,678f,02B
+" lemma: umgeben werden
+  narg: Sie
+  farg: vom Praeputium clitoridis , einer kleinen Hautfalte
+pspez1: gemeinsam mit dem Corpus clitoridis","
+
+Glans clitoridis
+
+","
+
+
+pra (""Praeputium clitoridis"")
+cor (""Corpus clitoridis"")",,27.05.2025 23:00:29 CEST,22,ELEVP32P,6LTWF36Y,678f,02C
+" lemma: umgeben werden
+  narg: Sie
+  farg: vom Praeputium clitoridis , einer kleinen Hautfalte
+pspez1: gemeinsam mit dem Corpus clitoridis
+pspez2A: vorn","
+
+Glans clitoridis
+
+
+","
+
+
+pra (""Praeputium clitoridis"")
+cor (""Corpus clitoridis"")
+",,27.05.2025 23:00:29 CEST,22,ELEVP32P,6LTWF36Y,678f,02D
+" lemma: umgeben werden
+  narg: Sie
+  farg: vom Praeputium clitoridis , einer kleinen Hautfalte
+pspez1: gemeinsam mit dem Corpus clitoridis
+pspez2B: seitlich","
+
+Glans clitoridis
+
+
+","
+
+
+pra (""Praeputium clitoridis"")
+cor (""Corpus clitoridis"")
+",,27.05.2025 23:00:29 CEST,22,ELEVP32P,6LTWF36Y,678f,02E
+" lemma: einer kleinen Hautfalte sein
+  narg: Praeputium clitoridis",,"
+
+pra",,27.05.2025 23:00:29 CEST,22,ELEVP32P,6LTWF36Y,678f,03A
+" lemma: beiderseits zeihen
+ narg1: das Frenulum clitoridis
+ narg2: zu den kleinen Schamlippen",,"
+
+fre (""Frenulum clitoridis"")
+",,27.05.2025 23:00:29 CEST,22,ELEVP32P,6LTWF36Y,678f,04A
+" lemma: beiderseits zeihen
+ narg1: das Frenulum clitoridis
+ narg2: zu den kleinen Schamlippen
+ pspez: Von der Unterseite des Kitzlers",,"
+
+fre (""Frenulum clitoridis"")
+
+gla (""Kitzlers"")",,27.05.2025 23:00:29 CEST,22,ELEVP32P,6LTWF36Y,678f,04B
+" lemma: sich bilden
+  narg: eine weißliche Masse , das Smegma clitoridis",,"
+
+? (""Smegma clitoridis"")",,27.05.2025 23:00:29 CEST,22,ELEVP32P,6LTWF36Y,678f,05A
+" lemma: sich bilden
+  narg: eine weißliche Masse , das Smegma clitoridis
+pspez1: Zwischen Clitoris und Praeputium clitoridis",,"
+
+? (""Smegma clitoridis"")
+pra (""Praeputium clitoridis"")",,27.05.2025 23:00:29 CEST,22,ELEVP32P,6LTWF36Y,678f,05B
+" lemma: sich bilden
+  narg: eine weißliche Masse , das Smegma clitoridis
+pspez1: Zwischen Clitoris und Praeputium clitoridis
+pspez2A: aus abgestoßenen Epithelzellen",,"
+
+? (""Smegma clitoridis"")
+pra (""Praeputium clitoridis"")
+",,27.05.2025 23:00:29 CEST,22,ELEVP32P,6LTWF36Y,678f,05C
+" lemma: sich bilden
+  narg: eine weißliche Masse , das Smegma clitoridis
+pspez1: Zwischen Clitoris und Praeputium clitoridis
+pspez2B: dem Sekret der Talgdrüsen",,"
+
+? (""Smegma clitoridis"")
+pra (""Praeputium clitoridis"")
+",,27.05.2025 23:00:29 CEST,22,ELEVP32P,6LTWF36Y,678f,05D
+" lemma: eine weißliche Masse sein
+  narg: das Smegma clitoridis",,"
+
+? (""Smegma clitoridis"")",,27.05.2025 23:00:29 CEST,22,ELEVP32P,6LTWF36Y,678f,06A
+" lemma: zahlreiche Nervenendkörperchen haben
+  narg: Die Schleimhaut der Clitoris",,"
+
+gla (""Clitoris"")",,27.05.2025 23:00:29 CEST,22,ELEVP32P,6LTWF36Y,678f,07A
+" lemma: Die Schwellkörper der Vulva sein
+ nargA: der Kitzler , Clitoris",,"
+
+kli (""Clitoris"")",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,01A
+" lemma: Die Schwellkörper der Vulva sein
+ nargA: der Kitzler , Clitoris
+ nargB: der Bulbus vestibuli",,"
+
+kli (""Clitoris"")
+bul (""Bulbus vestibuli"")",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,01B
+" lemma: entsprechen
+ narg1: Die Clitoris
+ narg2: den Corpora cavernosa penis des Mannes",,"
+
+kli (""Clitoris"")
+",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,02A
+" lemma: bestehen
+ narg1: Die Clitoris
+narg2A: aus den Crura clitoridis",,"
+
+kli (""Clitoris"")
+cru (""Crura clitoridis"")",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,03A
+" lemma: bestehen
+ narg1: Die Clitoris
+narg2A: aus den Crura clitoridis
+narg2B: aus dem Corpus clitoridis",,"
+
+kli (""Clitoris"")
+cru (""Crura clitoridis"")
+cor (""Corpus clitoridis"")",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,03B
+" lemma: bestehen
+ narg1: Die Clitoris
+narg2A: aus den Crura clitoridis
+narg2B: aus dem Corpus clitoridis
+narg2C: aus der Glans clitoridis",,"
+
+kli (""Clitoris"")
+cru (""Crura clitoridis"")
+cor (""Corpus clitoridis"")
+gla (""Glans clitoridis"")",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,03C
+" lemma: am Ramus inferior ossis pubis entspringen
+  narg: Die Crura clitoridis",,"
+
+cru (""Crura clitoridis"")",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,04A
+" lemma: Die Crura clitoridis am Ramus inferior ossis pubis bedecken
+  narg: M. ischiocavernosus",,"
+cru (""Crura clitoridis"")
+",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,05A
+" lemma: sich vereinigen
+  narg: Die Crura clitoridis",,"
+
+cru (""Crura clitoridis"")",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,06A
+" lemma: sich vereinigen
+  narg: Die Crura clitoridis
+  farg: zum Klitorisschaft , Corpus clitoridis",,"
+
+cru (""Crura clitoridis"")
+cor (""Corpus clitoridis"")",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,06B
+" lemma: sich vereinigen
+  narg: Die Crura clitoridis
+  farg: zum Klitorisschaft , Corpus clitoridis
+ pspez: vor dem Lig .
+pubicum inferius",,"
+
+cru (""Crura clitoridis"")
+cor (""Corpus clitoridis"")
+",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,06C
+" lemma: synonym sein
+ narg1: Klitorisschaft
+ narg2: Corpus clitoridis",,"
+
+cor
+cor",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,07A
+" lemma: Grundlage des Kitzlers bilden
+  narg: der paarige Schwellkörper , Corpus cavernosum clitoridis",,"
+kli (""Kitzlers"")
+cac (""Corpus cavernosum clitoridis"")",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,08A
+" lemma: {ein} paarige{r} Schwellkörper sein
+  narg: Corpus cavernosum clitoridis",,"
+
+cac",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,09A
+" lemma: unvollständig getrennt werden
+  narg: das vom linken und rechten Crus clitoridis kommende Corpus cavernosum",,"
+
+cac (""Corpus cavernosum"")",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,10A
+" lemma: unvollständig getrennt werden
+  narg: das vom linken und rechten Crus clitoridis kommende Corpus cavernosum
+pspez1: Im Corpus clitoridis",,"
+
+cac (""Corpus cavernosum"")
+cor (""Corpus clitoridis"")",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,10B
+" lemma: unvollständig getrennt werden
+  narg: das vom linken und rechten Crus clitoridis kommende Corpus cavernosum
+pspez1: durch das Septum corporum cavernosorum",,"
+
+cac (""Corpus cavernosum"")
+sep (""Septum corporum cavernosorum"")",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,10C
+" lemma: vom linken und rechten Crus clitoridis kommen
+  narg: Corpus cavernosum",,"
+cru (""Crus clitoridis"")
+cac",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,11A
+" lemma: von der Fascia clitoridis überzogen werden
+  narg: Das Corpus cavernosum",,"
+tac/tas (""Fascia clitoridis"")
+cac (""Corpus cavernosum"")",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,12A
+" lemma: In die Faszie einstrahlen
+ nargA: die kleinen Ligamenta suspensorium clitoridis",,"
+
+lig",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,13A
+" lemma: In die Faszie einstrahlen
+ nargA: die kleinen Ligamenta suspensorium clitoridis
+ nargB: die kleinen Ligamenta fundiforme clitoridis",,"
+
+lig
+lig",,27.05.2025 23:00:29 CEST,23,ELEVP32P,6Z9GAWQU,678,13B
+" lemma: dem Corpus spongiosum penis des Mannes entsprechen
+  narg: Die beiden Bulbi vestibuli",,"
+
+bul (""Bulbi vestibuli"")",,27.05.2025 23:00:29 CEST,24,ELEVP32P,ALVRZZAC,679,01A
+ lemma: zu beiden Seiten des Vestibulum vaginae liegen,,,,27.05.2025 23:00:29 CEST,24,ELEVP32P,ALVRZZAC,679,02A
+" lemma: aus einem starken Venenplexus bestehen
+  narg: Sie","
+
+Die beiden Bulbi vestibuli","
+bul (""starken Venenplexus"")
+",,27.05.2025 23:00:29 CEST,24,ELEVP32P,ALVRZZAC,679,03A
+" lemma: von einer zarten Tunica albuginea überzogen werden
+  narg: Sie","
+
+Die beiden Bulbi vestibuli","
+tac/tas (""Tunica albuginea"")
+",,27.05.2025 23:00:29 CEST,24,ELEVP32P,ALVRZZAC,679,04A
+" lemma: zart
+  narg: Tunica albuginea {der Bulbi vestibuli}",,"
+
+tac/tas",,27.05.2025 23:00:29 CEST,24,ELEVP32P,ALVRZZAC,679,05A
+" lemma: weiche , schwellbare Polster bilden
+  narg: Sie","
+
+Die beiden Bulbi vestibuli",,,27.05.2025 23:00:29 CEST,24,ELEVP32P,ALVRZZAC,679,06A
+"lemmaA: bei der Erektion des Penis mitwirken
+  narg: {M. ischiocavernosus}",,,,27.05.2025 23:00:30 CEST,25,ELEVP32P,AP2VNHFJ,617,01A
+"lemmaB: bei der Erektion der Clitoris mitwirken
+  narg: {M. ischiocavernosus}",,"
+kli
+",,27.05.2025 23:00:30 CEST,25,ELEVP32P,AP2VNHFJ,617,01B
+" lemma: aus dem Geschlechtshöcker entstehen
+  narg: der Kitzler ( Clitoris )",,"
+
+kli (""Clitoris"")",,27.05.2025 23:00:30 CEST,26,ELEVP32P,E5PSGMQY,639,01A
+" lemma: synonym sein
+ narg1: Kitzler
+ narg2: Clitoris",,"
+
+kli
+kli",,27.05.2025 23:00:30 CEST,26,ELEVP32P,E5PSGMQY,639,02A
+" lemma: Zu den äußeren Geschlechtsorganen der Frau gehören
+ nargA: der Schamberg , Mons pubis ( veneris )",,,,27.05.2025 23:00:30 CEST,27,ELEVP32P,J6U8NVFH,635,01A
+" lemma: Zu den äußeren Geschlechtsorganen der Frau gehören
+ nargA: der Schamberg , Mons pubis ( veneris )
+ nargB: die großen und kleinen Schamlippen",,,,27.05.2025 23:00:30 CEST,27,ELEVP32P,J6U8NVFH,635,01B
+" lemma: Zu den äußeren Geschlechtsorganen der Frau gehören
+ nargA: der Schamberg , Mons pubis ( veneris )
+ nargB: die großen und kleinen Schamlippen
+ nargC: Labia majora et minora pudendi , mit der Schamspalte , Rima pudendi",,,,27.05.2025 23:00:30 CEST,27,ELEVP32P,J6U8NVFH,635,01C
+" lemma: Zu den äußeren Geschlechtsorganen der Frau gehören
+ nargA: der Schamberg , Mons pubis ( veneris )
+ nargB: die großen und kleinen Schamlippen
+ nargC: Labia majora et minora pudendi , mit der Schamspalte , Rima pudendi
+ nargD: der Kitzler , Clitoris",,"
+
+
+
+
+kli (""Clitoris"")",,27.05.2025 23:00:30 CEST,27,ELEVP32P,J6U8NVFH,635,01D
+" lemma: Zu den äußeren Geschlechtsorganen der Frau gehören
+ nargA: der Schamberg , Mons pubis ( veneris )
+ nargB: die großen und kleinen Schamlippen
+ nargC: Labia majora et minora pudendi , mit der Schamspalte , Rima pudendi
+ nargD: der Kitzler , Clitoris
+ nargE: der Scheidenvorhof , Vestibulum vaginae",,"
+
+
+
+
+kli (""Clitoris"")
+",,27.05.2025 23:00:30 CEST,27,ELEVP32P,J6U8NVFH,635,01E
+" lemma: synonym sein
+ narg1: Kitzler
+ narg2: Clitoris",,"
+
+kli
+kli",,27.05.2025 23:00:30 CEST,27,ELEVP32P,J6U8NVFH,635,02A
+"lemmaA: ventral durch das Frenulum clitoridis abgegrenzt werden
+  narg: welcher","
+
+Der Scheidenvorhof","
+fre (""Frenulum clitoridis"")
+",,27.05.2025 23:00:30 CEST,28,ELEVP32P,KHDV8YD7,678,01A
+"lemmaB: dorsal durch das Frenulum labiorum abgegrenzt werden
+  narg: welcher","
+
+Der Scheidenvorhof",,,27.05.2025 23:00:30 CEST,28,ELEVP32P,KHDV8YD7,678,01B
+" lemma: Reizorgane sein
+ nargA: Clitoris",,"
+
+kli",,27.05.2025 23:00:31 CEST,29,ELEVP32P,R9LRX28T,679,01A
+" lemma: Reizorgane sein
+ nargA: Clitoris
+ nargB: Labia minora",,"
+
+kli
+",,27.05.2025 23:00:31 CEST,29,ELEVP32P,R9LRX28T,679,01B
+"   zus: auf taktile Reize
+ lemma: das Nervensystem erotisieren
+  narg: die","
+
+
+Clitoris und Labia minora",,,27.05.2025 23:00:31 CEST,29,ELEVP32P,R9LRX28T,679,02A
+"   zus: Bei der Frau
+ lemma: im Saccus subcutaneus perinei liegen
+ nargA: die Crura clitoridis",,"
+
+
+cru (""Crura clitoridis"")",,27.05.2025 23:00:31 CEST,30,ELEVP32P,RWJZIZX5,619,01A
+"   zus: Bei der Frau
+ lemma: im Saccus subcutaneus perinei liegen
+ nargA: die Crura clitoridis
+ pspez: beim Mann die Crura penis und der Bulbus penis",,"
+
+
+cru (""Crura clitoridis"")
+",,27.05.2025 23:00:31 CEST,30,ELEVP32P,RWJZIZX5,619,01B
+"   zus: Bei der Frau
+ lemma: im Saccus subcutaneus perinei liegen
+ nargA: die Crura clitoridis
+ nargB: der Bulbus vestibuli
+ pspez: beim Mann die Crura penis und der Bulbus penis",,"
+
+
+cru (""Crura clitoridis"")
+bul (""Bulbus vestibuli"")
+",,27.05.2025 23:00:31 CEST,30,ELEVP32P,RWJZIZX5,619,01C
+"   zus: Bei der Frau
+ lemma: im Saccus subcutaneus perinei liegen
+ nargA: die Crura clitoridis
+ nargB: der Bulbus vestibuli
+ pspez: beim Mann die Crura penis und der Bulbus penis",,"
+
+
+cru (""Crura clitoridis"")
+bul (""Bulbus vestibuli"")
+",,27.05.2025 23:00:31 CEST,30,ELEVP32P,RWJZIZX5,619,01D
+"   zus: bei der Frau
+ lemma: an der Faszie des Corpus clitoridis ansetzen
+  narg: M. bulbospongiosus ( M. bulbocavernosus )",,"
+
+cor (""Corpus clitoridis"")
+",,27.05.2025 23:00:31 CEST,31,ELEVP32P,VH7WUSLP,617,01A
+"   zus: bei der Frau
+ lemma: an der Faszie des Corpus clitoridis ansetzen
+  narg: M. bulbospongiosus ( M. bulbocavernosus )
+ pspez: beim Mann am Dorsum penis",,"
+
+cor (""Corpus clitoridis"")
+
+",,27.05.2025 23:00:31 CEST,31,ELEVP32P,VH7WUSLP,617,01B
+"   zus: andererseits
+lemmaA: in die Vv. pudendae externae erfolgen
+  narg: Der Abfluss des venösen Blutes",,,,27.05.2025 23:00:32 CEST,32,ELEVP32P,VW4V4EAS,680,01A
+"   zus: andererseits
+lemmaA: in die Vv. pudendae externae erfolgen
+  narg: Der Abfluss des venösen Blutes
+pspezA: über die Vv. labiales anteriores",,,,27.05.2025 23:00:32 CEST,32,ELEVP32P,VW4V4EAS,680,01B
+"   zus: andererseits
+lemmaA: in die Vv. pudendae externae erfolgen
+  narg: Der Abfluss des venösen Blutes
+pspezB: über die Vv. dorsales superficiales clitoridis",,"
+
+
+
+ven",,27.05.2025 23:00:32 CEST,32,ELEVP32P,VW4V4EAS,680,01C
+"   zus: andererseits
+lemmaB: in die V. femoralis erfolgen
+  narg: Der Abfluss des venösen Blutes",,,,27.05.2025 23:00:32 CEST,32,ELEVP32P,VW4V4EAS,680,01D
+"   zus: andererseits
+lemmaB: in die V. femoralis erfolgen
+  narg: Der Abfluss des venösen Blutes
+pspezA: über die Vv. labiales anteriores",,,,27.05.2025 23:00:32 CEST,32,ELEVP32P,VW4V4EAS,680,01E
+"   zus: andererseits
+lemmaB: in die V. femoralis erfolgen
+  narg: Der Abfluss des venösen Blutes
+pspezB: über die Vv. dorsales superficiales clitoridis",,"
+
+
+
+ven",,27.05.2025 23:00:32 CEST,32,ELEVP32P,VW4V4EAS,680,01F
+"   zus: einerseits
+ lemma: in die V. pudenda interna erfolgen
+  narg: Der Abfluss des venösen Blutes",,,,27.05.2025 23:00:32 CEST,32,ELEVP32P,VW4V4EAS,680,02A
+"   zus: einerseits
+ lemma: in die V. pudenda interna erfolgen
+  narg: Der Abfluss des venösen Blutes
+pspezA: über die Vv. dorsalis profunda clitoridis",,"
+
+
+
+ven",,27.05.2025 23:00:32 CEST,32,ELEVP32P,VW4V4EAS,680,02B
+"   zus: einerseits
+ lemma: in die V. pudenda interna erfolgen
+  narg: Der Abfluss des venösen Blutes
+pspezB: über die Vv. profundae clitoridis",,"
+
+
+
+ven",,27.05.2025 23:00:32 CEST,32,ELEVP32P,VW4V4EAS,680,02C
+"   zus: einerseits
+ lemma: in die V. pudenda interna erfolgen
+  narg: Der Abfluss des venösen Blutes
+pspezC: über die Vv. bulbi vestibuli",,"
+
+
+
+ven",,27.05.2025 23:00:32 CEST,32,ELEVP32P,VW4V4EAS,680,02D
+"   zus: einerseits
+ lemma: in die V. pudenda interna erfolgen
+  narg: Der Abfluss des venösen Blutes
+pspezD: über die Vv. labiales posteriores",,,,27.05.2025 23:00:32 CEST,32,ELEVP32P,VW4V4EAS,680,02E
+" lemma: Aus dem N. pudendus ( S2 – 4 ) kommen
+ nargA: der N. dorsalis clitoridis",,"
+
+ner (""N. dorsalis clitoridis"")",,27.05.2025 23:00:32 CEST,32,ELEVP32P,VW4V4EAS,680,03A
+" lemma: Aus dem N. pudendus ( S2 – 4 ) kommen
+ nargA: der N. dorsalis clitoridis
+ nargB: die Nn .
+perineales",,"
+
+ner (""N. dorsalis clitoridis"")
+",,27.05.2025 23:00:32 CEST,32,ELEVP32P,VW4V4EAS,680,03B
+" lemma: vegetative Fasern aus dem Plexus pelvicus enthalten
+  narg: Die Nn .
+cavernosi clitoridis",,"
+
+ner (""Nn .
+cavernosi clitoridis"")",,27.05.2025 23:00:32 CEST,32,ELEVP32P,VW4V4EAS,680,04A
+" lemma: von den unteren Schambeinästen entspringen
+  narg: Das Corpus cavernosum penis",,,,27.05.2025 23:00:32 CEST,33,ELEVP32P,X9IVTBQ4,693,01A
+" lemma: von den unteren Schambeinästen entspringen
+  narg: Das Corpus cavernosum penis
+pspez1: wie die Clitoris",,"
+
+
+kli (""Clitoris"")",,27.05.2025 23:00:32 CEST,33,ELEVP32P,X9IVTBQ4,693,01B
+" lemma: von den unteren Schambeinästen entspringen
+  narg: Das Corpus cavernosum penis
+pspez1: mit den Crura penis",,,,27.05.2025 23:00:32 CEST,33,ELEVP32P,X9IVTBQ4,693,01C
+" lemma: ansetzen
+ narg1: Der Muskel
+narg2A: penis","
+
+M. ischiocavernosus
+",,,27.05.2025 23:00:32 CEST,34,ELEVP32P,YVM83VLD,616,01A
+" lemma: ansetzen
+ narg1: Der Muskel
+narg2A: penis
+narg2B: clitoridis","
+
+M. ischiocavernosus
+
+","
+
+
+
+cru",,27.05.2025 23:00:32 CEST,34,ELEVP32P,YVM83VLD,616,01B
+" lemma: bedecken
+ narg1: Der Muskel
+narg2A: penis","
+
+M. ischiocavernosus
+",,,27.05.2025 23:00:32 CEST,34,ELEVP32P,YVM83VLD,616,02A
+" lemma: bedecken
+ narg1: Der Muskel
+narg2A: penis
+narg2B: clitoridis","
+
+M. ischiocavernosus
+
+","
+
+
+
+cru",,27.05.2025 23:00:32 CEST,34,ELEVP32P,YVM83VLD,616,02B
+" lemma: gehen
+ narg1: die A bulbi vestibuli
+ narg2: zum Bulbus vestibuli",,"
+
+art (""A bulbi vestibuli"")
+bul (""Bulbus vestibuli"")",,27.05.2025 23:00:32 CEST,35,HBA4D47V,2R4V3B6N,841,01A
+" lemma: gehen
+ narg1: die A bulbi vestibuli
+ narg2: zum Bulbus vestibuli
+ pspez: Aus der A. pudenda interna",,"
+
+art (""A bulbi vestibuli"")
+bul (""Bulbus vestibuli"")
+",,27.05.2025 23:00:32 CEST,35,HBA4D47V,2R4V3B6N,841,01B
+" lemma: gehen
+ narg1: die A. profunda clitoridis
+ narg2: zum Crus clitoridis",,"
+
+art (""A. profunda clitoridis"")
+cru (""Crus clitoridis"")",,27.05.2025 23:00:32 CEST,35,HBA4D47V,2R4V3B6N,841,02A
+" lemma: gehen
+ narg1: die A. profunda clitoridis
+ narg2: zum Crus clitoridis
+ pspez: Aus der A. pudenda interna",,"
+
+art (""A. profunda clitoridis"")
+cru (""Crus clitoridis"")
+",,27.05.2025 23:00:32 CEST,35,HBA4D47V,2R4V3B6N,841,02B
+" lemma: gehen
+ narg1: die A. dorsalis clitoridis
+ narg2: zur Glans clitoridis",,"
+
+art (""A. dorsalis clitoridis"")
+gla (""Glans clitoridis"")",,27.05.2025 23:00:32 CEST,35,HBA4D47V,2R4V3B6N,841,03A
+" lemma: gehen
+ narg1: die A. dorsalis clitoridis
+ narg2: zur Glans clitoridis
+ pspez: Aus der A. pudenda interna",,"
+
+art (""A. dorsalis clitoridis"")
+gla (""Glans clitoridis"")
+",,27.05.2025 23:00:32 CEST,35,HBA4D47V,2R4V3B6N,841,03B
+" lemma: aufnehmen
+ narg1: Die V. dorsalis clitoridis
+narg2A: das Blut der Glans",,"
+
+ven (""V. dorsalis clitoridis"")
+gla (""Glans"")",,27.05.2025 23:00:32 CEST,35,HBA4D47V,2R4V3B6N,841,04A
+" lemma: aufnehmen
+ narg1: Die V. dorsalis clitoridis
+narg2A: das Blut der Glans
+narg2B: des Corpus clitoridis",,"
+
+ven (""V. dorsalis clitoridis"")
+gla (""Glans"")
+cor (""Corpus clitoridis"")",,27.05.2025 23:00:32 CEST,35,HBA4D47V,2R4V3B6N,841,04B
+" lemma: schicken
+ narg1: Der Bulbus vestibuli
+ narg2: seine Venen
+narg3A: zu den Plexus venosus uterinus",,"
+
+bul (""Bulbus vestibuli"")
+
+",,27.05.2025 23:00:32 CEST,35,HBA4D47V,2R4V3B6N,841,05A
+" lemma: schicken
+ narg1: Der Bulbus vestibuli
+ narg2: seine Venen
+narg3A: zu den Plexus venosus uterinus
+narg3B: vaginalis",,"
+
+bul (""Bulbus vestibuli"")
+
+
+",,27.05.2025 23:00:32 CEST,35,HBA4D47V,2R4V3B6N,841,05B
+" lemma: schicken
+ narg1: Der Bulbus vestibuli
+ narg2: seine Venen
+narg3A: zu den Plexus venosus uterinus
+narg3B: vaginalis
+narg3C: zum Teil in die Vv. obturatoriae",,"
+
+bul (""Bulbus vestibuli"")
+
+
+
+",,27.05.2025 23:00:32 CEST,35,HBA4D47V,2R4V3B6N,841,05C
+" lemma: bestehen
+  narg: Verbindungen {vom Bulbus vestibuli} zu den übrigen Venen der äußeren Geschlechtsorgane",,"
+
+bul (""Verbindungen"")",,27.05.2025 23:00:32 CEST,35,HBA4D47V,2R4V3B6N,841,06A
+" lemma: ,
+ narg1: Schwellkörpern des Vorhofs
+ narg2: Bulbi vestibuli",,"
+
+bul
+bul",,27.05.2025 23:00:33 CEST,36,HBA4D47V,3LVD7FZY,841,01A
+" lemma: entsprechen
+ narg1: Den Schwellkörpern des Vorhofs , Bulbi vestibuli ( Abb .
+8.6-2 )
+ narg2: das Corpus spongiosum penis",,"
+
+bul (""Bulbi vestibuli"")
+",,27.05.2025 23:00:33 CEST,36,HBA4D47V,3LVD7FZY,841,02A
+" lemma: zwischen liegen
+ narg1: Sie
+narg2A: der unteren Faszie des Diaphragma urogenitale","
+
+Bulbi vestibuli
+",,,27.05.2025 23:00:33 CEST,36,HBA4D47V,3LVD7FZY,841,03A
+" lemma: zwischen liegen
+ narg1: Sie
+narg2A: der unteren Faszie des Diaphragma urogenitale
+narg2B: dem M. bulbospongiosus in der Seitenwand des Scheidenvorhofs","
+
+Bulbi vestibuli
+
+",,,27.05.2025 23:00:33 CEST,36,HBA4D47V,3LVD7FZY,841,03B
+" lemma: in der Seitenwand des Scheidenvorhofs .
+  narg: M. bulbospongiosus",,,,27.05.2025 23:00:33 CEST,36,HBA4D47V,3LVD7FZY,841,04A
+" lemma: keulenförmig verdickt sein
+  narg: Ihre hinteren Enden","
+
+Bulbi vestibuli (""Ihre"")",,,27.05.2025 23:00:33 CEST,36,HBA4D47V,3LVD7FZY,841,05A
+" lemma: nahe der BARTHOLINSChen Drüsen liegen
+  narg: Ihre hinteren Enden","
+
+Bulbi vestibuli (""Ihre"")",,,27.05.2025 23:00:33 CEST,36,HBA4D47V,3LVD7FZY,841,06A
+" lemma: sich vereinigen
+  narg: Ihre vorderen Enden","
+
+Bulbi vestibuli (""Ihre"")",,,27.05.2025 23:00:33 CEST,36,HBA4D47V,3LVD7FZY,841,07A
+" lemma: Blutgefäßverbindungen mit der Klitoris haben
+  narg: Ihre vorderen Enden","
+
+Bulbi vestibuli (""Ihre"")","
+kli (""Klitoris"")
+",,27.05.2025 23:00:33 CEST,36,HBA4D47V,3LVD7FZY,841,08A
+" lemma: ungefähr 3 cm lang sein
+  narg: Sie","
+
+Bulbi vestibuli",,,27.05.2025 23:00:33 CEST,36,HBA4D47V,3LVD7FZY,841,09A
+" lemma: aus einem Venengeflecht bestehen
+  narg: Sie","
+
+Bulbi vestibuli","
+bul (""Venengeflecht"")
+",,27.05.2025 23:00:33 CEST,36,HBA4D47V,3LVD7FZY,841,10A
+" lemma: z.T.
+kavernös erweitert ,
+  narg: Venengeflecht",,"
+
+bul",,27.05.2025 23:00:33 CEST,36,HBA4D47V,3LVD7FZY,841,11A
+" lemma: von glatten Muskelzellen umgeben sein
+  narg: das",,,,27.05.2025 23:00:33 CEST,36,HBA4D47V,3LVD7FZY,841,12A
+"   zus: bei sexueller Erregung
+ lemma: anschwellen
+  narg: Es","
+
+
+Venengeflecht","
+
+
+bul",,27.05.2025 23:00:33 CEST,36,HBA4D47V,3LVD7FZY,841,13A
+"lemmaA: zu einer stärkeren Schwellung von Bulbus vestibuli führen
+  narg: was","
+
+Nach der Einführung des Penis ( Immissio penis ) werden die Mechanorezeptoren in der Haut der Vaginalmanschette gereizt","
+bul
+",,27.05.2025 23:00:33 CEST,37,HBA4D47V,497IZEDJ,876,01A
+"lemmaB: zu einer stärkeren Schwellung von Klitoris führen
+  narg: was","
+
+Nach der Einführung des Penis ( Immissio penis ) werden die Mechanorezeptoren in der Haut der Vaginalmanschette gereizt","
+kli
+",,27.05.2025 23:00:33 CEST,37,HBA4D47V,497IZEDJ,876,01B
+" lemma: münden
+  narg: die Harnröhre , Urethra feminina",,,,27.05.2025 23:00:33 CEST,38,HBA4D47V,69K4S6BA,840,01A
+" lemma: münden
+  narg: die Harnröhre , Urethra feminina
+ pspez: Dorsal der Klitoris",,"
+
+
+gla (""Klitoris"")",,27.05.2025 23:00:33 CEST,38,HBA4D47V,69K4S6BA,840,01B
+ lemma: sein,,,,27.05.2025 23:00:34 CEST,39,HBA4D47V,7SXNBUBU,840,01A
+" lemma: sein
+  farg: am unteren Symphysenrand",,,,27.05.2025 23:00:34 CEST,39,HBA4D47V,7SXNBUBU,840,01B
+" lemma: sein
+  farg: am unteren Symphysenrand
+pspez1: Die Klitoris selbst",,"
+
+
+kli (""Klitoris"")",,27.05.2025 23:00:34 CEST,39,HBA4D47V,7SXNBUBU,840,01C
+" lemma: sein
+  farg: am unteren Symphysenrand
+pspez1: durch das Lig .
+suspensorium clitoridis",,"
+
+
+lig (""Lig .
+suspensorium clitoridis"")",,27.05.2025 23:00:34 CEST,39,HBA4D47V,7SXNBUBU,840,01D
+" lemma: sein
+  farg: am unteren Symphysenrand
+pspez1: befestigt",,,,27.05.2025 23:00:34 CEST,39,HBA4D47V,7SXNBUBU,840,01E
+" lemma: aufweisen
+ narg1: Die Klitoris
+ narg2: zahlreiche sensorische Nervenendigungen",,"
+
+kli (""Klitoris"")
+",,27.05.2025 23:00:34 CEST,39,HBA4D47V,7SXNBUBU,840,02A
+" lemma: Hohlräume enthalten
+  narg: Die Schwellkörper",,"
+
+cac (""Schwellkörper"")",,27.05.2025 23:00:34 CEST,39,HBA4D47V,7SXNBUBU,840,03A
+"  zus1: die
+  zus2: bei Blutfüllung
+ lemma: zu einer geringen Aufrichtung der Klitoris fahren","Hohlräume
+
+
+","
+
+
+kli (""Klitoris"")",,27.05.2025 23:00:34 CEST,39,HBA4D47V,7SXNBUBU,840,04A
+" lemma: bei Berührung und sexueller Erregung geschehen
+  narg: Dies","
+
+Hohlräume , die bei Blutfüllung zu einer geringen Aufrichtung der Klitoris führe",,,27.05.2025 23:00:34 CEST,39,HBA4D47V,7SXNBUBU,840,05A
+" lemma: aufnehmen
+ narg1: die Frau
+ narg2: die stärksten sexuellen Reize",,,,27.05.2025 23:00:34 CEST,39,HBA4D47V,7SXNBUBU,840,06A
+" lemma: aufnehmen
+ narg1: die Frau
+ narg2: die stärksten sexuellen Reize
+pspez1: Über den Kitzler",,"
+
+
+
+kli (""Kitzler"")",,27.05.2025 23:00:34 CEST,39,HBA4D47V,7SXNBUBU,840,06B
+" lemma: aufnehmen
+ narg1: die Frau
+ narg2: die stärksten sexuellen Reize
+pspez1: stärkere Reize als durch die Sensorik der Scheide",,,,27.05.2025 23:00:34 CEST,39,HBA4D47V,7SXNBUBU,840,06C
+" lemma: enthalten
+ narg1: Der oberflächliche Dammraum
+narg2A: Penis",,,,27.05.2025 23:00:34 CEST,40,HBA4D47V,9G3ND5CT,756,01A
+" lemma: enthalten
+ narg1: Der oberflächliche Dammraum
+narg2A: Penis
+narg2B: Klitoris",,"
+
+
+
+kli",,27.05.2025 23:00:34 CEST,40,HBA4D47V,9G3ND5CT,756,01B
+" lemma: enden
+ narg1: Der M. ischiocavernosus
+ narg2: in der Tunica albuginea
+narg3A: des Crus penis",,,,27.05.2025 23:00:34 CEST,40,HBA4D47V,9G3ND5CT,756,02A
+" lemma: enden
+ narg1: Der M. ischiocavernosus
+ narg2: in der Tunica albuginea
+narg3A: des Crus penis
+narg3B: des Crus clitoridis",,"
+
+
+
+
+cru (""Crus clitoridis"")",,27.05.2025 23:00:34 CEST,40,HBA4D47V,9G3ND5CT,756,02B
+"   zus: Bei der Frau
+ lemma: umfassen
+ narg1: der M. bulbospongiosus
+ narg2: den Bulbus vestibuli",,"
+
+
+
+bul (""Bulbus vestibuli"")",,27.05.2025 23:00:34 CEST,40,HBA4D47V,9G3ND5CT,756,03A
+"   zus: Bei der Frau
+ lemma: inserieren
+ narg1: der M. bulbospongiosus
+ narg2: in der Klitoris",,"
+
+
+
+kli (""Klitoris"")",,27.05.2025 23:00:34 CEST,40,HBA4D47V,9G3ND5CT,756,04A
+"   zus: Bei der Frau
+ lemma: inserieren
+ narg1: der M. bulbospongiosus
+ narg2: in der Klitoris
+ pspez: symphysenwärts",,"
+
+
+
+kli (""Klitoris"")
+",,27.05.2025 23:00:34 CEST,40,HBA4D47V,9G3ND5CT,756,04B
+" lemma: der Vermittlung sexueller Erregung dienen
+  narg: die Klitoris",,"
+
+kli (""Klitoris"")",,27.05.2025 23:00:34 CEST,41,HBA4D47V,ATWZCEVK,838,01A
+" lemma: zwischen liegen
+ nargA: dem Diaphragma urogenitale",,,,27.05.2025 23:00:34 CEST,42,HBA4D47V,AW8GI26B,840,01A
+" lemma: zwischen liegen
+ nargA: dem Diaphragma urogenitale
+ pspez: in der Tiefe der großen Schamlippen",,,,27.05.2025 23:00:34 CEST,42,HBA4D47V,AW8GI26B,840,01B
+" lemma: zwischen liegen
+ nargA: dem Diaphragma urogenitale
+ nargB: dem dorsalen Ende der Bulbi vestibuli
+ pspez: in der Tiefe der großen Schamlippen",,"
+
+
+bul (""Bulbi vestibuli"")
+",,27.05.2025 23:00:34 CEST,42,HBA4D47V,AW8GI26B,840,01C
+" lemma: zwischen liegen
+ nargA: dem Diaphragma urogenitale
+ nargB: dem dorsalen Ende der Bulbi vestibuli
+ pspez: in der Tiefe der großen Schamlippen",,"
+
+
+bul (""Bulbi vestibuli"")
+",,27.05.2025 23:00:34 CEST,42,HBA4D47V,AW8GI26B,840,01D
+" lemma: ,
+ narg1: Der Kitzler
+ narg2: Clitoris",,"
+
+kli (""Kitzler"")
+kli",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,01A
+"lemmaA: ein reich sensorisch innerviertes Organ sein
+  narg: Der Kitzler , Clitoris",,"
+
+kli (""Clitoris"")",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,02A
+"lemmaB: ein leicht erektiles Organ sein
+  narg: Der Kitzler , Clitoris",,"
+
+kli (""Clitoris"")",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,02B
+" lemma: entwicklungsgeschichtlich dem männlichen Penis entsprechen
+  narg: das",,,,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,03A
+"   zus: bei der Frau
+ lemma: nicht in einem Organ vereint sein
+  narg: die Corpora cavernosa und die Harnröhre",,"
+
+
+cac (""Corpora cavernosa"")",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,04A
+"   zus: bei der Frau
+ lemma: nicht in einem Organ vereint sein
+  narg: die Corpora cavernosa und die Harnröhre
+ pspez: Im Unterschied zum Penis",,"
+
+
+cac (""Corpora cavernosa"")
+",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,04B
+"lemmaA: die Aufnahme der sexuellen Erregung sein
+  narg: Die Funktion der Klitoris",,"
+
+kli (""Klitoris"")",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,05A
+"lemmaB: die Erhöhung der sexuellen Erregung sein
+  narg: Die Funktion der Klitoris",,"
+
+kli (""Klitoris"")",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,05B
+"lemmaA: dorsal der vorderen Kommissur liegen
+  narg: Der Kitzler",,"
+
+gla (""Kitzler"")",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,06A
+"lemmaB: dorsal des Präputiums liegen
+  narg: Der Kitzler",,"
+pra (""Präputiums"")
+gla (""Kitzler"")",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,06B
+" lemma: etwa 2,5 cm ventral der Harnröhrenmündung liegen
+  narg: Der Kitzler",,"
+
+gla (""Kitzler"")",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,07A
+" lemma: ,
+ narg1: Zwei kurze Schwellkörper
+ narg2: Corpora cavernosa clitoridis",,"
+
+cac (""Schwellkörper"")
+cac",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,08A
+" lemma: umhüllt sein
+  narg: die",,,,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,09A
+" lemma: umhüllt sein
+  narg: die
+ pspez: von einer faserreichen Bindegewebelage , Fascia clitoridis",,"
+
+
+tac/tas (""Fascia clitoridis"")",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,09B
+" lemma: geteilt sein
+  narg: die",,,,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,10A
+" lemma: geteilt sein
+  narg: die
+ pspez: von einem Septum",,"
+
+
+sep (""Septum"")",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,10B
+" lemma: den Klitoriskörper , Corpus clitoridis bilden
+  narg: Zwei kurze Schwellkörper , Corpora cavernosa clitoridis",,"
+cor (""Corpus clitoridis"")
+cac (""Corpora cavernosa clitoridis"")",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,11A
+" lemma: ,
+ narg1: den Klitoriskörper
+ narg2: Corpus clitoridis",,"
+
+cor (""Klitoriskörper"")
+cor",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,12A
+" lemma: knötchenförmig enden
+  narg: Er","
+
+Klitoriskörper",,,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,13A
+" lemma: knötchenförmig enden
+  narg: Er
+ pspez: mit der Eichel , Glans clitoridis","
+
+Klitoriskörper
+","
+
+
+gla (""Glans clitoridis"")",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,13B
+" lemma: ,
+ narg1: Eichel
+ narg2: Glans clitoridis",,"
+
+gla
+gla",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,14A
+" lemma: am Unterrand der Schambeinäste entspringen
+  narg: Die beiden Corpora cavernosa",,"
+
+cac (""Corpora cavernosa"")",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,15A
+" lemma: am Unterrand der Schambeinäste entspringen
+  narg: Die beiden Corpora cavernosa
+ pspez: als deutlich größere Schwellkörper {als der Corpus clitoridis} , Klitorisschenkel ( Crura clitoridis )",,"
+
+cac (""Corpora cavernosa"")
+cru (""Crura clitoridis"")",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,15B
+" lemma: ,
+ narg1: deutlich größere Schwellkörper {als der Corpus clitoridis}
+ narg2: Klitorisschenkel
+ narg3: Crura clitoridis",,"
+
+
+cru
+cru",,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,16A
+"lemmaA: bedeckt werden
+ narg1: Die Schenkel
+ narg2: durch die Mm. ischiocavernosi",,,,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,17A
+"lemmaB: verankert werden
+ narg1: Die Schenkel
+ narg2: durch die Mm. ischiocavernosi",,,,27.05.2025 23:00:35 CEST,43,HBA4D47V,BY3DF8LD,839,17B
+ lemma: zur Klitoris zeihen,,"
+gla (""Klitoris"")",,27.05.2025 23:00:35 CEST,44,HBA4D47V,C54SNUUY,839,01A
+" lemma: zur Klitoris zeihen
+pspez1: Mit dem tiefer gelegenen Teil",,"
+gla (""Klitoris"")
+",,27.05.2025 23:00:35 CEST,44,HBA4D47V,C54SNUUY,839,01B
+" lemma: zur Klitoris zeihen
+pspez1: sie","
+
+die kleinen Schamlippen","
+gla (""Klitoris"")
+",,27.05.2025 23:00:35 CEST,44,HBA4D47V,C54SNUUY,839,01C
+" lemma: zur Klitoris zeihen
+pspez1: als Kitzlerzügel , Frenula clitoridis",,"
+gla (""Klitoris"")
+fre (""Frenula clitoridis"")",,27.05.2025 23:00:35 CEST,44,HBA4D47V,C54SNUUY,839,01D
+" lemma: ,
+ narg1: Kitzlerzügel
+ narg2: Frenula clitoridis",,"
+
+fre
+fre",,27.05.2025 23:00:35 CEST,44,HBA4D47V,C54SNUUY,839,02A
+" lemma: in die Kitzlervorhaut , Praeputium clitoridis , übergehen
+  narg: Die oberflächlichen Anteile {der kleinen Schamlippen}",,"
+pra (""Praeputium clitoridis"")
+",,27.05.2025 23:00:35 CEST,44,HBA4D47V,C54SNUUY,839,03A
+" lemma: ,
+ narg1: Kitzlervorhaut
+ narg2: Praeputium clitoridis",,"
+
+pra
+pra",,27.05.2025 23:00:35 CEST,44,HBA4D47V,C54SNUUY,839,04A
+" lemma: bedecken
+ narg1: die
+ narg2: die Klitoris","
+
+Kitzlervorhaut
+","
+
+
+gla (""Klitoris"")",,27.05.2025 23:00:35 CEST,44,HBA4D47V,C54SNUUY,839,05A
+"   zus: {bei} neugeborene{n} Mädchen
+ lemma: im Verhältnis zu den anderen Genitalorganen relativ groß sein
+  narg: Die Klitoris",,"
+
+
+kli (""Klitoris"")",,27.05.2025 23:00:35 CEST,45,HBA4D47V,CQEKF29L,872,01A
+" lemma: die Vv. dorsalia clitoridis enthalten
+  narg: Die untere Abteilung des Spatium retropubicum",,"
+ven (""Vv. dorsalia clitoridis"")
+",,27.05.2025 23:00:35 CEST,46,HBA4D47V,DYAZ9PKM,755,01A
+"lemmaA: taktile Reizung des äußeren Genitales , besonders von Klitoris sein
+  narg: Stimuli der sexuellen Reaktion",,"
+kli
+",,27.05.2025 23:00:36 CEST,47,HBA4D47V,GE9YE6A7,876,01A
+"lemmaB: taktile Reizung des äußeren Genitales , besonders von Präputium sein
+  narg: Stimuli der sexuellen Reaktion",,"
+pra
+",,27.05.2025 23:00:36 CEST,47,HBA4D47V,GE9YE6A7,876,01B
+"lemmaC: taktile Reizung des äußeren Genitales , besonders von Frenuli clitoridis sein
+  narg: Stimuli der sexuellen Reaktion",,"
+fre
+",,27.05.2025 23:00:36 CEST,47,HBA4D47V,GE9YE6A7,876,01C
+"lemmaD: taktile Reizung des äußeren Genitales , besonders von Innenfläcdehre kleinen Labien sein
+  narg: Stimuli der sexuellen Reaktion",,,,27.05.2025 23:00:36 CEST,47,HBA4D47V,GE9YE6A7,876,01D
+" lemma: liegen
+ narg1: In der Subkutis
+narg2A: ein sich in der Pubertät ausbildendes Fettpolster",,,,27.05.2025 23:00:36 CEST,48,HBA4D47V,GKX8LMRK,839,01A
+" lemma: liegen
+ narg1: In der Subkutis
+narg2A: ein sich in der Pubertät ausbildendes Fettpolster
+narg2B: ein Venenplexus",,"
+
+
+
+bul",,27.05.2025 23:00:36 CEST,48,HBA4D47V,GKX8LMRK,839,01B
+" lemma: Hauptbestandteil des Schwellkörpers , Bulbus vestibuli sein
+  narg: Der Venenplexus",,"
+bul (""Bulbus vestibuli"")
+",,27.05.2025 23:00:36 CEST,48,HBA4D47V,GKX8LMRK,839,02A
+" lemma: ,
+ narg1: Schwellkörpers
+ narg2: Bulbus vestibuli",,"
+
+
+bul",,27.05.2025 23:00:36 CEST,48,HBA4D47V,GKX8LMRK,839,03A
+" lemma: bedeckt werden
+  narg: Der Venenplexus",,,,27.05.2025 23:00:36 CEST,48,HBA4D47V,GKX8LMRK,839,04A
+" lemma: bedeckt werden
+  narg: Der Venenplexus
+  farg: vom M. bulbospongiosus",,,,27.05.2025 23:00:36 CEST,48,HBA4D47V,GKX8LMRK,839,04B
+"   zus: Bei Füllung der Bulbi
+ lemma: anschwellen
+  narg: die großen Schamlippen",,"bul (""Bulbi"")
+
+
+",,27.05.2025 23:00:36 CEST,48,HBA4D47V,GKX8LMRK,839,05A
+" lemma: dienen
+ narg1: Die Reizung der Klitoris
+narg2A: der Aufnahme der sexuellen Erregung",,"
+
+kli (""Klitoris"")
+",,27.05.2025 23:00:36 CEST,49,HBA4D47V,KEINYR3G,875,01A
+" lemma: dienen
+ narg1: Die Reizung der Klitoris
+narg2A: der Aufnahme der sexuellen Erregung
+narg2B: Auslösung der sexuellen Erregung",,"
+
+kli (""Klitoris"")
+
+",,27.05.2025 23:00:36 CEST,49,HBA4D47V,KEINYR3G,875,01B
+" lemma: dienen
+ narg1: Die Reizung der Klitoris
+narg2A: der Aufnahme der sexuellen Erregung
+narg2B: Auslösung der sexuellen Erregung
+narg2C: Erhöhung der sexuellen Erregung",,"
+
+kli (""Klitoris"")
+
+
+",,27.05.2025 23:00:36 CEST,49,HBA4D47V,KEINYR3G,875,01C
+"   zus: Bei sexueller Erregung
+ lemma: anschwellen
+  narg: Die Corpora cavernosa clitoridis",,"
+
+
+cac (""Corpora cavernosa clitoridis"")",,27.05.2025 23:00:36 CEST,49,HBA4D47V,KEINYR3G,875,02A
+"   zus: Bei sexueller Erregung
+ lemma: anschwellen
+  narg: die Glans clitoridis",,"
+
+
+gla (""Glans clitoridis"")",,27.05.2025 23:00:36 CEST,49,HBA4D47V,KEINYR3G,875,03A
+"   zus: Bei sexueller Erregung
+ lemma: anschwellen
+  narg: die Glans clitoridis
+ pspez: im geringen Umfang",,"
+
+
+gla (""Glans clitoridis"")
+",,27.05.2025 23:00:36 CEST,49,HBA4D47V,KEINYR3G,875,03B
+"   zus: Bei sexueller Erregung
+ lemma: retrahieren
+  narg: der Crura clitoridis",,"
+
+
+cru (""Crura clitoridis"")",,27.05.2025 23:00:36 CEST,49,HBA4D47V,KEINYR3G,875,04A
+"   zus: Bei sexueller Erregung
+ lemma: unter das Präputium gezogen werden
+  narg: die Klitoris",,"
+
+pra (""Präputium"")
+gla (""Klitoris"")",,27.05.2025 23:00:36 CEST,49,HBA4D47V,KEINYR3G,875,05A
+"   zus: Bei sexueller Erregung
+ lemma: unter das Präputium gezogen werden
+  narg: die Klitoris
+ pspez: in Richtung Symphysenrand",,"
+
+pra (""Präputium"")
+gla (""Klitoris"")
+",,27.05.2025 23:00:36 CEST,49,HBA4D47V,KEINYR3G,875,05B
+"   zus: Bei sexueller Erregung
+ lemma: unter das Präputium gezogen werden
+  narg: die Klitoris
+ pspez: in Richtung Symphysenrand
+ gspez: Durch eine Retraktion der Crura clitoridis",,"
+
+pra (""Präputium"")
+gla (""Klitoris"")
+
+cru (""Crura clitoridis"")",,27.05.2025 23:00:36 CEST,49,HBA4D47V,KEINYR3G,875,05C
+" lemma: Zum äußeren Genitale zählen
+ nargA: Schamberg ( Mons pubis )",,,,27.05.2025 23:00:37 CEST,50,HBA4D47V,KLM2I7DD,838,01A
+" lemma: Zum äußeren Genitale zählen
+ nargA: Schamberg ( Mons pubis )
+ nargB: große ( Labia majora pudendi )",,,,27.05.2025 23:00:37 CEST,50,HBA4D47V,KLM2I7DD,838,01B
+" lemma: Zum äußeren Genitale zählen
+ nargA: Schamberg ( Mons pubis )
+ nargB: große ( Labia majora pudendi )
+ nargC: kleine Schamlippen ( Labia minorapudendi )",,,,27.05.2025 23:00:37 CEST,50,HBA4D47V,KLM2I7DD,838,01C
+" lemma: Zum äußeren Genitale zählen
+ nargA: Schamberg ( Mons pubis )
+ nargB: große ( Labia majora pudendi )
+ nargC: kleine Schamlippen ( Labia minorapudendi )
+ nargD: Kitzler ( Clitoris )",,"
+
+
+
+
+kli (""Clitoris"")",,27.05.2025 23:00:37 CEST,50,HBA4D47V,KLM2I7DD,838,01D
+" lemma: Zum äußeren Genitale zählen
+ nargA: Schamberg ( Mons pubis )
+ nargB: große ( Labia majora pudendi )
+ nargC: kleine Schamlippen ( Labia minorapudendi )
+ nargD: Kitzler ( Clitoris )
+ nargE: Scheidenvorhof ( Vestibulum vaginae )",,"
+
+
+
+
+kli (""Clitoris"")
+",,27.05.2025 23:00:37 CEST,50,HBA4D47V,KLM2I7DD,838,01E
+" lemma: Zum äußeren Genitale zählen
+ nargA: Schamberg ( Mons pubis )
+ nargB: große ( Labia majora pudendi )
+ nargC: kleine Schamlippen ( Labia minorapudendi )
+ nargD: Kitzler ( Clitoris )
+ nargE: Scheidenvorhof ( Vestibulum vaginae )
+ nargF: die Scheidenvorhofdrüsen ( GIl .
+vestibulares major et minores )",,"
+
+
+
+
+kli (""Clitoris"")
+
+",,27.05.2025 23:00:37 CEST,50,HBA4D47V,KLM2I7DD,838,01F
+" lemma: synonym sein
+ narg1: Kitzler
+ narg2: Clitoris",,"
+
+kli
+kli",,27.05.2025 23:00:37 CEST,50,HBA4D47V,KLM2I7DD,838,02A
+" lemma: sich ventral im Praeputium clitoridis fortsetzen
+  narg: Sie","
+
+Die kleinen Schamlippen","
+pra (""Praeputium clitoridis"")
+",,27.05.2025 23:00:37 CEST,51,HBA4D47V,NPEYU4CQ,748,01A
+" lemma: sich vereinen
+  narg: dessen Falten","
+
+Praeputium clitoridis (""dessen"")",,,27.05.2025 23:00:37 CEST,51,HBA4D47V,NPEYU4CQ,748,02A
+" lemma: sich vereinen
+  narg: dessen Falten
+ pspez: vor der Klitoris","
+
+Praeputium clitoridis (""dessen"")
+","
+
+
+gla (""Klitoris"")",,27.05.2025 23:00:37 CEST,51,HBA4D47V,NPEYU4CQ,748,02B
+" lemma: ein Derivat des Genitalhöckers sein
+  narg: Die Klitoris",,"
+
+kli (""Klitoris"")",,27.05.2025 23:00:37 CEST,51,HBA4D47V,NPEYU4CQ,748,03A
+"   zus: Die Vaskularisierung der Vagina während der Schwangerschaft führt zur Ausbildung von Venen
+ lemma: funktionelle Schwellkörper bilden
+  narg: diese Venen","
+
+
+Venen","
+
+?
+","
+
+
+klitorisbezug da? um welche schwellkörper geht es?",27.05.2025 23:00:37 CEST,52,HBA4D47V,W2Q7Z8ZE,867,01A
+"   zus: Die Vaskularisierung der Vagina während der Schwangerschaft führt zur Ausbildung von Venen
+ lemma: funktionelle Schwellkörper bilden
+  narg: diese Venen
+ pspez: um die Vagina","
+
+
+Venen
+","
+
+?
+
+","
+
+
+klitorisbezug da? um welche schwellkörper geht es?
+",27.05.2025 23:00:37 CEST,52,HBA4D47V,W2Q7Z8ZE,867,01B
+" lemma: entstehen
+  narg: Angeborene Hyperplasien der Klitoris oder der Labia minora",,"
+
+kli (""Klitoris"")",,27.05.2025 23:00:37 CEST,53,HBA4D47V,ZR294NUB,748,01A
+" lemma: entstehen
+  narg: Angeborene Hyperplasien der Klitoris oder der Labia minora
+ fargA: durch androgene Hormoneinflüsse von mütterlicher Seite",,"
+
+kli (""Klitoris"")
+",,27.05.2025 23:00:37 CEST,53,HBA4D47V,ZR294NUB,748,01B
+" lemma: entstehen
+  narg: Angeborene Hyperplasien der Klitoris oder der Labia minora
+ fargB: im Rahmen eines adrenogenitalen Syndroms",,"
+
+kli (""Klitoris"")
+",,27.05.2025 23:00:37 CEST,53,HBA4D47V,ZR294NUB,748,01C
+" lemma: auf den Rücken der Klitoris gelangen
+  narg: Ein N. dorsalis clitoridis",,"
+kli (""Klitoris"")
+ner",,27.05.2025 23:00:38 CEST,54,HBA4D47V,ZR6QMVF7,841,01A
+" lemma: hauptsächlich die A. pudenda interna begleiten
+  narg: Sie","
+
+sympathische Fasern aus dem Plexus hypogastricus inferior",,,27.05.2025 23:00:38 CEST,54,HBA4D47V,ZR6QMVF7,841,02A
+" lemma: die Durchblutung des Schwellkörpers regulieren
+  narg: Sie","
+
+sympathische Fasern aus dem Plexus hypogastricus inferior","
+? (""Schwellkörpers"")
+",,27.05.2025 23:00:38 CEST,54,HBA4D47V,ZR6QMVF7,841,03A
+" lemma: dem Vestibulum vaginae auf liegen
+  narg: Die Bulbi vestibuli",,"
+
+bul (""Bulbi vestibuli"")",,27.05.2025 23:00:39 CEST,61,M45LADVB,3L832H7C,263,01A
+" lemma: dem Vestibulum vaginae auf liegen
+  narg: Die Bulbi vestibuli
+ pspez: als dichte Venengeflechte",,"
+
+bul (""Bulbi vestibuli"")
+",,27.05.2025 23:00:39 CEST,61,M45LADVB,3L832H7C,263,01B
+" lemma: mit dem kavernösen Gewebe der Clitoris in Zusammenhang stehen
+  narg: Die Bulbi vestibuli",,"
+kli (""Clitoris"")
+bul (""Bulbi vestibuli"")",,27.05.2025 23:00:39 CEST,61,M45LADVB,3L832H7C,263,02A
+"   zus: Einführung des Gliedes in das weibliche Genitale
+lemmaA: in engen Kontakt mit den Wänden der Scheide kommen
+  narg: das Glied",,,,27.05.2025 23:00:40 CEST,64,M45LADVB,3D8N38KZ,266,01A
+"   zus: Einführung des Gliedes in das weibliche Genitale
+lemmaA: in engen Kontakt mit den Wänden der Scheide kommen
+  narg: das Glied
+ pspez: Durch die Volumenzunahme",,,,27.05.2025 23:00:40 CEST,64,M45LADVB,3D8N38KZ,266,01B
+"   zus: Einführung des Gliedes in das weibliche Genitale
+lemmaB: in engen Kontakt mit den kleinen Schamlippen kommen
+  narg: das Glied",,,,27.05.2025 23:00:40 CEST,64,M45LADVB,3D8N38KZ,266,01C
+"   zus: Einführung des Gliedes in das weibliche Genitale
+lemmaB: in engen Kontakt mit den kleinen Schamlippen kommen
+  narg: das Glied
+ pspez: Durch die Volumenzunahme",,,,27.05.2025 23:00:40 CEST,64,M45LADVB,3D8N38KZ,266,01D
+"   zus: Einführung des Gliedes in das weibliche Genitale
+lemmaC: in engen Kontakt {mit} dem Kitzler kommen
+  narg: das Glied",,"
+
+kli (""Kitzler"")
+",,27.05.2025 23:00:40 CEST,64,M45LADVB,3D8N38KZ,266,01E
+"   zus: Einführung des Gliedes in das weibliche Genitale
+lemmaC: in engen Kontakt {mit} dem Kitzler kommen
+  narg: das Glied
+ pspez: Durch die Volumenzunahme",,"
+
+kli (""Kitzler"")
+
+",,27.05.2025 23:00:40 CEST,64,M45LADVB,3D8N38KZ,266,01F
+"   zus: sowohl beim Mann wie bei der Frau
+ lemma: gereizt werden
+  narg: die Genitalnervenkörperchen",,"
+
+
+? (""Genitalnervenkörperchen"")",,27.05.2025 23:00:40 CEST,64,M45LADVB,3D8N38KZ,266,02A
+"   zus: sowohl beim Mann wie bei der Frau
+ lemma: gereizt werden
+  narg: die Genitalnervenkörperchen
+ pspez: Dadurch",,"
+
+
+? (""Genitalnervenkörperchen"")
+",,27.05.2025 23:00:40 CEST,64,M45LADVB,3D8N38KZ,266,02B
+" lemma: wesentlich schwächer {als die A. penis} sein
+  narg: Die A. clitoridis",,"
+
+art (""A. clitoridis"")",,27.05.2025 23:00:43 CEST,84,M45LADVB,R7MYH3X7,268,01A
+"lemmaA: sich in die A. bulbi vestibuli vaginae teilen
+  narg: Die A. clitoridis",,"
+art
+art (""A. clitoridis"")",,27.05.2025 23:00:43 CEST,84,M45LADVB,R7MYH3X7,268,02A
+"lemmaA: sich in die A. bulbi vestibuli vaginae teilen
+  narg: Die A. clitoridis
+ pspez: in gleicher Weise {wie die A. penis}",,"
+art
+art (""A. clitoridis"")
+",,27.05.2025 23:00:43 CEST,84,M45LADVB,R7MYH3X7,268,02B
+"lemmaB: sich in die A. urethralis teilen
+  narg: Die A. clitoridis",,"
+
+art (""A. clitoridis"")",,27.05.2025 23:00:43 CEST,84,M45LADVB,R7MYH3X7,268,02C
+"lemmaB: sich in die A. urethralis teilen
+  narg: Die A. clitoridis
+ pspez: in gleicher Weise {wie die A. penis}",,"
+
+art (""A. clitoridis"")
+",,27.05.2025 23:00:43 CEST,84,M45LADVB,R7MYH3X7,268,02D
+"lemmaC: sich in die A. profunda {clitoridis} teilen
+  narg: Die A. clitoridis",,"
+art
+art (""A. clitoridis"")",,27.05.2025 23:00:43 CEST,84,M45LADVB,R7MYH3X7,268,02E
+"lemmaC: sich in die A. profunda {clitoridis} teilen
+  narg: Die A. clitoridis
+ pspez: in gleicher Weise {wie die A. penis}",,"
+art
+art (""A. clitoridis"")
+",,27.05.2025 23:00:43 CEST,84,M45LADVB,R7MYH3X7,268,02F
+"lemmaD: sich in die {A.} dorsalis clitoridis teilen
+  narg: Die A. clitoridis",,"
+art
+art (""A. clitoridis"")",,27.05.2025 23:00:43 CEST,84,M45LADVB,R7MYH3X7,268,02G
+"lemmaD: sich in die {A.} dorsalis clitoridis teilen
+  narg: Die A. clitoridis
+ pspez: in gleicher Weise {wie die A. penis}",,"
+art
+art (""A. clitoridis"")
+",,27.05.2025 23:00:43 CEST,84,M45LADVB,R7MYH3X7,268,02H
+" lemma: vom Crus des Corpus cavernosum clitoridis ( bzw. penis entspringen
+  narg: Der Muskel","
+
+M. ischiocavernosus","
+cac (""Corpus cavernosum clitoridis"")
+",,27.05.2025 23:00:44 CEST,86,M45LADVB,9PKAZJVU,267,01A
+" lemma: entsprechen
+ narg1: Crus des Corpus cavernosum clitoridis
+ narg2: {Crus des Corpus cavernosum} penis",,"
+
+cac (""Corpus cavernosum clitoridis"")
+",,27.05.2025 23:00:44 CEST,86,M45LADVB,9PKAZJVU,267,02A
+" lemma: diese Schwellkörper umhüllen
+  narg: Der Muskel","
+
+M. ischiocavernosus","
+?; -> u.c.StringArray(elements=['cac']) (""Schwellkörper"")
+",,27.05.2025 23:00:44 CEST,86,M45LADVB,9PKAZJVU,267,03A
+" lemma: ansetzen
+  narg: Der Muskel","
+
+M. ischiocavernosus",,,27.05.2025 23:00:44 CEST,86,M45LADVB,9PKAZJVU,267,04A
+" lemma: ansetzen
+  narg: Der Muskel
+ pspez: vorn an ihrer Tunica albuginea","
+
+M. ischiocavernosus
+",,,27.05.2025 23:00:44 CEST,86,M45LADVB,9PKAZJVU,267,04B
+"   zus: teils
+ lemma: sich mit Fasern der anderen Seite vereinigen
+  narg: Der Muskel","
+
+
+M. ischiocavernosus",,,27.05.2025 23:00:44 CEST,86,M45LADVB,9PKAZJVU,267,05A
+"   zus: teils
+ lemma: sich mit Fasern der anderen Seite vereinigen
+  narg: Der Muskel
+pspez1: auf dem Dorsum der Schwellkörper","
+
+
+M. ischiocavernosus
+","
+
+
+
+?; -> u.c.StringArray(elements=['cac']) (""Schwellkörper"")",,27.05.2025 23:00:44 CEST,86,M45LADVB,9PKAZJVU,267,05B
+"   zus: teils
+ lemma: sich mit Fasern der anderen Seite vereinigen
+  narg: Der Muskel
+pspez1: schlingenförmig","
+
+
+M. ischiocavernosus
+",,,27.05.2025 23:00:44 CEST,86,M45LADVB,9PKAZJVU,267,05C
+" lemma: die männlichen und weiblichen Schwellkörper versorgen
+  narg: Sie {die Fasern des Ganglion pelvinum}",,"
+? (""Schwellkörper"")
+","vergleich zwischen penis und clitoris ist schwer als proposition darzustellen, deswegen weggelassen
+
+",27.05.2025 23:00:44 CEST,87,M45LADVB,SY73QC67,244,01A
+" lemma: die männlichen und weiblichen Schwellkörper versorgen
+  narg: Sie {die Fasern des Ganglion pelvinum}
+ pspez: als Plexus corporis cavernosi penis und clitoridis",,"
+? (""Schwellkörper"")
+
+ner (""clitoridis"")","vergleich zwischen penis und clitoris ist schwer als proposition darzustellen, deswegen weggelassen
+
+
+",27.05.2025 23:00:44 CEST,87,M45LADVB,SY73QC67,244,01B
+" lemma: ausgebildet sein
+  narg: Körper mit komplizierten Bluträumen",,,,27.05.2025 23:00:44 CEST,88,M45LADVB,BSBCVTMJ,262,01A
+" lemma: ausgebildet sein
+  narg: Körper mit komplizierten Bluträumen
+ gspez: Um bei der Begattung eine möglichst innige Vereinigung zu ermöglichen und dadurch das Wollustgefühl zu erhöhen",,,,27.05.2025 23:00:44 CEST,88,M45LADVB,BSBCVTMJ,262,01B
+"   zus: bei erhöhter Blutfüllung
+ lemma: anschwellen
+  narg: die","
+
+
+Körper mit komplizierten Bluträumen",,,27.05.2025 23:00:44 CEST,88,M45LADVB,BSBCVTMJ,262,02A
+" lemma: als Schwellkörper bezeichnet werden
+  narg: Sie","
+
+Körper mit komplizierten Bluträumen","
+?; -> u.c.StringArray(elements=['cac']) (""Schwellkörper"")
+",,27.05.2025 23:00:44 CEST,88,M45LADVB,BSBCVTMJ,262,03A
+"   zus: zunächst
+ lemma: bei beiden Geschlechtern gleichsein
+  narg: Ihre Anlage","
+
+
+Schwellkörper (""Ihre"")","
+
+
+?; -> u.c.StringArray(elements=['cac']) (""Schwellkörper"")",,27.05.2025 23:00:44 CEST,88,M45LADVB,BSBCVTMJ,262,04A
+"lemmaA: sich 1. in quere Züge , die Mm. perinei sondern
+  narg: Die den Sinus urogenitalis umgebende Muskulatur",,,,27.05.2025 23:00:45 CEST,89,M45LADVB,V8MBJZFP,267,01A
+"lemmaB: sich 2. in die die Schwellkörper umgebenden Muskeln sondern
+  narg: Die den Sinus urogenitalis umgebende Muskulatur",,"
+? (""Schwellkörper"")
+",,27.05.2025 23:00:45 CEST,89,M45LADVB,V8MBJZFP,267,01B
+" lemma: den unteren Schambeinästen anliegend
+  narg: Crura clitoridis",,"
+
+cru",,27.05.2025 23:00:45 CEST,90,M45LADVB,GJ3R2CNU,262,01A
+" lemma: den unteren Schambeinästen anliegend
+  narg: Crura clitoridis
+ pspez: unter dem M. ischiocavernosus",,"
+
+cru
+",,27.05.2025 23:00:45 CEST,90,M45LADVB,GJ3R2CNU,262,01B
+" lemma: sich vereinigen
+  narg: Die unter dem M. ischiocavernosus den unteren Schambeinästen anliegenden Crura clitoridis",,"
+
+cru (""Crura clitoridis"")",,27.05.2025 23:00:45 CEST,90,M45LADVB,GJ3R2CNU,262,02A
+" lemma: sich vereinigen
+  narg: Die unter dem M. ischiocavernosus den unteren Schambeinästen anliegenden Crura clitoridis
+pspez1: vor der Symphyse",,"
+
+cru (""Crura clitoridis"")
+",,27.05.2025 23:00:45 CEST,90,M45LADVB,GJ3R2CNU,262,02B
+" lemma: sich vereinigen
+  narg: Die unter dem M. ischiocavernosus den unteren Schambeinästen anliegenden Crura clitoridis
+pspez1: zum unpaaren Corpus clitoridis",,"
+
+cru (""Crura clitoridis"")
+cor (""Corpus clitoridis"")",,27.05.2025 23:00:45 CEST,90,M45LADVB,GJ3R2CNU,262,02C
+" lemma: spitzwinklig herabhängen
+  narg: das","
+
+Corpus clitoridis","
+
+cor",,27.05.2025 23:00:45 CEST,90,M45LADVB,GJ3R2CNU,262,03A
+"   zus: auch bei sexueller Reizung
+ lemma: sich nicht aufrichten",,,,27.05.2025 23:00:45 CEST,90,M45LADVB,GJ3R2CNU,262,04A
+" lemma: nennen
+ narg1: Die Spitze des Corpus
+ narg2: Glans clitoridis",,"
+
+cor (""Corpus"")
+gla",,27.05.2025 23:00:45 CEST,90,M45LADVB,GJ3R2CNU,262,05A
+" lemma: eingehüllt sein
+  narg: Die Spitze des Corpus , Glans clitoridis genannt",,"
+
+gla (""Glans clitoridis"")",,27.05.2025 23:00:45 CEST,90,M45LADVB,GJ3R2CNU,262,06A
+" lemma: eingehüllt sein
+  narg: Die Spitze des Corpus , Glans clitoridis genannt
+ pspez: vom Praeputium clitoridis",,"
+
+gla (""Glans clitoridis"")
+pra (""Praeputium clitoridis"")",,27.05.2025 23:00:45 CEST,90,M45LADVB,GJ3R2CNU,262,06B
+"lemmaA: über den Bulbus vestibuli hinweg zeihen
+  narg: Die bei der Frau durch den Scheidenvorhof getrennten Muskeln {Mm. bulbocavernosi}}",,"
+bul (""Bulbus vestibuli"")
+",,27.05.2025 23:00:45 CEST,91,M45LADVB,3XRS47JG,267,01A
+"lemmaB: über die Glandula vestibularis major hinweg zeihen
+  narg: Die bei der Frau durch den Scheidenvorhof getrennten Muskeln {Mm. bulbocavernosi}}",,,,27.05.2025 23:00:45 CEST,91,M45LADVB,3XRS47JG,267,01B
+" lemma: am Corpus cavernosum clitoridis ansetzen
+  narg: Die bei der Frau durch den Scheidenvorhof getrennten Muskeln {Mm. bulbocavernosi}}",,"
+cac (""Corpus cavernosum clitoridis"")
+",,27.05.2025 23:00:45 CEST,91,M45LADVB,3XRS47JG,267,02A
+" lemma: am Corpus cavernosum clitoridis ansetzen
+  narg: Die bei der Frau durch den Scheidenvorhof getrennten Muskeln {Mm. bulbocavernosi}}
+ pspez: mit oberflächlichen Fasern",,"
+cac (""Corpus cavernosum clitoridis"")
+
+",,27.05.2025 23:00:45 CEST,91,M45LADVB,3XRS47JG,267,02B
+" lemma: sich mit Fasern der anderen Seite vereinigen
+  narg: Tiefe Fasern {des M. bulbocavernosus}",,,,27.05.2025 23:00:45 CEST,91,M45LADVB,3XRS47JG,267,03A
+" lemma: sich mit Fasern der anderen Seite vereinigen
+  narg: Tiefe Fasern {des M. bulbocavernosus}
+ pspez: vor der Clitoris",,"
+
+
+kli (""Clitoris"")",,27.05.2025 23:00:45 CEST,91,M45LADVB,3XRS47JG,267,03B
+" lemma: die tiefe A. penis (
+  narg: {die tiefe A.} clitoridis",,"
+
+art",,27.05.2025 23:00:46 CEST,92,M45LADVB,4QGBBXKX,267,01A
+" lemma: Zwischen dem ventralen Teil der großen Schamlippen hervorragen
+  narg: ein kleines rundliches Knöpfchen , der Kitzler , die Clitoris",,"
+
+kli (""Clitoris"")",,27.05.2025 23:00:46 CEST,93,M45LADVB,98PV53BP,260,01A
+" lemma: ein kleines rundliches Knöpfchen sein
+  narg: der Kitzler",,"
+
+kli (""Kitzler"")",,27.05.2025 23:00:46 CEST,93,M45LADVB,98PV53BP,260,02A
+" lemma: synonym sein
+ narg1: der Kitzler
+ narg2: die Clitoris",,"
+
+kli (""Kitzler"")
+kli (""Clitoris"")",,27.05.2025 23:00:46 CEST,93,M45LADVB,98PV53BP,260,03A
+" lemma: vorn und seitlich umgeben werden
+  narg: Er","
+
+der Kitzler","
+
+kli",,27.05.2025 23:00:46 CEST,93,M45LADVB,98PV53BP,260,04A
+" lemma: vorn und seitlich umgeben werden
+  narg: Er
+ pspez: von einer kleinen Hautfalte , dem Praeputium clitoridis","
+
+der Kitzler
+","
+
+kli
+pra (""Praeputium clitoridis"")",,27.05.2025 23:00:46 CEST,93,M45LADVB,98PV53BP,260,04B
+" lemma: einer kleinen Hautfalte sein
+  narg: Praeputium clitoridis",,"
+
+pra",,27.05.2025 23:00:46 CEST,93,M45LADVB,98PV53BP,260,05A
+" lemma: zahlreiche Nervenendkörperchen haben
+  narg: Die Schleimhaut der Clitoris",,"
+
+kli (""Clitoris"")",,27.05.2025 23:00:46 CEST,94,M45LADVB,YG8MLLZJ,260,01A
+" lemma: sich bilden
+  narg: eine weichkäseähnliche Masse , das Smegma clitoridis",,"
+
+? (""Smegma clitoridis"")",,27.05.2025 23:00:46 CEST,94,M45LADVB,YG8MLLZJ,260,02A
+" lemma: sich bilden
+  narg: eine weichkäseähnliche Masse , das Smegma clitoridis
+ fargA: aus abgestoßenen Epithelzellen",,"
+
+? (""Smegma clitoridis"")
+",,27.05.2025 23:00:46 CEST,94,M45LADVB,YG8MLLZJ,260,02B
+" lemma: sich bilden
+  narg: eine weichkäseähnliche Masse , das Smegma clitoridis
+ fargB: aus dem Sekret der Talgdrüsen",,"
+
+? (""Smegma clitoridis"")
+",,27.05.2025 23:00:46 CEST,94,M45LADVB,YG8MLLZJ,260,02C
+" lemma: sich bilden
+  narg: eine weichkäseähnliche Masse , das Smegma clitoridis
+  farg: aus abgestoßenen Epithelzellen
+        aus dem Sekret der Talgdrüsen
+ pspez: Zwischen Clitoris und Praeputium clitoridis",,"
+
+? (""Smegma clitoridis"")
+
+pra (""Praeputium clitoridis"")",,27.05.2025 23:00:46 CEST,94,M45LADVB,YG8MLLZJ,260,02D
+" lemma: eine weichkäseähnliche Masse sein
+  narg: das Smegma clitoridis",,"
+
+? (""Smegma clitoridis"")",,27.05.2025 23:00:46 CEST,94,M45LADVB,YG8MLLZJ,260,03A
+"   zus: bei Füllung
+ lemma: das Vestibulum vaginae verengern
+  narg: Die Bulbi vestibuli",,"
+
+
+bul (""Bulbi vestibuli"")",,27.05.2025 23:00:47 CEST,96,M45LADVB,4MXNA24C,263,01A
+"   zus: bei Füllung
+ lemma: dem eingeführten männlichen Gliede nähern
+ narg1: Die Bulbi vestibuli
+ narg2: die kleinen Schamlippen",,"
+
+
+bul (""Bulbi vestibuli"")
+",,27.05.2025 23:00:47 CEST,96,M45LADVB,4MXNA24C,263,02A
+" lemma: in ihrer Wirkung werden
+ narg1: Sie
+ narg2: durch die Mm. bulbicavernosi","
+
+Die Bulbi vestibuli
+","
+
+bul
+",,27.05.2025 23:00:47 CEST,96,M45LADVB,4MXNA24C,263,03A
+"   zus: Bei Füllung des Corpus cavernosum clitoridis
+ lemma: bestehen bleiben
+  narg: die Abknickung zwischen den Crura und der Glans clitoridis",,"cac (""Corpus cavernosum clitoridis"")
+
+
+gla (""Glans clitoridis"")",,27.05.2025 23:00:47 CEST,96,M45LADVB,4MXNA24C,263,04A
+"   zus: Bei Einführung des Gliedes
+ lemma: sich auf die von ihnen zum Kitzler ziehenden Frenula clitoridis übertragen
+  narg: der Zug an den kleinen Schamlippen","
+
+den kleinen Schamlippen (""ihnen"")
+","
+
+fre (""Frenula clitoridis"")
+",,27.05.2025 23:00:47 CEST,96,M45LADVB,4MXNA24C,263,05A
+" lemma: zum Kitzler ziehend
+  narg: Frenula clitoridis",,"
+kli; -> u.c.StringArray(elements=['gla']) (""Kitzler"")
+fre",,27.05.2025 23:00:47 CEST,96,M45LADVB,4MXNA24C,263,06A
+" lemma: zum Kitzler ziehend
+  narg: Frenula clitoridis
+ pspez: von ihnen","
+
+
+den kleinen Schamlippen (""ihnen"")","
+kli; -> u.c.StringArray(elements=['gla']) (""Kitzler"")
+fre
+",,27.05.2025 23:00:47 CEST,96,M45LADVB,4MXNA24C,263,06B
+"   zus: Dadurch
+ lemma: genähert werden
+ narg1: die Eichel des Kitzlers
+ narg2: dem Penisrücken
+ narg3: das Wollustgefühl","Bei Einführung des Gliedes überträgt sich der Zug an den kleinen Schamlippen auf die von ihnen zum Kitzler ziehenden Frenula clitoridis .
+
+
+
+
+","fre
+
+
+gla (""Eichel des Kitzlers"")
+
+",,27.05.2025 23:00:47 CEST,96,M45LADVB,4MXNA24C,263,07A
+"  zus1: Dadurch
+  zus2: durch reibende Bewegungen
+ lemma: ausgelöst werden","Bei Einführung des Gliedes überträgt sich der Zug an den kleinen Schamlippen auf die von ihnen zum Kitzler ziehenden Frenula clitoridis .
+
+
+","fre
+
+
+",,27.05.2025 23:00:47 CEST,96,M45LADVB,4MXNA24C,263,08A
+" lemma: entsprechen
+ narg1: N. dorsalis penis
+ narg2: N. dorsalis clitoridis",,"
+
+
+ner",,27.05.2025 23:00:47 CEST,97,M45LADVB,42RE3YMV,270,01A
+" lemma: von den unteren Schambeinästen entspringen
+  narg: Das Corpus cavernosum penis",,,,27.05.2025 23:00:47 CEST,98,M45LADVB,TD8E932X,263,01A
+" lemma: von den unteren Schambeinästen entspringen
+  narg: Das Corpus cavernosum penis
+pspez1: wie das der Clitoris",,"
+
+
+kli (""Clitoris"")",,27.05.2025 23:00:47 CEST,98,M45LADVB,TD8E932X,263,01B
+" lemma: von den unteren Schambeinästen entspringen
+  narg: Das Corpus cavernosum penis
+pspez1: mit den paarigen Crura",,,,27.05.2025 23:00:47 CEST,98,M45LADVB,TD8E932X,263,01C
+"lemmaA: aus dem Kitzler , der Clitoris bestehen
+  narg: Sie","
+
+Die äußeren weiblichen Geschlechtswerkzeuge","
+kli (""Clitoris"")
+",,27.05.2025 23:00:47 CEST,99,M45LADVB,THATJX9H,226,01A
+"lemmaB: aus den kleinen und großen Schamlippen bestehen
+  narg: Sie","
+
+Die äußeren weiblichen Geschlechtswerkzeuge",,,27.05.2025 23:00:47 CEST,99,M45LADVB,THATJX9H,226,01B
+"lemmaC: aus Labia minora et majora pudendi bestehen
+  narg: Sie","
+
+Die äußeren weiblichen Geschlechtswerkzeuge",,,27.05.2025 23:00:47 CEST,99,M45LADVB,THATJX9H,226,01C
+" lemma: synonym sein
+ narg1: Kitzler
+ narg2: Clitoris",,"
+
+kli
+kli",,27.05.2025 23:00:47 CEST,99,M45LADVB,THATJX9H,226,02A
+" lemma: zu den kleinen Schamlippen zeihen
+  narg: ein Paar feiner Hautfalten , das Frenulum clitoridis",,"
+
+fre (""Frenulum clitoridis"")",,27.05.2025 23:00:48 CEST,100,M45LADVB,WKX4334H,260,01A
+" lemma: zu den kleinen Schamlippen zeihen
+  narg: ein Paar feiner Hautfalten , das Frenulum clitoridis
+pspez1: Von der Rück- bzw. Unterseite des Kitzlers",,"
+
+fre (""Frenulum clitoridis"")
+kli; -> u.c.StringArray(elements=['gla']) (""Kitzlers"")",,27.05.2025 23:00:48 CEST,100,M45LADVB,WKX4334H,260,01B
+" lemma: zu den kleinen Schamlippen zeihen
+  narg: ein Paar feiner Hautfalten , das Frenulum clitoridis
+pspez1: beiderseits",,"
+
+fre (""Frenulum clitoridis"")
+",,27.05.2025 23:00:48 CEST,100,M45LADVB,WKX4334H,260,01C
+" lemma: ein Paar feiner Hautfalten sein
+  narg: das Frenulum clitoridis",,"
+
+fre (""Frenulum clitoridis"")",,27.05.2025 23:00:48 CEST,100,M45LADVB,WKX4334H,260,02A
+"lemmaA: die Vv. scrotales ( labiales ) aufnehmen
+  narg: Sie","
+
+V. pudendalis interna",,,27.05.2025 23:00:48 CEST,101,M45LADVB,ZUYEF6U9,269,01A
+"lemmaA: die Vv. scrotales ( labiales ) aufnehmen
+  narg: Sie
+ pspez: aus dem Corpus cavernosum penis ( bzw. clitoridis","
+
+V. pudendalis interna
+","
+
+
+cac (""clitoridis"")",,27.05.2025 23:00:48 CEST,101,M45LADVB,ZUYEF6U9,269,01B
+"lemmaB: die V. profunda penis ( clitoridis aufnehmen
+  narg: Sie","
+
+V. pudendalis interna","
+ven (""clitoridis"")
+",,27.05.2025 23:00:48 CEST,101,M45LADVB,ZUYEF6U9,269,01C
+"lemmaB: die V. profunda penis ( clitoridis aufnehmen
+  narg: Sie
+ pspez: aus dem Corpus cavernosum penis ( bzw. clitoridis","
+
+V. pudendalis interna
+","
+ven (""clitoridis"")
+
+cac (""clitoridis"")",,27.05.2025 23:00:48 CEST,101,M45LADVB,ZUYEF6U9,269,01D
+" lemma: entsprechen
+ narg1: V. profunda penis
+ narg2: {V. profunda} clitoridis",,"
+
+
+ven",,27.05.2025 23:00:48 CEST,101,M45LADVB,ZUYEF6U9,269,02A
+" lemma: entsprechen
+ narg1: Corpus cavernosum penis
+ narg2: {Corpus cavernosum} clitoridis",,"
+
+
+cac",,27.05.2025 23:00:48 CEST,101,M45LADVB,ZUYEF6U9,269,03A
+" lemma: den Kitzler , Corpus cavernosum clitoridis bilden
+  narg: Die Schwellkörper der Frau",,"
+cac (""Corpus cavernosum clitoridis"")
+? (""Schwellkörper"")",,27.05.2025 23:00:48 CEST,102,M45LADVB,GMJFZDXM,262,01A
+" lemma: synonym sein
+ narg1: Kitzler
+ narg2: Corpus cavernosum clitoridis",,"
+
+kli
+cac",,27.05.2025 23:00:48 CEST,102,M45LADVB,GMJFZDXM,262,02A
+" lemma: den Scheidenvorhof umgeben
+  narg: Die Schwellkörper der Frau",,"
+
+? (""Schwellkörper"")",,27.05.2025 23:00:48 CEST,102,M45LADVB,GMJFZDXM,262,03A
+" lemma: den Scheidenvorhof umgeben
+  narg: Die Schwellkörper der Frau
+ pspez: als Bulbi vestibuli",,"
+
+? (""Schwellkörper"")
+bul (""Bulbi vestibuli"")",,27.05.2025 23:00:48 CEST,102,M45LADVB,GMJFZDXM,262,03B
+" lemma: das Diaphragma urogenitale durchbohren
+  narg: Sympathische und parasympathische Fasern aus den vegetativen Beckengeflechten",,,,27.05.2025 23:00:49 CEST,103,M45LADVB,JA2ZRY5T,270,01A
+" lemma: das Diaphragma urogenitale durchbohren
+  narg: Sympathische und parasympathische Fasern aus den vegetativen Beckengeflechten
+pspez1: mit der Harnröhre",,,,27.05.2025 23:00:49 CEST,103,M45LADVB,JA2ZRY5T,270,01B
+" lemma: das Diaphragma urogenitale durchbohren
+  narg: Sympathische und parasympathische Fasern aus den vegetativen Beckengeflechten
+pspez1: als Plexus cavernosus penis ( clitoridis",,"
+
+
+ner (""clitoridis"")",,27.05.2025 23:00:49 CEST,103,M45LADVB,JA2ZRY5T,270,01C
+" lemma: entsprechen
+ narg1: Plexus cavernosus penis
+ narg2: {Plexus cavernosus} clitoridis",,"
+
+
+ner",,27.05.2025 23:00:49 CEST,103,M45LADVB,JA2ZRY5T,270,02A
+" lemma: die Schwellkörper versorgen
+  narg: Sympathische und parasympathische Fasern aus den vegetativen Beckengeflechten",,"
+? (""Schwellkörper"")
+",,27.05.2025 23:00:49 CEST,103,M45LADVB,JA2ZRY5T,270,03A
+" lemma: zum Kitzler , Clitoris werden
+  narg: der Geschlechtshöcker",,"
+kli (""Clitoris"")
+",,27.05.2025 23:00:49 CEST,104,M45LADVB,ZLZZQYAQ,229,01A
+" lemma: synonym sein
+ narg1: Kitzler
+ narg2: Clitoris",,"
+
+kli
+kli",,27.05.2025 23:00:49 CEST,104,M45LADVB,ZLZZQYAQ,229,02A
