@@ -9,8 +9,8 @@ from string import Template
 from tqdm import tqdm
 import regexSearchterms as st
 
-QUERY = Template(f'{st.SEARCHSTRING} and jhr=$year and mat=books and spr=ger')
-#print(QUERY.substitute(year=1945))
+QUERY = Template(f'inh all {st.SEARCHSTRING} and jhr=$year and mat=books and spr=ger')
+print(QUERY.substitute(year=1945))
 
 def dnb_sru_numRecords(query):
     
@@ -18,21 +18,26 @@ def dnb_sru_numRecords(query):
     params = {'recordSchema' : 'MARC21-xml',
           'operation': 'searchRetrieve',
           'version': '1.1',
-          'maximumRecords': 1,
+          'maximumRecords': 10,
           'query': query
          }
     r = requests.get(base_url, params=params)
     #print(r.content)
     xml = soup(r.content, features="xml")
-    numRecords = xml.find('numberOfRecords').string
+    try:
+        numRecords = xml.find('numberOfRecords').string
+    except:
+        numRecords = -1
     
     return numRecords
 
 data = []
 for year in range(1945, 2026):
-    print(year)
+#for searchterm in tqdm(st.SEARCHTERMS):
+    #print(year)
     numRecords = dnb_sru_numRecords(QUERY.substitute(year=year))
     d = {'YEAR': year, 'NUM_RECORDS': numRecords}
+    #print(numRecords)
     data.append(d.copy())
     print(year, numRecords)
 

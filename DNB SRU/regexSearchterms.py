@@ -2,14 +2,14 @@
 SEARCHTERMS = ['bulboklitoralorgan*',
 			'clit',
 			'clitor*',
-			'kitzel*',
+			'kitzel',
 			'kitzler*',
 			'klit',
 			'klitor*',
-			'lustknospe*',
+			#'lustknospe*',                -> 0 Treffer
 			'lustorgan*',
-			'lustperle*',
-			'"penis muliebre"',
+			#'lustperle*',                 -> 0 Treffer
+			'penis muliebre',
 					
     #vulva-synonyme
 			'cunnus',
@@ -18,27 +18,27 @@ SEARCHTERMS = ['bulboklitoralorgan*',
 			'fud',
 			'fut',
 			'intimbereich*',
-			'intimgegend*',
+			#'intimgegend*',               -> 0 Treffer
 			'intimzone*',
-			'"miss brown"',
+			'miss brown',
 			'möse*',
 			'pubes*',
-			'"pudendum muliebre"',
+			'pudendum muliebre',
 			'punzel*',
 			'pussi*',
 			'pussy*',
 			'schamgegend*',
 			'scheidenvorhof*',
 			'vestibulum',
-			'"vorhof d* scheide*"',
-			'"vorhof d* vagina*"',
+			'vorhof d* scheide*',
+			'vorhof d* vagina*',
 			'votze*',
 			'vulv*',
-			'"weiblich* scham*"',
+			'weiblich* scham*',
 			'yoni*',
 
     #geschlechtsorgan-synonyme
-            '*genital*',
+            'genital*',
 			'begattungsorgan*',
 			'fortpflanzungsapparat*',
 			'fortpflanzungsorgan*',
@@ -49,15 +49,16 @@ SEARCHTERMS = ['bulboklitoralorgan*',
 			'geschlechtsorgan*',
 			'geschlechtsteil*',
 			'geschlechtswerkzeug*',
-			'intimorgan*',
+            #'intimorgan*',                 -> 0 Treffer
 			'liebesorgan*',
-			'"primär* geschlechtsmerkmal*"',
+			'primär* geschlechtsmerkmal*',
 			'pudendum',
 			'reproduktionsorgan*',
 			'schamteil*',
 			'sexualapparat*',
 			'sexualorgan*',
 			'wollustorgan*',
+            #'wolllustorgan*',              -> 0 Treffer
 			'zeugungsorgan*']
                 
-SEARCHSTRING = ' or '.join([('inh all ' + s) for s in SEARCHTERMS])
+SEARCHSTRING = '(' + ' or '.join([('"' + s + '"') for s in SEARCHTERMS]) + ')'
