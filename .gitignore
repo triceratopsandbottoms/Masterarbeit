@@ -1,3 +1,4 @@
+.env
 inception_docker/repository
 inception_docker/log
 inception_docker/version

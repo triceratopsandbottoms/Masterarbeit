@@ -7,15 +7,19 @@ from cassis import *
 from inspect import currentframe, getframeinfo
 from string import Template
 from tqdm import tqdm
+from dotenv import dotenv_values
 import json, itertools, warnings, time
 import pandas as pd
 
-INCEPTION_URL = "http://localhost:8080"
-INCEPTION_USER = "remote-api"
-INCEPTION_PW = "MDT2azx-qae0fbg*uhz"
-PROJECT_ID = 2
+secrets = dotenv_values(".env")
+
+INCEPTION_URL = secrets['INCEPTION_URL']
+INCEPTION_USER = secrets['INCEPTION_USER']
+INCEPTION_PW = secrets['INCEPTION_PW']
+PROJECT_ID = secrets['INCEPTION_PROJECT_ID']
+USER = secrets['INCEPTION_ANNOTATION_USER']
+
 INCEPTION_FORMAT = InceptionFormat.UIMA_CAS_XMI
-USER = 'admin'
 
 SENTENCE_TYPE = "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence"
 TOKEN_TYPE = "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token"

@@ -10,11 +10,16 @@ from pyzotero import zotero
 from lxml import etree
 from string import Template
 from tqdm import tqdm
+from dotenv import dotenv_values
 
 QUERY = Template(f'inh all {search.SEARCHSTRING} and jhr=$year and mat=books and spr=ger and location=leipzig')
 CREATOR_DICT = {'abr': 'contributor', 'aft': 'contributor', 'aui': 'contributor', 'aut': 'author', 'clb': 'contributor', 'cov': 'contributor', 'cre': 'contributor', 'ctb': 'contributor', 'edc': 'series editor', 'edd': 'editor', 'edt': 'editor', 'ill': 'contributor', 'oth': 'contributor', 'trl': 'translator', 'wfw': 'contributor', 'win': 'contributor'}
-LIBRARY_ID = 6014926
-API_KEY = 'wyvQS9dKWZVY7yoEuJLPCEXW'
+
+# load secrets from file
+secrets = dotenv_values("../.env")
+
+LIBRARY_ID = secrets['ZOTERO_LIBRARY_ID']
+API_KEY = secrets['ZOTERO_API_KEY']
 
 #print(QUERY.substitute(year=1945))
 zot = zotero.Zotero(LIBRARY_ID, 'group', API_KEY)
@@ -425,7 +430,6 @@ for index, row in tqdm(sample_df.iterrows()):
     r = requests.get(f'{base_url}/04/text')
     html = soup(r.content.decode(), features='lxml')
     tocText = html.get_text()
-    
     
     tocLines = []
     numChapterMatch_regex = r'(?P<numChapter>^(((Kapitel)|(Kap\.?)|(Abschnitt)|(Teil))\s)?(([A-Z]{0,5})|((?P<numChap_chars>[^\s[a-zäüöß]{3,}]*)[\d\.:(\-\S)]+(?P=numChap_chars))))[\s|$]'
