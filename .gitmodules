@@ -1,3 +1,6 @@
 [submodule "inception_external_recommender"]
 	path = inception_external_recommender
 	url = https://github.com/triceratopsandbottoms/inception-external-recommender.git
+[submodule "python-dropbox-file-uploader"]
+	path = python-dropbox-file-uploader
+	url = https://github.com/triceratopsandbottoms/python-dropbox-file-uploader.git
