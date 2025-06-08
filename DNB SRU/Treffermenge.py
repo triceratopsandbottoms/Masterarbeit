@@ -3,6 +3,8 @@ import re
 import unicodedata
 import random
 import time
+import sys
+import logging
 import pandas as pd
 import dnb_search as search
 from bs4 import BeautifulSoup as soup
@@ -11,17 +13,28 @@ from lxml import etree
 from string import Template
 from tqdm import tqdm
 from dotenv import dotenv_values
+sys.path.append('../python-dropbox-file-uploader')
+from main import DropboxUploader
 
 QUERY = Template(f'inh all {search.SEARCHSTRING} and jhr=$year and mat=books and spr=ger and location=leipzig')
 CREATOR_DICT = {'abr': 'contributor', 'aft': 'contributor', 'aui': 'contributor', 'aut': 'author', 'clb': 'contributor', 'cov': 'contributor', 'cre': 'contributor', 'ctb': 'contributor', 'edc': 'series editor', 'edd': 'editor', 'edt': 'editor', 'ill': 'contributor', 'oth': 'contributor', 'trl': 'translator', 'wfw': 'contributor', 'win': 'contributor'}
+SAMPLESIZE_PER_YEAR = 15
+FIRST_YEAR = 1945
+LAST_YEAR = 2025
+SEED = 2906     #my birthday - the seed doesn't really matter, all pseudorandom sequences have about the same randomness in them. However, to make the sampling reproducible, a fixed seed is needed.
 
 # load secrets from file
 secrets = dotenv_values("../.env")
 
 LIBRARY_ID = secrets['ZOTERO_LIBRARY_ID']
 API_KEY = secrets['ZOTERO_API_KEY']
+dropbox_zot_home = secrets['DROPBOX_MAIN_ZOTERO_DIR']
 
-#print(QUERY.substitute(year=1945))
+logger = logging.getLogger(__name__)
+logging.basicConfig(format='%(asctime)s - %(levelname)s: %(message)s', filename='example.log', encoding='utf-8', level=logging.DEBUG)
+
+logging.info(f'Program started with the following settings: \nQUERY: {QUERY}\nwith YEAR from {FIRST_YEAR} until {LAST_YEAR}\nUsed Seed: {SEED}')
+
 zot = zotero.Zotero(LIBRARY_ID, 'group', API_KEY)
 
 def getNumRecordsForYears(firstyear, lastyear, querytemplate):
@@ -43,7 +56,7 @@ def getNumRecordsForYears(firstyear, lastyear, querytemplate):
     '''
     
     data = []
-    for year in tqdm(range(firstyear, lastyear+1)):
+    for year in tqdm(range(firstyear, lastyear+1), desc='numRecords for years'):
         numRecords = dnb_sru_numRecords(querytemplate.substitute(year=year))
         d = {'YEAR': year, 'NUM_RECORDS': numRecords}
         data.append(d.copy())
@@ -130,8 +143,8 @@ def getMarcSubfieldOf(xml_datafield, subfield, mode='text'):
         if fields != []:
             texts = ', '.join([f.text for f in fields])
         else:
-            text = ''
-        return text
+            texts = ''
+        return texts
     elif mode=='fields':
         return fields
     elif mode=='field':
@@ -245,9 +258,9 @@ def marcxml2zotEntry(xml_marc):
             zotEntry['creators'].append(creator.copy())
         else:
             zotEntry['extra'] += f'Creator ({type_}): '
-            if creator['name'] != []:
+            try:
                 zotEntry['extra'] += creator['name']
-            else:
+            except:
                 zotEntry['extra'] += creator['lastName'] + ' || ' + creator['firstName']
 
     #ISBN
@@ -376,167 +389,200 @@ def combineCorrespondingRanges(xOnlyRanges, noXRanges, xColumn, dataList, xOnlyR
     newLength = len(dataList)
     #print('difference:', oldLength-newLength)
     return dataList
-    
-df = getNumRecordsForYears(2022, 2023, QUERY)
-print('got numrecords for years')
-#df.to_csv("recordcountsPerYear.csv", index=False)
 
-random.seed(29061998) #my birthday
+logging.info('Starting to retrieve data from the DNB via SRU now: Getting the number of records per year...')
+df = getNumRecordsForYears(FIRST_YEAR, LAST_YEAR, QUERY)
+logging.info('Done!')
+
+file = df.to_csv(index=False).encode()
+DropboxUploader().upload_files(file, "recordcountsPerYear.csv")
+print('got and saved numrecords for years')
+
+
+random.seed(SEED)
 
 global counter
 global matchList
 
-sample_df = getYearSamples(df, 10)
-for index, row in tqdm(sample_df.iterrows()):
-#for i in [0]:
-    year = row['YEAR']
-    order = row['ORDER']
-    recordPos = row['RECORD_POS']
-    
-    #year = '1975'
-    #order = '3'
-    #recordPos = '1'
-    
-    #get marc xml record from the dnb catalog via sru and isolate record
-    r_marc21 = dnb_sru(QUERY.substitute(year=year), startRecord=recordPos)
-    xml_marc = soup(r_marc21.content, features="xml")
-    record_marc = xml_marc.find('record', {'type':'Bibliographic'})
-    str_marc_record = unicodedata.normalize("NFC", str(record_marc))
-    xml_marc_record = etree.fromstring(str_marc_record)
-    
-    #convert record to zotEntry
-    zotEntry = marcxml2zotEntry(xml_marc_record)
-    zotEntry['date'] = str(year)
-    zotEntry['extra'] = f'order: {order}\n' + zotEntry['extra']
-    
-    print(zotEntry)
-    response = zot.create_items([zotEntry])
-    base_url = zotEntry['url']
-    entry_key = response['success']['0']
-    
-    #create attachments for zotEntry:
-    # 1. link to the table of content as pdf
-    zotAtt_toc_pdf = zot.item_template('attachment', 'linked_url')
-    zotAtt_toc_pdf['parentItem'] = entry_key
-    zotAtt_toc_pdf['title'] = f'Inhaltsverzeichnis_{year}_{order}.pdf'
-    zotAtt_toc_pdf['contentType'] = 'application/pdf'
-    zotAtt_toc_pdf['url'] = f'{base_url}/04'
-    
-    # 2. table of content (toc) text
-    zotAtt_toc_text = zot.item_template('note')
-    zotAtt_toc_text['parentItem'] = entry_key
-    zotAtt_toc_text['note'] = f'<h1> Inhaltsverzeichnis-OCR-Text_{year}_{order}</h1>'
-    
-    r = requests.get(f'{base_url}/04/text')
-    html = soup(r.content.decode(), features='lxml')
-    tocText = html.get_text()
-    
-    tocLines = []
-    numChapterMatch_regex = r'(?P<numChapter>^(((Kapitel)|(Kap\.?)|(Abschnitt)|(Teil))\s)?(([A-Z]{0,5})|((?P<numChap_chars>[^\s[a-zäüöß]{3,}]*)[\d\.:(\-\S)]+(?P=numChap_chars))))[\s|$]'
-    pageMatch_regex = r'(?P<page>[^\.\s,]{0,2}\d+[^\.\s,]{0,2})$'
-    #dotRow_pattern = r'(\b[\wÖÜÄ]?[a-z0-9öüäß]+\b[?!\'"\-]|[]{0})(\s?(?:[^a-np-zäöüß][a-np-zäöüß]{0,3}?)*)$'
-    #dotRow_regex = re.compile(r'(\b[\wÖÜÄ]?[a-z0-9öüäß]+\b[?!\'"\-]|[]{0})(\s?[^\w](?:[^a-np-zäöüß][a-np-zäöüß]{0,3}?)*)$')
-    line_count = 0
-    for line in tocText.splitlines():
-        numChapter = ''
-        title = ''
-        page = ''
+sample_df = getYearSamples(df, SAMPLESIZE_PER_YEAR)
+sample_df.insert(len(sample_df.columns), 'SEARCHCOUNT', None)
+
+file = sample_df.to_csv(index=False).encode()
+DropboxUploader().upload_files(file, "randomlyGenerizedSample.csv")
+print('got and saved sample')
+logging.info(f'Generated and saved a list of up to {SAMPLESIZE_PER_YEAR} random record positions per year')
+
+exceptions = []
+countList = []
+for ind, row in tqdm(sample_df.iterrows(), desc='retrieve records:', total=SAMPLESIZE_PER_YEAR*(LAST_YEAR-FIRST_YEAR+1)):
+    try:
+        year = row['YEAR']
+        order = row['ORDER']
+        recordPos = row['RECORD_POS']
+
+        #get marc xml record from the dnb catalog via sru and isolate record
+        r_marc21 = dnb_sru(QUERY.substitute(year=year), startRecord=recordPos)
+        xml_marc = soup(r_marc21.content, features="xml")
+        record_marc = xml_marc.find('record', {'type':'Bibliographic'})
+        str_marc_record = unicodedata.normalize("NFC", str(record_marc))
+        xml_marc_record = etree.fromstring(str_marc_record)
+        #print(dir(xml_marc))
         
-        pageMatch = re.search(pageMatch_regex, line)
-        if pageMatch:
-            page = pageMatch['page']
-            if len(line) > len(page):
-                #print('page start:', pageMatch.start('page'))
-                line = line[0:pageMatch.start('page')-1]
-                #print('line after split page:', line)
-            else:
-                line = ''
-        numChapterMatch = re.search(numChapterMatch_regex, line)
-        if numChapterMatch:
-            numChapter = numChapterMatch['numChapter']
-            #print('numChapter:', numChapter)
-            if len(line) > len(numChapter):
-                title = line[numChapterMatch.end('numChapter')+1:-1]
-                #print('title after split numChapter:', title)
-            else:
-                line = ''
-        title = line
-        #title = re.sub(dotRow_pattern, '\g<1> ', title)
-        line_count +=1
-        tocLines.append([numChapter, title, page, line_count])
-    
-    hasChapterNums = (len([l for l in tocLines if l[0] != ''])>0)
-    
-    pageOnlyFunc = lambda inputList, i: inputList[i][0]=='' and inputList[i][1]=='' and inputList[i][2]!=''
-    pageOnlyRanges = getRangesFromList(tocLines, pageOnlyFunc)
-    #print(pageOnlyRanges)
-    
-    if len(pageOnlyRanges)>0:
-        noPageFunc = lambda inputList, i: inputList[i][1]!='' and inputList[i][2]==''
-        noPageRanges = getRangesFromList(tocLines, noPageFunc)
-        #print(noPageRanges)
-        tocLines = combineCorrespondingRanges(pageOnlyRanges, noPageRanges, 2, tocLines)
-    
-    if hasChapterNums:
-        numChapOnlyFunc = lambda inputList, i: inputList[i][1:2]==[''] and inputList[i][0]!=''
-        numChapOnlyRanges = getRangesFromList(tocLines, numChapOnlyFunc)
+        #convert record to zotEntry
+        zotEntry = marcxml2zotEntry(xml_marc_record)
+        zotEntry['date'] = str(year)
+        zotEntry['extra'] = f'order: {order}\n' + zotEntry['extra']
         
-        if len(numChapOnlyRanges)>0:
-            noNumChapFunc = lambda inputList, i: inputList[i][1]!='' and inputList[i][0]==''
-            noNumChapRanges = getRangesFromList(tocLines, noNumChapFunc)
-    
-            tocLines = combineCorrespondingRanges(numChapOnlyRanges, noNumChapRanges, 0, tocLines, xOnlyRangesFirst=True)
-    
-    tocTable = '<table style="width:100%">'
-    
-    if hasChapterNums:
-        #f_md.write('| Kap.-Nr. | Kapitel | Seite |\n')
-        #f_md.write('| -------- | ------- | ----- |\n')
-        tocTable += '''
-          <tr>
-            <th style="width:20px">line_count</th>
-            <th style="width:10%">Kap.-Nr.</th>
-            <th style="width:80%">Kapitel</th>
-            <th style="width:20px">Seite</th>
-          </tr>
-          '''
-    else:
-        #f_md.write('| Kapitel | Seite |\n')
-        #f_md.write('| ------- | ----- |\n')
-        tocTable += '''
-          <tr>
-            <th style="width:20px">line_count</th>
-            <th style="width:90%">Kapitel</th>
-            <th style="width:20px">Seite</th>
-          </tr>
-          '''
-    
-    tocRows = [tocLine2tocRow(l, hasChapterNums, mode='html') for l in tocLines]
-    tocTable += '\n'.join(tocRows)
-    tocTable += '</table>'
-    
-    #print(tocText)
-    counter = 0
-    matchList = []
-    for term in search.SEARCHTERMS:
-        #prepare term for regex-search 
-        term = term.replace('*', '.*?') # right-truncation * -> 0 or more chars (lazy)
-        term = term.replace(' ', r'\b \b') # add word boundaries around a space
-        term = r'\n(.*?)(\b' + term + r'\b)(.*?)\n' # add word boundaries + begin/end of table row around it
-        tocTable = re.sub(term, highlightedMatch, tocTable, flags=re.I)
-    
-    zotAtt_toc_text['note'] += f'<div><h2>Gefundene Stichwörter: {counter}</h2><p>{"".join(matchList)}</p></div><div><h2>Inhaltsverzeichnis</h2>{tocTable}</div>'
-    
-    response = zot.create_items([zotAtt_toc_pdf, zotAtt_toc_text])
-    
-    attachmentPaths = []
-    with open(f'tmp/MARC21-xml_{year}_{order}.mrcx', 'w') as f:
-        f.write(xml_marc.prettify())
-    
-    attachmentPaths.append(f'tmp/MARC21-xml_{year}_{order}.mrcx')
-    
-    zot.attachment_simple(attachmentPaths, entry_key)
-    
-    
+        #print(zotEntry)
+        response = zot.create_items([zotEntry])
+        base_url = zotEntry['url']
+        entry_key = response['success']['0']
+        
+        #create attachments for zotEntry:
+        # 1. link to the marcxml in the dropbox
+        zotAtt_marcxml = zot.item_template('attachment', 'linked_url')
+        zotAtt_marcxml['parentItem'] = entry_key
+        zotAtt_marcxml['title'] = f'Titeldaten_{year}_{order}.xml'
+        zotAtt_marcxml['contentType'] = 'application/json'
+        
+        file = str_marc_record.encode()
+        saveFolder = 'Titeldaten_MARC21-xml'
+        saveAs = f'{saveFolder}/{year}_{order}.xml'
+        DropboxUploader().upload_files(file, saveAs)
+        
+        zotAtt_marcxml['url'] = f'{dropbox_zot_home}{saveFolder}?preview={year}_{order}.xml'
+        
+        # 2. link to the table of content as pdf
+        zotAtt_toc_pdf = zot.item_template('attachment', 'linked_url')
+        zotAtt_toc_pdf['parentItem'] = entry_key
+        zotAtt_toc_pdf['title'] = f'Inhaltsverzeichnis_{year}_{order}.pdf'
+        zotAtt_toc_pdf['contentType'] = 'application/pdf'
+        zotAtt_toc_pdf['url'] = f'{base_url}/04'
+        
+        # 3. table of content (toc) text
+        zotAtt_toc_text = zot.item_template('note')
+        zotAtt_toc_text['parentItem'] = entry_key
+        zotAtt_toc_text['note'] = f'<h1> Inhaltsverzeichnis-OCR-Text_{year}_{order}</h1>'
+        
+        r = requests.get(f'{base_url}/04/text')
+        html = soup(r.content.decode(), features='lxml')
+        tocText = html.get_text()
+        
+        tocLines = []
+        numChapterMatch_regex = r'(?P<numChapter>^(((Kapitel)|(Kap\.?)|(Abschnitt)|(Teil))\s)?(([A-Z]{0,5})|((?P<numChap_chars>[^\s[a-zäüöß]{3,}]*)[\d\.:(\-\S)]+(?P=numChap_chars))))[\s|$]'
+        pageMatch_regex = r'(?P<page>[^\.\s,]{0,2}\d+[^\.\s,]{0,2})$'
+        #dotRow_pattern = r'(\b[\wÖÜÄ]?[a-z0-9öüäß]+\b[?!\'"\-]|[]{0})(\s?(?:[^a-np-zäöüß][a-np-zäöüß]{0,3}?)*)$'
+        #dotRow_regex = re.compile(r'(\b[\wÖÜÄ]?[a-z0-9öüäß]+\b[?!\'"\-]|[]{0})(\s?[^\w](?:[^a-np-zäöüß][a-np-zäöüß]{0,3}?)*)$')
+        line_count = 0
+        for line in tocText.splitlines():
+            numChapter = ''
+            title = ''
+            page = ''
+            
+            pageMatch = re.search(pageMatch_regex, line)
+            if pageMatch:
+                page = pageMatch['page']
+                if len(line) > len(page):
+                    #print('page start:', pageMatch.start('page'))
+                    line = line[0:pageMatch.start('page')-1]
+                    #print('line after split page:', line)
+                else:
+                    line = ''
+            numChapterMatch = re.search(numChapterMatch_regex, line)
+            if numChapterMatch:
+                numChapter = numChapterMatch['numChapter']
+                #print('numChapter:', numChapter)
+                if len(line) > len(numChapter):
+                    title = line[numChapterMatch.end('numChapter')+1:-1]
+                    #print('title after split numChapter:', title)
+                else:
+                    line = ''
+            title = line
+            #title = re.sub(dotRow_pattern, '\g<1> ', title)
+            line_count +=1
+            tocLines.append([numChapter, title, page, line_count])
+        
+        hasChapterNums = (len([l for l in tocLines if l[0] != ''])>0)
+        
+        pageOnlyFunc = lambda inputList, i: inputList[i][0]=='' and inputList[i][1]=='' and inputList[i][2]!=''
+        pageOnlyRanges = getRangesFromList(tocLines, pageOnlyFunc)
+        #print(pageOnlyRanges)
+        
+        if len(pageOnlyRanges)>0:
+            noPageFunc = lambda inputList, i: inputList[i][1]!='' and inputList[i][2]==''
+            noPageRanges = getRangesFromList(tocLines, noPageFunc)
+            #print(noPageRanges)
+            tocLines = combineCorrespondingRanges(pageOnlyRanges, noPageRanges, 2, tocLines)
+        
+        if hasChapterNums:
+            numChapOnlyFunc = lambda inputList, i: inputList[i][1:2]==[''] and inputList[i][0]!=''
+            numChapOnlyRanges = getRangesFromList(tocLines, numChapOnlyFunc)
+            
+            if len(numChapOnlyRanges)>0:
+                noNumChapFunc = lambda inputList, i: inputList[i][1]!='' and inputList[i][0]==''
+                noNumChapRanges = getRangesFromList(tocLines, noNumChapFunc)
+        
+                tocLines = combineCorrespondingRanges(numChapOnlyRanges, noNumChapRanges, 0, tocLines, xOnlyRangesFirst=True)
+        
+        tocTable = '<table style="width:100%">'
+        
+        if hasChapterNums:
+            #f_md.write('| Kap.-Nr. | Kapitel | Seite |\n')
+            #f_md.write('| -------- | ------- | ----- |\n')
+            tocTable += '''
+              <tr>
+                <th style="width:20px">line_count</th>
+                <th style="width:10%">Kap.-Nr.</th>
+                <th style="width:80%">Kapitel</th>
+                <th style="width:20px">Seite</th>
+              </tr>
+              '''
+        else:
+            #f_md.write('| Kapitel | Seite |\n')
+            #f_md.write('| ------- | ----- |\n')
+            tocTable += '''
+              <tr>
+                <th style="width:20px">line_count</th>
+                <th style="width:90%">Kapitel</th>
+                <th style="width:20px">Seite</th>
+              </tr>
+              '''
+        
+        tocRows = [tocLine2tocRow(l, hasChapterNums, mode='html') for l in tocLines]
+        tocTable += '\n'.join(tocRows)
+        tocTable += '</table>'
+        
+        #print(tocText)
+        counter = 0
+        matchList = []
+        for term in search.SEARCHTERMS:
+            #prepare term for regex-search 
+            term = term.replace('*', '.*?') # right-truncation * -> 0 or more chars (lazy)
+            term = term.replace(' ', r'\b \b') # add word boundaries around a space
+            term = r'\n(.*?)(\b' + term + r'\b)(.*?)\n' # add word boundaries + begin/end of table row around it
+            tocTable = re.sub(term, highlightedMatch, tocTable, flags=re.I)
+
+        zotAtt_toc_text['note'] += f'<div><h2>Gefundene Stichwörter: {counter}</h2><p>{"<br>".join(matchList)}</p></div><div><h2>Inhaltsverzeichnis</h2>{tocTable}</div>'
+        
+        countList.append(counter)
+        
+        sample_df.at[ind, 'SEARCHCOUNT'] = counter
+        response = zot.create_items([zotAtt_toc_pdf, zotAtt_toc_text, zotAtt_marcxml])
+    except Exception as e:
+        exceptions.append((ind, row, e))
+        logging.exception(f"The book with index {ind}, year {row['YEAR']}, order {row['ORDER']} and record position {row['RECORD_POS']} could not be added to Zotero:")
+        logging.exception(e)
+logging.info('DNB SRU Calls are finished now.')
+
+exc_df = pd.DataFrame(exceptions)
+file = exc_df.to_csv(index=False).encode()
+DropboxUploader().upload_files(file, "exceptions.csv")
+print(f'{len(exceptions)} exceptions occured and were saved')
+
+file = sample_df.to_csv(index=False).encode()
+DropboxUploader().upload_files(file, "searchtermsPerSampledBook.csv")
+print('collected and saved searchterm counts per sample')
+logging.info('Exceptions and serchterm counts per sample are now saved in the cloud as well.')
+
 '''
 '''
