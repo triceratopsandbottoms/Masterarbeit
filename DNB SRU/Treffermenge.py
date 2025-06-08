@@ -300,38 +300,97 @@ def marcxml2zotEntry(xml_marc):
     
     #print(zotEntry)
     return zotEntry
+
+def highlightedMatch(matchobj):
+    global counter
+    global matchList
+    counter += 1
+    replacement = Template(f'{matchobj[1]}<span $set_id style="background-color: #ffd40080">{matchobj[2]}</span>{matchobj[3]}')
+    matchList.append(f'{replacement.substitute(set_id="")} <a href="#M{counter}">Zum Eintrag</a>')
+    return '\n' + replacement.substitute(set_id=f'id="M{counter}"') + '\n'
     
-#df = getNumRecordsForYears(2022, 2023, QUERY)
-#print(df)
+def tocLine2tocRow(tocLine, hasChapterNums=False, mode='html'):
+    if mode=='html':
+        ret = '<tr>'
+        ret += f'<td>{tocLine[3]}</td>'
+        if hasChapterNums:
+            ret += f'<td>{tocLine[0]}</td>'
+        ret += f'<td>{tocLine[1]}</td>'
+        ret += f'<td>{tocLine[2]}</td>'
+        ret += '</tr>'
+    elif mode=='md':
+        ret = '| '
+        if hasChapterNums:
+            ret += f'{tocLine[0]} | '
+        ret += f'{tocLine[1]} | '
+        ret += f'{tocLine[2]} |'
+    return ret
+    
+def getRangesFromList(inputList, function, useIndex=True):
+    ranges = []
+    rangeBegin = -1
+    rangeEnd = -1
+    
+    for i in range(len(inputList)):
+        if useIndex==False:
+            i = inputList[i]
+            
+        if function(inputList, i): #we have a wanted item
+            if rangeBegin==-1:
+                rangeBegin = i
+            rangeEnd = i
+        else:
+            if rangeEnd != -1:
+                ranges.append((rangeBegin, rangeEnd))
+                rangeBegin = -1
+                rangeEnd = -1
+    if rangeEnd != -1:
+        ranges.append((rangeBegin, rangeEnd))
+    return ranges
+    
+def combineCorrespondingRanges(xOnlyRanges, noXRanges, xColumn, dataList, xOnlyRangesFirst=False, mode='html'):
+    if mode=='html':
+        ital1 = '<i>'
+        ital2 = '</i>'
+    elif mode=='md':
+        ital1 = '*'
+        ital2 = '*'
+    for range_ in xOnlyRanges:
+        rangeLength = range_[1]-range_[0] + 1
+        correspondingRanges = [r for r in noXRanges if r[1]==range_[0]-1 and r[1]-r[0]>=rangeLength-1]
+        if len(correspondingRanges)==1:
+            #print(f'{correspondingRanges=}')
+            for i in range(range_[0], range_[1]+1):
+                if xOnlyRangesFirst:
+                    dataList[i+rangeLength][xColumn] = f'{ital1}{dataList[i][xColumn]}{ital2}'
+                else:
+                    dataList[i-rangeLength][xColumn] = f'{ital1}{dataList[i][xColumn]}{ital2}'
+                dataList[i][xColumn] = ''
+    oldLength = len(dataList)
+    dataList = [d for d in dataList if len(d[0])+len(d[1])+len(d[2])>0 ]
+    newLength = len(dataList)
+    #print('difference:', oldLength-newLength)
+    return dataList
+    
+df = getNumRecordsForYears(2022, 2023, QUERY)
+print('got numrecords for years')
 #df.to_csv("recordcountsPerYear.csv", index=False)
 
-#random.seed(312487687)
-#sample_df = getYearSamples(df, 10)
-#query = '1331715741'
-#for index, row in sample_df.iterrows():
-tocText = 'Hormone und Genitalorgane .................................................................. 606'
+random.seed(29061998) #my birthday
 
-for term in search.SEARCHTERMS:
-    #prepare term for regex-search 
-    term = term.replace('*', '') # right-truncation * -> 0 or more chars (lazy)
-    #term = '\\\\b' + term.replace(' ', '\\\\b \\\\b') + '\\\\b'  # add word boundaries around a space
-    #term = term + '\\b' # add word boundaries at beginning and end
-    print(term)
-    #print(repr(term)[1:-1])
-    #tocText = re.sub(term, r'<span style="background-color: #f1983780">$&<\/span>', tocText, re.I)
-    text = tocText.replace(term, f'<span style="background-color: #f1983780">{term}<\/span>')
-        
-print(text)
+global counter
+global matchList
 
-'''
-for i in [0]:
-    #year = row['YEAR']
-    #order = row['ORDER']
-    #recordPos = row['RECORD_POS']
+sample_df = getYearSamples(df, 10)
+for index, row in tqdm(sample_df.iterrows()):
+#for i in [0]:
+    year = row['YEAR']
+    order = row['ORDER']
+    recordPos = row['RECORD_POS']
     
-    year = '1975'
-    order = '3'
-    recordPos = '1'
+    #year = '1975'
+    #order = '3'
+    #recordPos = '1'
     
     #get marc xml record from the dnb catalog via sru and isolate record
     r_marc21 = dnb_sru(QUERY.substitute(year=year), startRecord=recordPos)
@@ -339,52 +398,141 @@ for i in [0]:
     record_marc = xml_marc.find('record', {'type':'Bibliographic'})
     str_marc_record = unicodedata.normalize("NFC", str(record_marc))
     xml_marc_record = etree.fromstring(str_marc_record)
-
+    
     #convert record to zotEntry
     zotEntry = marcxml2zotEntry(xml_marc_record)
-    zotEntry['date'] = year
+    zotEntry['date'] = str(year)
     zotEntry['extra'] = f'order: {order}\n' + zotEntry['extra']
-    zotEntry.update({'key': f'{year}P{order}'})
     
+    print(zotEntry)
+    response = zot.create_items([zotEntry])
     base_url = zotEntry['url']
+    entry_key = response['success']['0']
     
     #create attachments for zotEntry:
     # 1. link to the table of content as pdf
     zotAtt_toc_pdf = zot.item_template('attachment', 'linked_url')
-    zotAtt_toc_pdf['parentItem'] = zotEntry['key']
+    zotAtt_toc_pdf['parentItem'] = entry_key
     zotAtt_toc_pdf['title'] = f'Inhaltsverzeichnis_{year}_{order}.pdf'
     zotAtt_toc_pdf['contentType'] = 'application/pdf'
     zotAtt_toc_pdf['url'] = f'{base_url}/04'
     
     # 2. table of content (toc) text
     zotAtt_toc_text = zot.item_template('note')
-    zotAtt_toc_text['parentItem'] = zotEntry['key']
-    zotAtt_toc_text['title'] = f'Inhaltsverzeichnis-Text_{year}_{order}.pdf'
+    zotAtt_toc_text['parentItem'] = entry_key
+    zotAtt_toc_text['note'] = f'<h1> Inhaltsverzeichnis-OCR-Text_{year}_{order}</h1>'
+    
     r = requests.get(f'{base_url}/04/text')
     html = soup(r.content.decode(), features='lxml')
     tocText = html.get_text()
     
+    
+    tocLines = []
+    numChapterMatch_regex = r'(?P<numChapter>^(((Kapitel)|(Kap\.?)|(Abschnitt)|(Teil))\s)?(([A-Z]{0,5})|((?P<numChap_chars>[^\s[a-zäüöß]{3,}]*)[\d\.:(\-\S)]+(?P=numChap_chars))))[\s|$]'
+    pageMatch_regex = r'(?P<page>[^\.\s,]{0,2}\d+[^\.\s,]{0,2})$'
+    #dotRow_pattern = r'(\b[\wÖÜÄ]?[a-z0-9öüäß]+\b[?!\'"\-]|[]{0})(\s?(?:[^a-np-zäöüß][a-np-zäöüß]{0,3}?)*)$'
+    #dotRow_regex = re.compile(r'(\b[\wÖÜÄ]?[a-z0-9öüäß]+\b[?!\'"\-]|[]{0})(\s?[^\w](?:[^a-np-zäöüß][a-np-zäöüß]{0,3}?)*)$')
+    line_count = 0
+    for line in tocText.splitlines():
+        numChapter = ''
+        title = ''
+        page = ''
+        
+        pageMatch = re.search(pageMatch_regex, line)
+        if pageMatch:
+            page = pageMatch['page']
+            if len(line) > len(page):
+                #print('page start:', pageMatch.start('page'))
+                line = line[0:pageMatch.start('page')-1]
+                #print('line after split page:', line)
+            else:
+                line = ''
+        numChapterMatch = re.search(numChapterMatch_regex, line)
+        if numChapterMatch:
+            numChapter = numChapterMatch['numChapter']
+            #print('numChapter:', numChapter)
+            if len(line) > len(numChapter):
+                title = line[numChapterMatch.end('numChapter')+1:-1]
+                #print('title after split numChapter:', title)
+            else:
+                line = ''
+        title = line
+        #title = re.sub(dotRow_pattern, '\g<1> ', title)
+        line_count +=1
+        tocLines.append([numChapter, title, page, line_count])
+    
+    hasChapterNums = (len([l for l in tocLines if l[0] != ''])>0)
+    
+    pageOnlyFunc = lambda inputList, i: inputList[i][0]=='' and inputList[i][1]=='' and inputList[i][2]!=''
+    pageOnlyRanges = getRangesFromList(tocLines, pageOnlyFunc)
+    #print(pageOnlyRanges)
+    
+    if len(pageOnlyRanges)>0:
+        noPageFunc = lambda inputList, i: inputList[i][1]!='' and inputList[i][2]==''
+        noPageRanges = getRangesFromList(tocLines, noPageFunc)
+        #print(noPageRanges)
+        tocLines = combineCorrespondingRanges(pageOnlyRanges, noPageRanges, 2, tocLines)
+    
+    if hasChapterNums:
+        numChapOnlyFunc = lambda inputList, i: inputList[i][1:2]==[''] and inputList[i][0]!=''
+        numChapOnlyRanges = getRangesFromList(tocLines, numChapOnlyFunc)
+        
+        if len(numChapOnlyRanges)>0:
+            noNumChapFunc = lambda inputList, i: inputList[i][1]!='' and inputList[i][0]==''
+            noNumChapRanges = getRangesFromList(tocLines, noNumChapFunc)
+    
+            tocLines = combineCorrespondingRanges(numChapOnlyRanges, noNumChapRanges, 0, tocLines, xOnlyRangesFirst=True)
+    
+    tocTable = '<table style="width:100%">'
+    
+    if hasChapterNums:
+        #f_md.write('| Kap.-Nr. | Kapitel | Seite |\n')
+        #f_md.write('| -------- | ------- | ----- |\n')
+        tocTable += '''
+          <tr>
+            <th style="width:20px">line_count</th>
+            <th style="width:10%">Kap.-Nr.</th>
+            <th style="width:80%">Kapitel</th>
+            <th style="width:20px">Seite</th>
+          </tr>
+          '''
+    else:
+        #f_md.write('| Kapitel | Seite |\n')
+        #f_md.write('| ------- | ----- |\n')
+        tocTable += '''
+          <tr>
+            <th style="width:20px">line_count</th>
+            <th style="width:90%">Kapitel</th>
+            <th style="width:20px">Seite</th>
+          </tr>
+          '''
+    
+    tocRows = [tocLine2tocRow(l, hasChapterNums, mode='html') for l in tocLines]
+    tocTable += '\n'.join(tocRows)
+    tocTable += '</table>'
+    
+    #print(tocText)
+    counter = 0
+    matchList = []
     for term in search.SEARCHTERMS:
         #prepare term for regex-search 
         term = term.replace('*', '.*?') # right-truncation * -> 0 or more chars (lazy)
-        #term = '\\b' + term.replace(' ', '\\b \\b') + '\\b'  # add word boundaries around a space
-        #term = term + '\\b' # add word boundaries at beginning and end
-        #print(term)
-        #print(repr(term)[1:-1])
-        #tocText = re.sub(term, r'<span style="background-color: #f1983780">$&<\/span>', tocText, re.I)
-        text = re.sub('\\b' + term.replace(' ', '\\b \\b') + '\\b', 'FOUND', tocText, 1, re.I)
-        
-    print(text)
-    zotAtt_toc_text['note'] = f'<div data-schema-version="9"><p>{tocText}</p>\n</div>'
-    #zot.create_items([zotEntry, zotAtt_toc_pdf, zotAtt_toc_text])
+        term = term.replace(' ', r'\b \b') # add word boundaries around a space
+        term = r'\n(.*?)(\b' + term + r'\b)(.*?)\n' # add word boundaries + begin/end of table row around it
+        tocTable = re.sub(term, highlightedMatch, tocTable, flags=re.I)
+    
+    zotAtt_toc_text['note'] += f'<div><h2>Gefundene Stichwörter: {counter}</h2><p>{"".join(matchList)}</p></div><div><h2>Inhaltsverzeichnis</h2>{tocTable}</div>'
+    
+    response = zot.create_items([zotAtt_toc_pdf, zotAtt_toc_text])
     
     attachmentPaths = []
     with open(f'tmp/MARC21-xml_{year}_{order}.mrcx', 'w') as f:
-        f.write(str_marc_record)
+        f.write(xml_marc.prettify())
     
     attachmentPaths.append(f'tmp/MARC21-xml_{year}_{order}.mrcx')
     
-    #zot.attachment_simple(attachmentPaths, zotEntry['key'])
+    zot.attachment_simple(attachmentPaths, entry_key)
     
     
+'''
 '''
