@@ -14,7 +14,7 @@ from string import Template
 from tqdm import tqdm
 from dotenv import dotenv_values
 sys.path.append('../python-dropbox-file-uploader')
-from main import DropboxUploader
+from main import DropboxHandler
 
 QUERY = Template(f'inh all {search.SEARCHSTRING} and jhr=$year and mat=books and spr=ger and location=leipzig')
 CREATOR_DICT = {'abr': 'contributor', 'aft': 'contributor', 'aui': 'contributor', 'aut': 'author', 'clb': 'contributor', 'cov': 'contributor', 'cre': 'contributor', 'ctb': 'contributor', 'edc': 'series editor', 'edd': 'editor', 'edt': 'editor', 'ill': 'contributor', 'oth': 'contributor', 'trl': 'translator', 'wfw': 'contributor', 'win': 'contributor'}
@@ -31,18 +31,17 @@ API_KEY = secrets['ZOTERO_API_KEY']
 dropbox_zot_home = secrets['DROPBOX_MAIN_ZOTERO_DIR']
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(format='%(asctime)s - %(levelname)s: %(message)s', filename='example.log', encoding='utf-8', level=logging.DEBUG)
+logging.basicConfig(format='%(asctime)s - %(levelname)s: %(message)s', filename='2ndRun.log', encoding='utf-8', level=logging.INFO)
 
 logging.info(f'Program started with the following settings: \nQUERY: {QUERY}\nwith YEAR from {FIRST_YEAR} until {LAST_YEAR}\nUsed Seed: {SEED}')
-
 zot = zotero.Zotero(LIBRARY_ID, 'group', API_KEY)
 
 def getNumRecordsForYears(firstyear, lastyear, querytemplate):
     '''
-    firstyear:      first year the number of search records is wanted
+    firstyear:      first year for which the number of search records is wanted
         Type:       int
         
-    lastyear:       last year the number of search records is wanted
+    lastyear:       last year for which the number of search records is wanted
         Type:       int
         
     querytemplate:  DNB SRU query for the with a fillable year
@@ -390,31 +389,48 @@ def combineCorrespondingRanges(xOnlyRanges, noXRanges, xColumn, dataList, xOnlyR
     #print('difference:', oldLength-newLength)
     return dataList
 
+'''
 logging.info('Starting to retrieve data from the DNB via SRU now: Getting the number of records per year...')
 df = getNumRecordsForYears(FIRST_YEAR, LAST_YEAR, QUERY)
 logging.info('Done!')
 
 file = df.to_csv(index=False).encode()
-DropboxUploader().upload_files(file, "recordcountsPerYear.csv")
+DropboxHandler().upload_files(file, "recordcountsPerYear.csv")
 print('got and saved numrecords for years')
 
 
 random.seed(SEED)
 
-global counter
-global matchList
 
 sample_df = getYearSamples(df, SAMPLESIZE_PER_YEAR)
 sample_df.insert(len(sample_df.columns), 'SEARCHCOUNT', None)
 
 file = sample_df.to_csv(index=False).encode()
-DropboxUploader().upload_files(file, "randomlyGenerizedSample.csv")
+DropboxHandler().upload_files(file, "randomlyGenerizedSample.csv")
 print('got and saved sample')
 logging.info(f'Generated and saved a list of up to {SAMPLESIZE_PER_YEAR} random record positions per year')
+'''
+
+
+DropboxHandler().download_files("exceptions.csv", "tmp/exceptions.csv")
+
+df = pd.read_csv('tmp/exceptions.csv')
+
+series = pd.Series(df['1'], dtype='string')
+dicts = []
+index = []
+for x in series:
+    values = re.findall('\d+', x, flags=re.M)
+    #item_series = pd.Series(values[0:2], name = values[3])
+    dict_ = {'YEAR': values[0], 'ORDER': values[1], 'RECORD_POS': values[2]}
+    dicts.append(dict_)
+    index.append(values[3])
+
+sample_df = pd.DataFrame(dicts, index=index)
 
 exceptions = []
 countList = []
-for ind, row in tqdm(sample_df.iterrows(), desc='retrieve records:', total=SAMPLESIZE_PER_YEAR*(LAST_YEAR-FIRST_YEAR+1)):
+for ind, row in tqdm(sample_df.iterrows(), desc='retrieve records:', total=sample_df.count()['YEAR']):
     try:
         year = row['YEAR']
         order = row['ORDER']
@@ -448,7 +464,7 @@ for ind, row in tqdm(sample_df.iterrows(), desc='retrieve records:', total=SAMPL
         file = str_marc_record.encode()
         saveFolder = 'Titeldaten_MARC21-xml'
         saveAs = f'{saveFolder}/{year}_{order}.xml'
-        DropboxUploader().upload_files(file, saveAs)
+        DropboxHandler().upload_files(file, saveAs)
         
         zotAtt_marcxml['url'] = f'{dropbox_zot_home}{saveFolder}?preview={year}_{order}.xml'
         
@@ -465,7 +481,12 @@ for ind, row in tqdm(sample_df.iterrows(), desc='retrieve records:', total=SAMPL
         zotAtt_toc_text['note'] = f'<h1> Inhaltsverzeichnis-OCR-Text_{year}_{order}</h1>'
         
         r = requests.get(f'{base_url}/04/text')
-        html = soup(r.content.decode(), features='lxml')
+        encoding = r.apparent_encoding
+        try:
+            content_dec = r.content.decode(encoding)
+        except UnicodeDecodeError:
+            content_dec = r.content.decode('utf-8')
+        html = soup(content_dec, features='lxml')
         tocText = html.get_text()
         
         tocLines = []
@@ -576,11 +597,11 @@ logging.info('DNB SRU Calls are finished now.')
 
 exc_df = pd.DataFrame(exceptions)
 file = exc_df.to_csv(index=False).encode()
-DropboxUploader().upload_files(file, "exceptions.csv")
+DropboxHandler().upload_files(file, "exceptions_2ndRun.csv")
 print(f'{len(exceptions)} exceptions occured and were saved')
 
 file = sample_df.to_csv(index=False).encode()
-DropboxUploader().upload_files(file, "searchtermsPerSampledBook.csv")
+DropboxHandler().upload_files(file, "searchtermsPerSampledBook_2ndRun.csv")
 print('collected and saved searchterm counts per sample')
 logging.info('Exceptions and serchterm counts per sample are now saved in the cloud as well.')
 
