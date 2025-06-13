@@ -23,6 +23,15 @@ FIRST_YEAR = 1945
 LAST_YEAR = 2025
 SEED = 2906     #my birthday - the seed doesn't really matter, all pseudorandom sequences have about the same randomness in them. However, to make the sampling reproducible, a fixed seed is needed.
 
+INPUT_FILEPATH_EXCEPTIONS = "exceptions.csv"
+
+FILENAME_SEARCHTERMS_PER_BOOK = "searchtermsPerSampledBook_2ndRun.csv"
+FILENAME_RECORDCOUNTS_PER_YEAR = "recordcountsPerYear.csv"
+FILENAME_GENERIZED_SAMPLE = "randomlyGenerizedSample.csv"
+FILENAME_EXCEPTIONS = "exceptions_2ndRun.csv"
+FILENAME_LOG = '2ndRun.log'
+LOGGING_LEVEL = logging.INFO
+
 # load secrets from file
 secrets = dotenv_values("../.env")
 
@@ -31,7 +40,7 @@ API_KEY = secrets['ZOTERO_API_KEY']
 dropbox_zot_home = secrets['DROPBOX_MAIN_ZOTERO_DIR']
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(format='%(asctime)s - %(levelname)s: %(message)s', filename='2ndRun.log', encoding='utf-8', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(levelname)s: %(message)s', filename=FILENAME_LOG, encoding='utf-8', level=LOGGING_LEVEL)
 
 logging.info(f'Program started with the following settings: \nQUERY: {QUERY}\nwith YEAR from {FIRST_YEAR} until {LAST_YEAR}\nUsed Seed: {SEED}')
 zot = zotero.Zotero(LIBRARY_ID, 'group', API_KEY)
@@ -392,27 +401,25 @@ def combineCorrespondingRanges(xOnlyRanges, noXRanges, xColumn, dataList, xOnlyR
 '''
 logging.info('Starting to retrieve data from the DNB via SRU now: Getting the number of records per year...')
 df = getNumRecordsForYears(FIRST_YEAR, LAST_YEAR, QUERY)
-logging.info('Done!')
+logging.info('Got the numbers of records per year!')
 
 file = df.to_csv(index=False).encode()
-DropboxHandler().upload_files(file, "recordcountsPerYear.csv")
-print('got and saved numrecords for years')
-
+DropboxHandler().upload_files(file, FILENAME_RECORDCOUNTS_PER_YEAR)
 
 random.seed(SEED)
-
 
 sample_df = getYearSamples(df, SAMPLESIZE_PER_YEAR)
 sample_df.insert(len(sample_df.columns), 'SEARCHCOUNT', None)
 
+logging.info(f'Generated a list of up to {SAMPLESIZE_PER_YEAR} random record positions per year')
+
 file = sample_df.to_csv(index=False).encode()
-DropboxHandler().upload_files(file, "randomlyGenerizedSample.csv")
-print('got and saved sample')
-logging.info(f'Generated and saved a list of up to {SAMPLESIZE_PER_YEAR} random record positions per year')
+DropboxHandler().upload_files(file, FILENAME_GENERIZED_SAMPLE)
+logging.info(f'Saved that list.')
 '''
 
-
-DropboxHandler().download_files("exceptions.csv", "tmp/exceptions.csv")
+logging.info('Download the list of (record position, year, order)-tuples that caused an exception in a prior run.')
+DropboxHandler().download_files(INPUT_FILEPATH_EXCEPTIONS, "tmp/exceptions.csv")
 
 df = pd.read_csv('tmp/exceptions.csv')
 
@@ -428,6 +435,8 @@ for x in series:
 
 sample_df = pd.DataFrame(dicts, index=index)
 
+logging.info('Deserialised those tuples.')
+
 exceptions = []
 countList = []
 for ind, row in tqdm(sample_df.iterrows(), desc='retrieve records:', total=sample_df.count()['YEAR']):
@@ -435,6 +444,7 @@ for ind, row in tqdm(sample_df.iterrows(), desc='retrieve records:', total=sampl
         year = row['YEAR']
         order = row['ORDER']
         recordPos = row['RECORD_POS']
+        logging.info(f'Retrieving the corresponding record for the {recordPos}. position in the search results for {year} with order = {order}...')
 
         #get marc xml record from the dnb catalog via sru and isolate record
         r_marc21 = dnb_sru(QUERY.substitute(year=year), startRecord=recordPos)
@@ -443,16 +453,19 @@ for ind, row in tqdm(sample_df.iterrows(), desc='retrieve records:', total=sampl
         str_marc_record = unicodedata.normalize("NFC", str(record_marc))
         xml_marc_record = etree.fromstring(str_marc_record)
         #print(dir(xml_marc))
+        logging.debug('Retrieved the matching MARC21-xml title data.')
         
         #convert record to zotEntry
         zotEntry = marcxml2zotEntry(xml_marc_record)
         zotEntry['date'] = str(year)
         zotEntry['extra'] = f'order: {order}\n' + zotEntry['extra']
+        logging.debug('Converted MARC21-xml record to zotero item format.')
         
         #print(zotEntry)
         response = zot.create_items([zotEntry])
         base_url = zotEntry['url']
         entry_key = response['success']['0']
+        logging.info(f'Saved record in Zotero with item key {entry_key}.')
         
         #create attachments for zotEntry:
         # 1. link to the marcxml in the dropbox
@@ -467,6 +480,7 @@ for ind, row in tqdm(sample_df.iterrows(), desc='retrieve records:', total=sampl
         DropboxHandler().upload_files(file, saveAs)
         
         zotAtt_marcxml['url'] = f'{dropbox_zot_home}{saveFolder}?preview={year}_{order}.xml'
+        logging.debug('Saved raw MARC21-xml in dropbox and prepared a link-attachment to the zotero item.')
         
         # 2. link to the table of content as pdf
         zotAtt_toc_pdf = zot.item_template('attachment', 'linked_url')
@@ -474,6 +488,7 @@ for ind, row in tqdm(sample_df.iterrows(), desc='retrieve records:', total=sampl
         zotAtt_toc_pdf['title'] = f'Inhaltsverzeichnis_{year}_{order}.pdf'
         zotAtt_toc_pdf['contentType'] = 'application/pdf'
         zotAtt_toc_pdf['url'] = f'{base_url}/04'
+        logging.debug('Prepared a link-attachment with a link to the Table of Content (pdf) to the zotero item.')
         
         # 3. table of content (toc) text
         zotAtt_toc_text = zot.item_template('note')
@@ -485,6 +500,7 @@ for ind, row in tqdm(sample_df.iterrows(), desc='retrieve records:', total=sampl
         try:
             content_dec = r.content.decode(encoding)
         except UnicodeDecodeError:
+            logging.info(f'Decoding with the apparent encoding '{encoding}' did not work. Trying decoding with utf-8 next.')
             content_dec = r.content.decode('utf-8')
         html = soup(content_dec, features='lxml')
         tocText = html.get_text()
@@ -597,11 +613,12 @@ logging.info('DNB SRU Calls are finished now.')
 
 exc_df = pd.DataFrame(exceptions)
 file = exc_df.to_csv(index=False).encode()
-DropboxHandler().upload_files(file, "exceptions_2ndRun.csv")
-print(f'{len(exceptions)} exceptions occured and were saved')
+
+DropboxHandler().upload_files(file, FILENAME_EXCEPTIONS)
+logging.info(f'{len(exceptions)} exceptions occured and were saved')
 
 file = sample_df.to_csv(index=False).encode()
-DropboxHandler().upload_files(file, "searchtermsPerSampledBook_2ndRun.csv")
+DropboxHandler().upload_files(file, FILENAME_SEARCHTERMS_PER_BOOK)
 print('collected and saved searchterm counts per sample')
 logging.info('Exceptions and serchterm counts per sample are now saved in the cloud as well.')
 
