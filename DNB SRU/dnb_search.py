@@ -1,5 +1,5 @@
     #klitoris-synonyme
-SEARCHTERMS = ['bulboklitoralorgan*',
+CLITORIS_TERMS = ['bulboklitoralorgan*',
 			'clit',
 			'clitor*',
 			'kitzel',
@@ -9,10 +9,10 @@ SEARCHTERMS = ['bulboklitoralorgan*',
 			#'lustknospe*',                -> 0 Treffer
 			'lustorgan*',
 			#'lustperle*',                 -> 0 Treffer
-			'penis muliebre',
+			'penis muliebre']
 					
     #vulva-synonyme
-			'cunnus',
+VULVA_TERMS = ['cunnus',
 			'fotze*',
 			'foz',
 			'fud',
@@ -35,10 +35,10 @@ SEARCHTERMS = ['bulboklitoralorgan*',
 			'votze*',
 			'vulv*',
 			'weiblich* scham*',
-			'yoni*',
+			'yoni*']
 
     #geschlechtsorgan-synonyme
-            'genital*',
+GENITAL_TERMS = ['genital*',
 			'begattungsorgan*',
 			'fortpflanzungsapparat*',
 			'fortpflanzungsorgan*',
@@ -60,5 +60,17 @@ SEARCHTERMS = ['bulboklitoralorgan*',
 			'wollustorgan*',
             #'wolllustorgan*',              -> 0 Treffer
 			'zeugungsorgan*']
+ONE_WORD_SUBSTITUTIONS = {'primär* geschlechtsmerkmal*': 'geschlechtsmerkmal*', 'weiblich* scham*': 'scham*', 'vorhof d* scheide*': 'vorhof', 'vorhof d* vagina*': 'vorhof', 'pudendum muliebre': 'muliebre', 'miss brown': 'brown', 'penis muliebre': 'muliebre'}
+
+def oneWordVersion(termList):
+    for term in termList:
+        if term in ONE_WORD_SUBSTITUTIONS.keys():
+            termList[termList.index(term)] = ONE_WORD_SUBSTITUTIONS[term]
+    return termList
                 
+SEARCHTERMS = []
+SEARCHTERMS.extend(CLITORIS_TERMS)
+SEARCHTERMS.extend(VULVA_TERMS)
+SEARCHTERMS.extend(GENITAL_TERMS)
+
 SEARCHSTRING = '(' + ' or '.join([('"' + s + '"') for s in SEARCHTERMS]) + ')'
