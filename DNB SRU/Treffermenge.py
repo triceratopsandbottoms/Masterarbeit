@@ -445,7 +445,6 @@ for ind, row in tqdm(sample_df.iterrows(), desc='retrieve records:', total=sampl
         order = row['ORDER']
         recordPos = row['RECORD_POS']
         logging.info(f'Retrieving the corresponding record for the {recordPos}. position in the search results for {year} with order = {order}...')
-
         #get marc xml record from the dnb catalog via sru and isolate record
         r_marc21 = dnb_sru(QUERY.substitute(year=year), startRecord=recordPos)
         xml_marc = soup(r_marc21.content, features="xml")
