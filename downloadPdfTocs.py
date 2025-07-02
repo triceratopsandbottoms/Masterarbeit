@@ -7,7 +7,10 @@ import time
 import logging
 import pprint
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
+from sklearn.linear_model import LinearRegression
 sys.path.append('./DNB SRU')
 import dnb_search as search
 sys.path.append('./python-dropbox-file-uploader')
@@ -319,6 +322,18 @@ def remove_outliers(df, cols, min_dev=15):
     #print(f'Outliers with [{", ".join(cols)}]-values beneath {[round(x, 1) for x in (Q1 - k * IQR)]} or above {[round(x, 1) for x in Q3 + k * IQR]} were excluded.')
     return df
     
+def lin_reg_residual_column(df, col_x, col_y):
+    x = df[[col_x]]
+    y = df[col_y]
+    model = LinearRegression()
+    model.fit(x, y)
+    
+    residuals = abs(df[col_y] - model.predict(df[[col_x]]))
+    
+    df = df.assign(residuals=residuals)
+    
+    return residuals
+    
 def get_differing_rows(df1, df2):
     return df1[~df1.isin(df2).all(axis=1)]
     
@@ -353,36 +368,73 @@ def pdf_page_cleanup():
             corner_nums.append(interimList)
 
     raw_df = pd.DataFrame(corner_nums, columns=['page_num','x0','y0','x1','y1','num_word','block_no','line_no','word_no'])
+    #print('step 1:\n', raw_df)
     raw_df = raw_df.apply(pd.to_numeric).drop_duplicates()
     
+    #print('step 2 (duplicate removal):\n', raw_df)
     #df = raw_df
     df = remove_outliers(raw_df, cols=['y0', 'y1'])
     
+    df.insert(5, 'x_center', (df['x0']+df['x1'])/2)
+    df.insert(6, 'y_center', (df['y0']+df['y1'])/2)
+    
+    #print('step 3 (y-outlier removal):\n', df)
     #print(raw_df)
     #print('Differing rows:\n', get_differing_rows(raw_df, df), '\n')
     
     #categorize data into 2 position clusters (there are 2 page number locations, for left/right pages)
     kmeans = KMeans(n_clusters=2)
-    y = kmeans.fit_predict(df[['x0', 'x1']])
+    y = kmeans.fit_predict(df[['x_center']])
     df = df.assign(cluster=y)
     
+    #print('step 4 (assign cluster):\n', df)
+    
     grouped = df.groupby('cluster')
-    grouped = grouped.apply(lambda x: remove_outliers(x, cols=['x0', 'x1']).assign(cluster=x.name).assign(x0_diff_median=abs(x['x0']-x['x0'].median())), include_groups=False)
+    #grouped.apply(lambda x: remove_outliers(x, cols=['x_center']).assign(cluster=x.name).assign(x0_diff_median=abs(x['x0']-x['x0'].median())), include_groups=False)
     
-    #grouped = grouped.apply(lambda x: x.assign(diff_median=abs(x-x.median())))
-    #grouped = grouped.apply(sort_values('x0', key=lambda a: a.map(lambda b: abs(b-a.median()))))
-    #print(grouped)
-    #grouped = grouped.apply(lambda x: x.assign(cluster=x.name))
-    print(grouped)
     
-    new_df = grouped.reset_index(level='cluster', drop=True)
+    '''Axiom: all left resp. right pages (-> clusters) have  e i t h e r  odd  o r  even page numbers
+    Goal: Remove page numbers that doesn't fit 
+    1. check whether the extracted page number (num_word) is odd or even, 2. get the modal value for even-ness within the cluster, 3. filter those pages where the even-ness matches it's clusters modal'''
+    df['even'] = df['num_word'] % 2 == 0 
+    cluster_even = df.groupby('cluster')['even'].agg(lambda x: x.mode())    
+    df = df[ df['even'] == list(cluster_even[df['cluster']]) ]
+    
+
+    grouped.apply(lambda g: lin_reg_residual_column(g, 'num_word', 'x_center'), include_groups=False)
+    
+    #models = df.groupby('cluster')[['num_word', 'x_center']].agg( lambda x: LinearRegression().fit(x[['num_word']], x['x_center']), axis=1 )
+    #print(models)
+    #residuals = df.groupby('cluster')[]
+    
+    residuals = []
+    for name, group in df.groupby('cluster'):
+        x = df[['num_word']]
+        y = df['x_center']
+        model = LinearRegression()
+        model.fit(group[['num_word']], group['x_center'])
+        residuals.extend(abs(group['x_center'] - model.predict(group[['num_word']])))
+    
+    df['residuals'] = residuals
+    
+    print('step 5 (added column with residuals of linear regression per cluster):\n', df)
+    
+    #new_df = grouped.reset_index(level='cluster', drop=True)
     
     #print('Dropped x0,x1-outliers of clusters:\n', get_differing_rows(df, new_df), '\n')
     
     # before duplicates are deleted, we sort the df so that better fitting page numbers (those closer to the median position) are kept
-    new_df.sort_values(['page_num', 'x0_diff_median'], inplace=True) 
-    new_df.drop_duplicates('page_num')
-    print(new_df)
+    #new_df.sort_values(['page_num', 'x0_diff_median'], inplace=True) 
+    
+    df.sort_values(['page_num', 'residuals'])
+    
+    print('step 6 (sort by page_num and residuals):\n', df)
+    
+    #new_df.drop_duplicates('page_num')
+    
+    #print('step 7 (remove num_word with less fitting position in case of more than 1 number per page):\n', new_df)
+    
+    #print(new_df)
     
 def getTags():
     print (zot.tags())
