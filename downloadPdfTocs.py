@@ -1,9 +1,13 @@
 import requests
 import sys
 import os
+import re
 import pymupdf
 import time
 import logging
+import pprint
+import pandas as pd
+from sklearn.cluster import KMeans
 sys.path.append('./DNB SRU')
 import dnb_search as search
 sys.path.append('./python-dropbox-file-uploader')
@@ -21,10 +25,13 @@ config = dotenv_values(".env.config")
 LIBRARY_ID = secrets['ZOTERO_LIBRARY_ID']
 API_KEY = secrets['ZOTERO_API_KEY']
 collectionId = secrets['ZOTERO_COLLECTION_ZU_BESTELLEN']
+collectionId_inclusion = secrets['ZOTERO_COLLECTION_EINSCHLUSS']
+
 file_path = config['ZOTERO_FILEDUMP_PATH']
 dropbox_folder = config['DROPBOX_PDFTOC_FOLDER']
 dropbox_zot_home = config['DROPBOX_MAIN_ZOTERO_DIR']
 local_file_path = config['LOCAL_PDFTOC_PATH']
+local_books_path = config['LOCAL_PDFBOOKS_PATH']
 
 # get logging config values from env
 filename_log = config['FILENAME_LOG_PDFTOCHANDLING']
@@ -43,7 +50,19 @@ vulva_terms = search.oneWordVersion(search.VULVA_TERMS)
 genital_terms = search.oneWordVersion(search.GENITAL_TERMS)
 
 zot = zotero.Zotero(LIBRARY_ID, 'group', API_KEY)
-
+    
+def pretty_print_dict(d, fcol_width):
+    ret = ''
+    for k, v in d.items():
+        if type(v)==str:
+            string = v
+        else:
+            string = pprint.pformat(v, sort_dicts=False)
+        v_lines = string.splitlines()
+        v_output = f'\n{" ":<{fcol_width}}'.join(v_lines)
+        ret += f'{k:<{fcol_width}}{v_output}' + '\n'
+    return ret
+    
 def changePublicUrlsToDropbox():
 
     items = zot.everything(zot.collection_items(collectionId, itemType='attachment'))
@@ -182,7 +201,7 @@ def highlightSearchterms_upload2zotero():
             try:
                 corr_att = [a for a in zotero_attachments if a['title']==file.name][0]
             except IndexError:
-                print(f'No corresponding attachment found for ${file.name}')
+                print(f'No corresponding attachment found for {file.name}')
                 continue
             #print(corr_att)    
             #print(file.path)
@@ -196,10 +215,180 @@ def highlightSearchterms_upload2zotero():
         except Exception as e:
             raise Exception(f'An error occured while proccessing file "{file.name}": {e}')
 
+def isNameInCreators(name, creators):
+    if len(creators)==0:
+        return 'creators is empty'
+    for creator in creators:
+        if creator.get('name')==None:
+            nameToCompare = f"{creator.get('lastName')}{creator.get('firstName')}"
+        else:
+            nameToCompare = creator.get('name')
+        if nameToCompare.find(name)>=0:
+            return 'yes'
+    return 'no'
+
+def analyzeItemCards():
+    
+    #items = zot.everything(zot.items(tag='✅ Einschluss'))
+    items = zot.everything(zot.collection_items_top(collectionId_inclusion))
+    
+    sign_item_dict = {}
+    
+    for item in items:
+        sign = item['data']['callNumber']
+        sign_std = sign.replace(' ', '').upper()
+        for k, v in item['data'].copy().items():
+            if not v:
+                item['data'].pop(k)
+        sign_item_dict[sign_std] = item['data']
+    
+    dir_entries = os.scandir(local_books_path)
+    file_paths = [e.path for e in dir_entries if e.is_file()]
+    
+    document_overview = []
+    paths = ['./tmp/Neuer Ordner (8)_20250629.pdf']
+    
+    #for inputPath in paths:
+    for inputPath in tqdm(file_paths):
+        document_dict = {}
+        document_dict['path'] = inputPath
+        document_dict['status'] = ''
+        
+        try:
+            doc=pymupdf.open(inputPath)
+            pages = list(doc.pages())
+            itemCard = pages[0]
+            
+            rect_sign = pymupdf.Rect(470, 420, 720, 455)
+            raw_signature = itemCard.get_textbox(rect_sign).strip()
+            signature = raw_signature[2:].replace(' ', '').upper()
+            document_dict['raw_signature'] = raw_signature
+            document_dict['corr_key'] = ''
+            
+            rect_info = pymupdf.Rect(125, 60, 400, 250)
+            raw_info = itemCard.get_textbox(rect_info).strip()
+            document_dict['raw_info'] = raw_info
+            
+            if not raw_signature.startswith('L:'):
+                logging.error(f"raw_signature '{raw_signature}' retrieved from the ItemCard in '{inputPath}' doesn't start with 'L:', e.g. has an invalid format, and therefore cannot be matched with a zotero item.")
+                #print(f"raw_signature '{raw_signature}' retrieved from the ItemCard in '{inputPath}' doesn't start with 'L:', e.g. has an invalid format, and therefore cannot be matched with a zotero item.")
+                document_dict['status'] = "ERROR: Signature doesn't start with 'L:'"
+                continue
+            elif re.fullmatch('[A-Z0-9\-\.,]*', signature) is None:
+                logging.error(f"The signature '{signature}' retrieved from the ItemCard in '{inputPath}' contains invalid characters, e.g. chars other than [A-Z0-9\-\.,], and therefore cannot be matched with a zotero item.")
+                #print(f"The signature '{signature}' retrieved from the ItemCard in '{inputPath}' contains invalid characters, e.g. chars other than [A-Z0-9\-\.,], and therefore cannot be matched with a zotero item.")
+                document_dict['status'] = "ERROR: Signature contains invalid chars"
+                continue
+            elif signature not in sign_item_dict.keys():
+                logging.error(f"The signature '{signature}' retrieved from the ItemCard in '{inputPath}' was not found in the considered zotero items and therefore was not matched with an item.")
+                #print(f"The signature '{signature}' retrieved from the ItemCard in '{inputPath}' was not found in the considered zotero items and therefore was not matched with an item.")
+                document_dict['status'] = "ERROR: Signature not found in zotero"
+                continue
+                
+            corr_item = sign_item_dict[signature]
+            pretty_item = pretty_print_dict(corr_item, 20)
+            corr_key = corr_item['key']
+            document_dict['corr_key'] = corr_key
+            document_dict['pretty_item'] = str(pretty_item)
+        except Exception as e:
+            document_dict['status'] = f"ERROR: {e}"
+        
+        document_overview.append(document_dict)
+    
+    df = pd.DataFrame(document_overview)
+    df.to_csv('matching_overview.csv')
+
+    #item = zot.item(corr_key)
+    
+    
+#remove outliers in y-coordinate-cols; code from https://stackoverflow.com/a/59366409
+def remove_outliers(df, cols, min_dev=15):
+    k = 1.5 # how many interquartile ranges around the quartiles are still included
+    Q1 = df[cols].quantile(0.25)
+    Q3 = df[cols].quantile(0.75)
+    IQR = Q3 - Q1
+    
+    dev = [max([k*x, min_dev]) for x in IQR] # how much deviation from the quartiles do we include
+    
+    # low_b = Q1 - dev
+    # upp_b = Q3 + dev
+    # print(f'{low_b=}, {upp_b=}')
+    
+    df = df[~((df[cols] < (Q1 - dev)) |(df[cols] > (Q3 + dev))).any(axis=1)]
+    
+    #print(f'Outliers with [{", ".join(cols)}]-values beneath {[round(x, 1) for x in (Q1 - k * IQR)]} or above {[round(x, 1) for x in Q3 + k * IQR]} were excluded.')
+    return df
+    
+def get_differing_rows(df1, df2):
+    return df1[~df1.isin(df2).all(axis=1)]
+    
+def pdf_page_cleanup():
+    #Seitenzahlen: eine Zahl in einer der Ecken oder nicht existent. Wenn keine Zahl erkannt wird, aber die Seite davor und danach Seitenzahl haben: Seitenzahl dazwischen. Wenn unklar: markieren? Seitenzahlen mit doc.set_page_labels(//list_of_dicts//) setzen
+    #Wenn keine unklaren Seitenzahlen nach den Seiten zu Beginn: Seiten sortieren
+    inputPath = './tmp/Neuer Ordner (8)_20250629.pdf'
+    doc=pymupdf.open(inputPath)
+    
+    corner_nums = []
+    for page in doc.pages():
+        textpage = page.get_textpage()
+        height = page.cropbox[3]
+        words = textpage.extractWORDS()
+        num_words = [w for w in words if w[4].isdigit() and w[6]==0]
+        num_words_header = [w for w in num_words if w[3] < height*0.1]
+        num_words_footer = [w for w in num_words if w[1] > height-height*0.1]
+        
+        if num_words_header:
+            interimList = list(sorted(num_words_header, key=lambda w: (w[1], w[0]))[0])
+            interimList.insert(0, page.number)
+            corner_nums.append(interimList)
+            interimList = list(sorted(num_words_header, key=lambda w: (w[1], w[2]))[0])
+            interimList.insert(0, page.number)
+            corner_nums.append(interimList)
+        if num_words_footer:
+            interimList = list(sorted(num_words_footer, key=lambda w: (w[3], w[0]))[0])
+            interimList.insert(0, page.number)
+            corner_nums.append(interimList)
+            interimList = list(sorted(num_words_footer, key=lambda w: (w[3], w[2]))[0])
+            interimList.insert(0, page.number)
+            corner_nums.append(interimList)
+
+    raw_df = pd.DataFrame(corner_nums, columns=['page_num','x0','y0','x1','y1','num_word','block_no','line_no','word_no'])
+    raw_df = raw_df.apply(pd.to_numeric).drop_duplicates()
+    
+    #df = raw_df
+    df = remove_outliers(raw_df, cols=['y0', 'y1'])
+    
+    #print(raw_df)
+    #print('Differing rows:\n', get_differing_rows(raw_df, df), '\n')
+    
+    #categorize data into 2 position clusters (there are 2 page number locations, for left/right pages)
+    kmeans = KMeans(n_clusters=2)
+    y = kmeans.fit_predict(df[['x0', 'x1']])
+    df = df.assign(cluster=y)
+    
+    grouped = df.groupby('cluster')
+    grouped = grouped.apply(lambda x: remove_outliers(x, cols=['x0', 'x1']).assign(cluster=x.name).assign(x0_diff_median=abs(x['x0']-x['x0'].median())), include_groups=False)
+    
+    #grouped = grouped.apply(lambda x: x.assign(diff_median=abs(x-x.median())))
+    #grouped = grouped.apply(sort_values('x0', key=lambda a: a.map(lambda b: abs(b-a.median()))))
+    #print(grouped)
+    #grouped = grouped.apply(lambda x: x.assign(cluster=x.name))
+    print(grouped)
+    
+    new_df = grouped.reset_index(level='cluster', drop=True)
+    
+    #print('Dropped x0,x1-outliers of clusters:\n', get_differing_rows(df, new_df), '\n')
+    
+    # before duplicates are deleted, we sort the df so that better fitting page numbers (those closer to the median position) are kept
+    new_df.sort_values(['page_num', 'x0_diff_median'], inplace=True) 
+    new_df.drop_duplicates('page_num')
+    print(new_df)
+    
 def getTags():
     print (zot.tags())
 
-fromZoteroUrlToZoteroPdf()
+#analyzeItemCards()
+pdf_page_cleanup()
 
 """
 try:
