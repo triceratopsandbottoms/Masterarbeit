@@ -336,6 +336,12 @@ def lin_reg_residual_column(df, col_x, col_y):
     
 def get_differing_rows(df1, df2):
     return df1[~df1.isin(df2).all(axis=1)]
+
+def get_range_begins(nums):
+    nums = sorted(set(nums))
+    gaps = [[e] for s, e in zip(nums, nums[1:]) if s+1 < e]
+    edges = iter(nums[:1] + sum(gaps, [])) # + nums[-1:])
+    return list(edges) #list(zip(edges, edges))
     
 def pdf_page_cleanup():
     #Seitenzahlen: eine Zahl in einer der Ecken oder nicht existent. Wenn keine Zahl erkannt wird, aber die Seite davor und danach Seitenzahl haben: Seitenzahl dazwischen. Wenn unklar: markieren? Seitenzahlen mit doc.set_page_labels(//list_of_dicts//) setzen
@@ -382,16 +388,12 @@ def pdf_page_cleanup():
     #print(raw_df)
     #print('Differing rows:\n', get_differing_rows(raw_df, df), '\n')
     
-    #categorize data into 2 position clusters (there are 2 page number locations, for left/right pages)
+    '''categorize data into 2 position clusters (there are 2 page number locations, for left/right pages)'''
     kmeans = KMeans(n_clusters=2)
     y = kmeans.fit_predict(df[['x_center']])
     df = df.assign(cluster=y)
     
-    #print('step 4 (assign cluster):\n', df)
-    
-    grouped = df.groupby('cluster')
-    #grouped.apply(lambda x: remove_outliers(x, cols=['x_center']).assign(cluster=x.name).assign(x0_diff_median=abs(x['x0']-x['x0'].median())), include_groups=False)
-    
+    #print('step 4 (assign cluster):\n', df)    
     
     '''Axiom: all left resp. right pages (-> clusters) have  e i t h e r  odd  o r  even page numbers
     Goal: Remove page numbers that doesn't fit 
@@ -401,7 +403,7 @@ def pdf_page_cleanup():
     df = df[ df['even'] == list(cluster_even[df['cluster']]) ]
     
 
-    grouped.apply(lambda g: lin_reg_residual_column(g, 'num_word', 'x_center'), include_groups=False)
+    #grouped.apply(lambda g: lin_reg_residual_column(g, 'num_word', 'x_center'), include_groups=False)
     
     #models = df.groupby('cluster')[['num_word', 'x_center']].agg( lambda x: LinearRegression().fit(x[['num_word']], x['x_center']), axis=1 )
     #print(models)
@@ -416,25 +418,61 @@ def pdf_page_cleanup():
         residuals.extend(abs(group['x_center'] - model.predict(group[['num_word']])))
     
     df['residuals'] = residuals
-    
     print('step 5 (added column with residuals of linear regression per cluster):\n', df)
-    
-    #new_df = grouped.reset_index(level='cluster', drop=True)
-    
+        
     #print('Dropped x0,x1-outliers of clusters:\n', get_differing_rows(df, new_df), '\n')
     
-    # before duplicates are deleted, we sort the df so that better fitting page numbers (those closer to the median position) are kept
-    #new_df.sort_values(['page_num', 'x0_diff_median'], inplace=True) 
-    
+    # before duplicates are deleted, we sort the df so that better fitting page numbers (those closer to the median position) are kept    
     df.sort_values(['page_num', 'residuals'])
+    #print('step 6 (sort by page_num and residuals):\n', df)
     
-    print('step 6 (sort by page_num and residuals):\n', df)
+    df.drop_duplicates('page_num')
+    #print('step 7 (remove num_words with less fitting position in case of more than 1 number per page):\n', df)
     
-    #new_df.drop_duplicates('page_num')
+    first_labeled_page = df['page_num'].min()
+    last_page = doc.page_count-1
+    print(first_labeled_page, last_page)
     
-    #print('step 7 (remove num_word with less fitting position in case of more than 1 number per page):\n', new_df)
+    df.set_index('page_num', inplace=True
+    )
+    page_labels = {}
+    page_label_tuples = []
+    guessed = False
+    ambiguous_guess = False
+    for i in range(first_labeled_page, doc.page_count):
+        if i in df.index:
+            #page_labels[i] = int(df.at[i, 'num_word'])
+            label = int(df.at[i, 'num_word'])
+            #if guessed and page_labels[i-1]!=page_labels[i]-1:
+            if guessed and page_label_tuples[-1][1] != label-1:
+                ambiguous_guess = True
+            page_label_tuples.append((i, label))
+            guessed = False
+        else:
+            #page_labels[i] = page_labels[i-1]+1
+            page_label_tuples.append((i, page_label_tuples[-1][1]+1))
+            guessed = True
+    if guessed and page_label_tuples[-1][1] < df.loc['num_word'].max():
+        ambiguous_guess = True
     
-    #print(new_df)
+    #TO-DO
+    dicts = [{'startpage': 0, 'prefix': '', 'style': 'r', 'firstpagenum': 1}]
+    range_begins = get_range_begins([t[1] for t in page_label_tuples])
+    for rb in range_begins:
+        startpage = [t[0] for t in page_label_tuples if t[1]==rb][0]
+        d = {'startpage': startpage, 'prefix': '', 'style': 'D', 'firstpagenum': rb}
+        dicts.append(d)
+    
+    doc.set_page_labels(dicts)
+    
+    if not ambiguous_guess:
+        new_page_order = list(range(first_labeled_page)).extend([t[0] for t in sorted(page_label_tuples, key=lambda t: t[1])])
+        print(new_page_order)
+        #sorted_labels = sorted(page_labels.values())
+    #print(page_label_tuples, ambiguous_guess)
+    
+    
+    
     
 def getTags():
     print (zot.tags())
