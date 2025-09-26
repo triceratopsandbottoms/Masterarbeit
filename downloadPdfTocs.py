@@ -276,17 +276,14 @@ def analyzeItemCards():
                 logging.error(f"raw_signature '{raw_signature}' retrieved from the ItemCard in '{inputPath}' doesn't start with 'L:', e.g. has an invalid format, and therefore cannot be matched with a zotero item.")
                 #print(f"raw_signature '{raw_signature}' retrieved from the ItemCard in '{inputPath}' doesn't start with 'L:', e.g. has an invalid format, and therefore cannot be matched with a zotero item.")
                 document_dict['status'] = "ERROR: Signature doesn't start with 'L:'"
-                continue
             elif re.fullmatch('[A-Z0-9\-\.,]*', signature) is None:
                 logging.error(f"The signature '{signature}' retrieved from the ItemCard in '{inputPath}' contains invalid characters, e.g. chars other than [A-Z0-9\-\.,], and therefore cannot be matched with a zotero item.")
                 #print(f"The signature '{signature}' retrieved from the ItemCard in '{inputPath}' contains invalid characters, e.g. chars other than [A-Z0-9\-\.,], and therefore cannot be matched with a zotero item.")
                 document_dict['status'] = "ERROR: Signature contains invalid chars"
-                continue
             elif signature not in sign_item_dict.keys():
                 logging.error(f"The signature '{signature}' retrieved from the ItemCard in '{inputPath}' was not found in the considered zotero items and therefore was not matched with an item.")
                 #print(f"The signature '{signature}' retrieved from the ItemCard in '{inputPath}' was not found in the considered zotero items and therefore was not matched with an item.")
                 document_dict['status'] = "ERROR: Signature not found in zotero"
-                continue
                 
             corr_item = sign_item_dict[signature]
             pretty_item = pretty_print_dict(corr_item, 20)
@@ -305,21 +302,26 @@ def analyzeItemCards():
     
     
 #remove outliers in y-coordinate-cols; code from https://stackoverflow.com/a/59366409
-def remove_outliers(df, cols, min_dev=15):
+def remove_outliers(df, cols, min_dev=15, max_dev=30):
     k = 1.5 # how many interquartile ranges around the quartiles are still included
     Q1 = df[cols].quantile(0.25)
     Q3 = df[cols].quantile(0.75)
+    med = df[cols].quantile(0.5)
     IQR = Q3 - Q1
     
-    dev = [max([k*x, min_dev]) for x in IQR] # how much deviation from the quartiles do we include
+    dev = [min(max([k*x, min_dev]), max_dev) for x in IQR] # how much deviation from the quartiles do we include
+    #print(df)
+
+    #print(f'{df[cols].median()=}, {low_b=}, {upp_b=}')
     
-    # low_b = Q1 - dev
-    # upp_b = Q3 + dev
-    # print(f'{low_b=}, {upp_b=}')
+    low_b = pd.Series([max(Q1.iloc[x], med.iloc[x]-min_dev)-dev[x] for x in range(Q1.size)], index=cols)
+    upp_b = pd.Series([min(Q3.iloc[x], med.iloc[x]+min_dev)+dev[x] for x in range(Q3.size)], index=cols)
+    #print(f'{df[cols].size=}, {low_b=}')
     
-    df = df[~((df[cols] < (Q1 - dev)) |(df[cols] > (Q3 + dev))).any(axis=1)]
+    df = df[~((df[cols] < low_b) |(df[cols] > upp_b)).any(axis=1)]
     
-    #print(f'Outliers with [{", ".join(cols)}]-values beneath {[round(x, 1) for x in (Q1 - k * IQR)]} or above {[round(x, 1) for x in Q3 + k * IQR]} were excluded.')
+    #print(f'Outliers with [{", ".join(cols)}]-values beneath {[round(x, 1) for x in (Q1 - dev)]} or above {[round(x, 1) for x in Q3 + dev]} were excluded.')
+    #print(df)
     return df
     
 def lin_reg_residual_column(df, col_x, col_y):
@@ -337,148 +339,203 @@ def lin_reg_residual_column(df, col_x, col_y):
 def get_differing_rows(df1, df2):
     return df1[~df1.isin(df2).all(axis=1)]
 
-def get_range_begins(nums):
-    nums = sorted(set(nums))
+def get_range_begins(nums, sortInput=True):
+    if sortInput: 
+        nums = sorted(set(nums))
     gaps = [[e] for s, e in zip(nums, nums[1:]) if s+1 < e]
     edges = iter(nums[:1] + sum(gaps, [])) # + nums[-1:])
     return list(edges) #list(zip(edges, edges))
     
-def pdf_page_cleanup():
+def improve_bookscans():
     #Seitenzahlen: eine Zahl in einer der Ecken oder nicht existent. Wenn keine Zahl erkannt wird, aber die Seite davor und danach Seitenzahl haben: Seitenzahl dazwischen. Wenn unklar: markieren? Seitenzahlen mit doc.set_page_labels(//list_of_dicts//) setzen
     #Wenn keine unklaren Seitenzahlen nach den Seiten zu Beginn: Seiten sortieren
-    inputPath = './tmp/Neuer Ordner (8)_20250629.pdf'
-    doc=pymupdf.open(inputPath)
     
-    corner_nums = []
-    for page in doc.pages():
-        textpage = page.get_textpage()
-        height = page.cropbox[3]
-        words = textpage.extractWORDS()
-        num_words = [w for w in words if w[4].isdigit() and w[6]==0]
-        num_words_header = [w for w in num_words if w[3] < height*0.1]
-        num_words_footer = [w for w in num_words if w[1] > height-height*0.1]
+    df_zotMatches = pd.read_csv('matchedZot_2colmns.csv')
+    #inputPath = './tmp/Neuer Ordner (8)_20250629.pdf'
+    
+    for row in list(df_zotMatches.itertuples())[77:]:
+        print('Current row:', row)
+        index = row[0]
+        path = row[1]
+        zotKey = row[2]
         
-        if num_words_header:
-            interimList = list(sorted(num_words_header, key=lambda w: (w[1], w[0]))[0])
-            interimList.insert(0, page.number)
-            corner_nums.append(interimList)
-            interimList = list(sorted(num_words_header, key=lambda w: (w[1], w[2]))[0])
-            interimList.insert(0, page.number)
-            corner_nums.append(interimList)
-        if num_words_footer:
-            interimList = list(sorted(num_words_footer, key=lambda w: (w[3], w[0]))[0])
-            interimList.insert(0, page.number)
-            corner_nums.append(interimList)
-            interimList = list(sorted(num_words_footer, key=lambda w: (w[3], w[2]))[0])
-            interimList.insert(0, page.number)
-            corner_nums.append(interimList)
+        children = zot.children(zotKey, itemType='attachment')
+        attachment_titles = [x['data']['title'] for x in children]
+        bookscans = [x for x in attachment_titles if x.startswith('Buchscan')]
+        #print(bookscans)
+        if bookscans != []:
+            continue
 
-    raw_df = pd.DataFrame(corner_nums, columns=['page_num','x0','y0','x1','y1','num_word','block_no','line_no','word_no'])
-    #print('step 1:\n', raw_df)
-    raw_df = raw_df.apply(pd.to_numeric).drop_duplicates()
-    
-    #print('step 2 (duplicate removal):\n', raw_df)
-    #df = raw_df
-    df = remove_outliers(raw_df, cols=['y0', 'y1'])
-    
-    df.insert(5, 'x_center', (df['x0']+df['x1'])/2)
-    df.insert(6, 'y_center', (df['y0']+df['y1'])/2)
-    
-    #print('step 3 (y-outlier removal):\n', df)
-    #print(raw_df)
-    #print('Differing rows:\n', get_differing_rows(raw_df, df), '\n')
-    
-    '''categorize data into 2 position clusters (there are 2 page number locations, for left/right pages)'''
-    kmeans = KMeans(n_clusters=2)
-    y = kmeans.fit_predict(df[['x_center']])
-    df = df.assign(cluster=y)
-    
-    #print('step 4 (assign cluster):\n', df)    
-    
-    '''Axiom: all left resp. right pages (-> clusters) have  e i t h e r  odd  o r  even page numbers
-    Goal: Remove page numbers that doesn't fit 
-    1. check whether the extracted page number (num_word) is odd or even, 2. get the modal value for even-ness within the cluster, 3. filter those pages where the even-ness matches it's clusters modal'''
-    df['even'] = df['num_word'] % 2 == 0 
-    cluster_even = df.groupby('cluster')['even'].agg(lambda x: x.mode())    
-    df = df[ df['even'] == list(cluster_even[df['cluster']]) ]
-    
-
-    #grouped.apply(lambda g: lin_reg_residual_column(g, 'num_word', 'x_center'), include_groups=False)
-    
-    #models = df.groupby('cluster')[['num_word', 'x_center']].agg( lambda x: LinearRegression().fit(x[['num_word']], x['x_center']), axis=1 )
-    #print(models)
-    #residuals = df.groupby('cluster')[]
-    
-    residuals = []
-    for name, group in df.groupby('cluster'):
-        x = df[['num_word']]
-        y = df['x_center']
-        model = LinearRegression()
-        model.fit(group[['num_word']], group['x_center'])
-        residuals.extend(abs(group['x_center'] - model.predict(group[['num_word']])))
-    
-    df['residuals'] = residuals
-    print('step 5 (added column with residuals of linear regression per cluster):\n', df)
+        doc=pymupdf.open(path)
         
-    #print('Dropped x0,x1-outliers of clusters:\n', get_differing_rows(df, new_df), '\n')
-    
-    # before duplicates are deleted, we sort the df so that better fitting page numbers (those closer to the median position) are kept    
-    df.sort_values(['page_num', 'residuals'])
-    #print('step 6 (sort by page_num and residuals):\n', df)
-    
-    df.drop_duplicates('page_num')
-    #print('step 7 (remove num_words with less fitting position in case of more than 1 number per page):\n', df)
-    
-    first_labeled_page = df['page_num'].min()
-    last_page = doc.page_count-1
-    print(first_labeled_page, last_page)
-    
-    df.set_index('page_num', inplace=True
-    )
-    page_labels = {}
-    page_label_tuples = []
-    guessed = False
-    ambiguous_guess = False
-    for i in range(first_labeled_page, doc.page_count):
-        if i in df.index:
-            #page_labels[i] = int(df.at[i, 'num_word'])
-            label = int(df.at[i, 'num_word'])
-            #if guessed and page_labels[i-1]!=page_labels[i]-1:
-            if guessed and page_label_tuples[-1][1] != label-1:
-                ambiguous_guess = True
-            page_label_tuples.append((i, label))
+        '''EXTRACT POSSIBLE PAGE LABELS'''
+        corner_nums = []
+        for page in doc.pages():
+            textpage = page.get_textpage()
+            height = page.cropbox[3]
+            words = textpage.extractWORDS()
+            num_words = [w for w in words if w[4].isdigit() and w[6]==0]
+            num_words_header = [w for w in num_words if w[3] < height*0.1]
+            num_words_footer = [w for w in num_words if w[1] > height-height*0.1]
+            
+            if num_words_header:
+                interimList = list(sorted(num_words_header, key=lambda w: (w[1], w[0]))[0])
+                interimList.insert(0, page.number)
+                corner_nums.append(interimList)
+                interimList = list(sorted(num_words_header, key=lambda w: (w[1], w[2]))[0])
+                interimList.insert(0, page.number)
+                corner_nums.append(interimList)
+            if num_words_footer:
+                interimList = list(sorted(num_words_footer, key=lambda w: (w[3], w[0]))[0])
+                interimList.insert(0, page.number)
+                corner_nums.append(interimList)
+                interimList = list(sorted(num_words_footer, key=lambda w: (w[3], w[2]))[0])
+                interimList.insert(0, page.number)
+                corner_nums.append(interimList)
+
+        raw_df = pd.DataFrame(corner_nums, columns=['page_num','x0','y0','x1','y1','num_word','block_no','line_no','word_no'])
+        #print('step 1:\n', raw_df)
+        
+        '''GET BEST EXTRACTED PAGE LABELS'''
+        df = raw_df.apply(pd.to_numeric).drop_duplicates()
+        
+        #print('step 2 (duplicate removal):\n', raw_df)
+        #df = raw_df
+        
+        if df['num_word'].size>0 and df['num_word'].max()== df.at[0, 'num_word']:
+            df.drop(0, inplace=True)
+        
+        df.insert(5, 'x_center', (df['x0']+df['x1'])/2)
+        df.insert(6, 'y_center', (df['y0']+df['y1'])/2)
+        
+        df = remove_outliers(df, cols=['y_center'])
+        
+        #print('step 3 (y-outlier removal):\n', df)
+        #print(raw_df)
+        #print('Differing rows:\n', get_differing_rows(raw_df, df), '\n')
+        
+        if df['page_num'].size > 4:
+            try:
+                '''categorize data into 2 position clusters (there are 2 page number locations, for left/right pages)'''
+                kmeans = KMeans(n_clusters=2)
+                y = kmeans.fit_predict(df[['x_center']])
+                df = df.assign(cluster=y)
+                
+                #print('step 4 (assign cluster):\n', df)    
+                
+                '''Axiom: all left resp. right pages (-> clusters) have  e i t h e r  odd  o r  even page numbers
+                Goal: Remove page numbers that doesn't fit 
+                1. check whether the extracted page number (num_word) is odd or even, 2. get the modal value for even-ness within the cluster, 3. filter those pages where the even-ness matches it's clusters modal'''
+                df['even'] = df['num_word'] % 2 == 0 
+                cluster_even = df.groupby('cluster')['even'].agg(lambda x: x.mode())    
+                df = df[ df['even'] == list(cluster_even[df['cluster']]) ]
+                
+                residuals = []
+                for name, group in df.groupby('cluster'):
+                    x = df[['num_word']]
+                    y = df['x_center']
+                    model = LinearRegression()
+                    model.fit(group[['num_word']], group['x_center'])
+                    residuals.extend(abs(group['x_center'] - model.predict(group[['num_word']])))
+                
+                df['residuals'] = residuals
+                #print('step 5 (added column with residuals of linear regression per cluster):\n', df)
+                    
+                #print('Dropped x0,x1-outliers of clusters:\n', get_differing_rows(df, new_df), '\n')
+                
+                # before duplicates are deleted, we sort the df so that better fitting page numbers (those closer to the median position) are kept    
+                df.sort_values(['page_num', 'residuals'])
+                #print('step 6 (sort by page_num and residuals):\n', df)
+                df.drop_duplicates('page_num', inplace=True)
+                #print('step 7 (remove num_words with less fitting position in case of more than 1 number per page):\n', df)
+            except Exception as e:
+                print('Clustering did not work for this item. Error:', e)
+
+
+        first_labeled_page = df['page_num'].min()
+        last_page = doc.page_count-1
+        #print(first_labeled_page, last_page)
+            
+        if df['page_num'].size > 1:
+            df.set_index('page_num', inplace=True)
+            
+            '''FILL IN MISSING PAGE LABELS'''
+            original_pnos = range(first_labeled_page, doc.page_count)
+            page_labels = []
+            ambiguous_guess = False
             guessed = False
+            for i in original_pnos:
+                if i in df.index:
+                    label = int(df.at[i, 'num_word'])
+                    if guessed and page_labels[-1] != label-1:
+                        ambiguous_guess = True
+                    page_labels.append(label)
+                    guessed = False
+                else:
+                    label = page_labels[-1]+1
+                    page_labels.append(label)
+                    guessed = True
+            if guessed and page_labels[-1] < df['num_word'].max():
+                ambiguous_guess = True
+            
+            '''SET PAGE LABELS'''
+            range_begins = get_range_begins(page_labels, sortInput=False)
+            
+            dicts = [{'startpage': 0, 'prefix': '', 'style': 'r', 'firstpagenum': 1}]
+            for rb in range_begins:
+                #startpage = [t[0] for t in page_label_tuples if t[1]==rb][0]
+                startpage = original_pnos[page_labels.index(rb)]
+                d = {'startpage': startpage, 'prefix': '', 'style': 'D', 'firstpagenum': rb}
+                dicts.append(d)
+
+            doc.set_page_labels(dicts)
+            
+            '''EVENTUALLY SORT PAGES BY PAGE LABELS'''
+            if not ambiguous_guess:
+                meta_pages = range(first_labeled_page)
+                #main_pages = [t[0] for t in sorted(page_label_tuples, key=lambda t: t[1])]
+                main_pages = [p for p in sorted(original_pnos, key=lambda p: page_labels[original_pnos.index(p)])]
+                all_pages = [p for p in [*meta_pages, *main_pages]]
+                sorted_pages = sorted(all_pages)
+                if sorted_pages!=all_pages:
+                    doc.select(sorted_pages)
+                
+        '''MARK CLITORIS MENTIONS'''
+        if type(first_labeled_page)==int:
+            pages = list(doc.pages())[first_labeled_page:]
         else:
-            #page_labels[i] = page_labels[i-1]+1
-            page_label_tuples.append((i, page_label_tuples[-1][1]+1))
-            guessed = True
-    if guessed and page_label_tuples[-1][1] < df.loc['num_word'].max():
-        ambiguous_guess = True
+            pages = list(doc.pages())
+            
+        for page in pages:
+            textpage = page.get_textpage()
+            
+            clit_terms = ['clit', 'klit', 'kitzler', 'schwellkörper', 'cavern', 'kavern', 'spongi', 'bulb']
+            for term in clit_terms:
+                searchTermAndHighlightOccurences(page, textpage, term, 'hotpink')
+        
+        '''SAVE PDF'''
+        doc.save(f'tmp/Buchscan_{zotKey}.pdf')
+        
+        #resp = zot.attachment_both([[f'Buchscan_{zotKey}.pdf', f'tmp/Buchscan_{zotKey}.pdf']], zotKey)
+        #if resp['failure'] != []:
+        #    print('WARNING: A failure occured while uploading a pdf to zotero:', resp['failure'])
+        
+def assign_parentItem_2_bookscan():
+    parentless_items = zot.everything(zot.top(q='Buchscan'))
+    template = zot.item_template('attachment', 'imported_file')
     
-    #TO-DO
-    dicts = [{'startpage': 0, 'prefix': '', 'style': 'r', 'firstpagenum': 1}]
-    range_begins = get_range_begins([t[1] for t in page_label_tuples])
-    for rb in range_begins:
-        startpage = [t[0] for t in page_label_tuples if t[1]==rb][0]
-        d = {'startpage': startpage, 'prefix': '', 'style': 'D', 'firstpagenum': rb}
-        dicts.append(d)
-    
-    doc.set_page_labels(dicts)
-    
-    if not ambiguous_guess:
-        new_page_order = list(range(first_labeled_page)).extend([t[0] for t in sorted(page_label_tuples, key=lambda t: t[1])])
-        print(new_page_order)
-        #sorted_labels = sorted(page_labels.values())
-    #print(page_label_tuples, ambiguous_guess)
-    
-    
-    
-    
+    for item in [[i['data'] for i in parentless_items if i['data']['title'].startswith('Buchscan')][0]]:
+        print(item)
+        parentItem_key = item['title'].split('_')[1]
+        item['parentItem'] = parentItem_key
+        #zot.update_item(item)
+        #print(parentItem_key) 
+            
 def getTags():
     print (zot.tags())
 
 #analyzeItemCards()
-pdf_page_cleanup()
+assign_parentItem_2_bookscan()
 
 """
 try:
