@@ -3,10 +3,10 @@ Usage:
   parse_deps.py [INPUT]
   parse_deps.py (-h|--help)
 
-Parse a text into a conll file
+Parse text(s) into conll file(s) and upload to Inception
 
 Arguments:
-  INPUT input file. If not specified, will use stdin instead
+  INPUT input file or directory. If not specified, will use stdin instead
   
 Options:
   -h             display this help
@@ -21,14 +21,17 @@ import urllib.parse
 from docopt import docopt
 from pycaprio import Pycaprio
 from pycaprio.mappings import InceptionFormat, DocumentState
+from dotenv import dotenv_values
 
-INCEPTION_URL = "http://localhost:8080"
-INCEPTION_USER = "remote-api"
-INCEPTION_PW = "MDT2azx-qae0fbg*uhz"
-PROJECT_ID = 2
+secrets = dotenv_values(".env")
+
+inception_url = secrets['INCEPTION_URL']
+inception_user = secrets['INCEPTION_USER']
+inception_pw = secrets['INCEPTION_PW']
+project_id = secrets['PROJECT_ID']
 INCEPTION_FORMAT = InceptionFormat.CONLL2006
 
-client = Pycaprio(INCEPTION_URL, authentication=(INCEPTION_USER, INCEPTION_PW))
+client = Pycaprio(inception_url, authentication=(inception_user, inception_pw))
     
 if sys.version_info[0] >= 3:
     str = str
@@ -105,7 +108,7 @@ def postDocumentToInception(title, filepath):
     doc_file = open(filepath,'rb')
     new_document = None
     try:
-        new_document = client.api.create_document(PROJECT_ID, title, doc_file, document_format=INCEPTION_FORMAT)
+        new_document = client.api.create_document(project_id, title, doc_file, document_format=INCEPTION_FORMAT)
         return(new_document) # <Document #5: Test document name (Project: 1)>
     except Exception as ex:
         print(ex)
