@@ -350,21 +350,24 @@ def improve_bookscans():
     #Seitenzahlen: eine Zahl in einer der Ecken oder nicht existent. Wenn keine Zahl erkannt wird, aber die Seite davor und danach Seitenzahl haben: Seitenzahl dazwischen. Wenn unklar: markieren? Seitenzahlen mit doc.set_page_labels(//list_of_dicts//) setzen
     #Wenn keine unklaren Seitenzahlen nach den Seiten zu Beginn: Seiten sortieren
     
-    df_zotMatches = pd.read_csv('matchedZot_2colmns.csv')
+    #df_zotMatches = pd.read_csv('matchedZot_2colmns.csv')
     #inputPath = './tmp/Neuer Ordner (8)_20250629.pdf'
     
-    for row in list(df_zotMatches.itertuples())[77:]:
-        print('Current row:', row)
-        index = row[0]
-        path = row[1]
-        zotKey = row[2]
+    #for row in list(df_zotMatches.itertuples())[77:]:
+    #    print('Current row:', row)
+    #    index = row[0]
+    #    path = row[1]
+    #    zotKey = row[2]
+    for i in [0]:    
+        path = './tmp/Perlentauchen_komplett.pdf'
+        zotKey = 'A9ZW3FQJ'
         
         children = zot.children(zotKey, itemType='attachment')
         attachment_titles = [x['data']['title'] for x in children]
         bookscans = [x for x in attachment_titles if x.startswith('Buchscan')]
         #print(bookscans)
-        if bookscans != []:
-            continue
+        #if bookscans != []:
+        #    continue
 
         doc=pymupdf.open(path)
         
@@ -394,12 +397,12 @@ def improve_bookscans():
                 corner_nums.append(interimList)
 
         raw_df = pd.DataFrame(corner_nums, columns=['page_num','x0','y0','x1','y1','num_word','block_no','line_no','word_no'])
-        #print('step 1:\n', raw_df)
+        print('step 1:\n', raw_df)
         
         '''GET BEST EXTRACTED PAGE LABELS'''
         df = raw_df.apply(pd.to_numeric).drop_duplicates()
         
-        #print('step 2 (duplicate removal):\n', raw_df)
+        print('step 2 (duplicate removal):\n', raw_df)
         #df = raw_df
         
         if df['num_word'].size>0 and df['num_word'].max()== df.at[0, 'num_word']:
@@ -410,7 +413,7 @@ def improve_bookscans():
         
         df = remove_outliers(df, cols=['y_center'])
         
-        #print('step 3 (y-outlier removal):\n', df)
+        print('step 3 (y-outlier removal):\n', df)
         #print(raw_df)
         #print('Differing rows:\n', get_differing_rows(raw_df, df), '\n')
         
@@ -454,7 +457,7 @@ def improve_bookscans():
 
         first_labeled_page = df['page_num'].min()
         last_page = doc.page_count-1
-        #print(first_labeled_page, last_page)
+        print(first_labeled_page, last_page)
             
         if df['page_num'].size > 1:
             df.set_index('page_num', inplace=True)
@@ -516,9 +519,9 @@ def improve_bookscans():
         '''SAVE PDF'''
         doc.save(f'tmp/Buchscan_{zotKey}.pdf')
         
-        #resp = zot.attachment_both([[f'Buchscan_{zotKey}.pdf', f'tmp/Buchscan_{zotKey}.pdf']], zotKey)
-        #if resp['failure'] != []:
-        #    print('WARNING: A failure occured while uploading a pdf to zotero:', resp['failure'])
+        resp = zot.attachment_both([[f'Buchscan_{zotKey}.pdf', f'tmp/Buchscan_{zotKey}.pdf']], zotKey)
+        if resp['failure'] != []:
+            print('WARNING: A failure occured while uploading a pdf to zotero:', resp['failure'])
         
 def assign_parentItem_2_bookscan():
     parentless_items = zot.everything(zot.top(q='Buchscan'))
@@ -535,7 +538,8 @@ def getTags():
     print (zot.tags())
 
 #analyzeItemCards()
-assign_parentItem_2_bookscan()
+#assign_parentItem_2_bookscan()
+improve_bookscans()
 
 """
 try:

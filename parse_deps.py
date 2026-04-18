@@ -28,7 +28,7 @@ secrets = dotenv_values(".env")
 inception_url = secrets['INCEPTION_URL']
 inception_user = secrets['INCEPTION_USER']
 inception_pw = secrets['INCEPTION_PW']
-project_id = secrets['PROJECT_ID']
+project_id = secrets['INCEPTION_PROJECT_ID']
 INCEPTION_FORMAT = InceptionFormat.CONLL2006
 
 client = Pycaprio(inception_url, authentication=(inception_user, inception_pw))

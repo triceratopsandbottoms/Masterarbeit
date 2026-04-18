@@ -10,6 +10,8 @@ from tqdm import tqdm
 from dotenv import dotenv_values
 import json, itertools, warnings, time
 import pandas as pd
+from functools import reduce
+from itertools import chain, product
 
 secrets = dotenv_values(".env")
 
@@ -33,8 +35,8 @@ COREFERENCE_TYPE = "webanno.custom.Coreferencesaslinks"
 NAMED_ENTITY_TYPE = "de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity"
 CLITORIS_ENTITY_TYPE = "webanno.custom.ClitorisEntities"
 SURFACE_FORM_TYPE = "de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.SurfaceForm"
-SEMARG_TYPE = "de.tudarmstadt.ukp.dkpro.core.api.semantics.type.SemArg"
-SEMPRED_TYPE = "de.tudarmstadt.ukp.dkpro.core.api.semantics.type.SemPred"
+# SEMARG_TYPE = "de.tudarmstadt.ukp.dkpro.core.api.semantics.type.SemArg"
+# SEMPRED_TYPE = "de.tudarmstadt.ukp.dkpro.core.api.semantics.type.SemPred"
 
 NAMED_TO_CLIT_ENT_DICT = {'A. bulbi vestibuli': 'art', 'A. bulbi vestibuli vaginae': 'art', 'A. clitoridis': 'art', 'A. profunda clitoridis': 'art', 'Bulbus/-i vestibularis': 'bul', 'Corpus cavernosum urethrae': 'cau', 'Corpusc': '!', 'Klitoris (Organ mit C. cavernosum)': 'kli', 'Lig. fundiforme clitoridis': 'lig', 'N. cavernosus clitoridis': 'ner', 'V. bulbi vestibuli': 'ven', 'V. dorsalis clitoridis': 'ven', 'V. dorsalis clitoridis subfascialis': 'ven', 'V. dorsalis superficialis clitoridis': 'ven', 'V. profunda clitoridis': 'ven', 'Klitoris (Organ mit C. cavernosum + spongiosum)': 'kli', 'Klitoris (Organ mit C. cavernosum + spongiosum + cav. urethrae)': 'kli', 'Klitoris (Organ mit unklarem Umfang)': 'kli', 'Klitoriskomplex (Organkomplex/-gruppe)': '?', 'Schwellkörper (C. cavernosum + spongiosum)': '?', 'Schwellkörper (C. cavernosum + spongiosum + cav. urethrae)': '?', 'Schwellgewebe': '?', 'Corpus cavernosum clitoridis': 'cac', 'Crus/Crura clitoridis': 'cru', 'Corpus clitoridis (gesamt)': 'cor', 'Corpus clitoridis ascendenz': 'asz', 'Corpus clitoridis descendenz': 'des', 'Septum media des Corpus clitoridis': 'sep', 'Septum media des RSP': '?', 'Tunica albuginea': 'tac/tas', 'Corpus spongiosum clitoridis': 'spo', 'Bulbus/-i vestibuli': 'bul', 'Bulbuskommissur': 'kom', 'Glans clitoridis': 'gla', 'Frenulum/-a': 'fre', 'Infra-corporeal Residual Spongy Part (RSP)': 'rsp', 'Pars intermedia, Kobeltscher Venenplexus': 'int', 'Ligamentum suspensorium clitoridis': 'lig', 'Präputium clitoridis': 'pra', 'Fascia retrocruralis': 'frc', 'N. dorsalis clitoridis': 'ner', 'A. dorsalis clitoridis': 'art', 'V. dorsalis profunda clitoridis': 'ven', 'Angulus clitoridis': '?', 'Smegma clitoridis': '?'}
 
@@ -42,10 +44,16 @@ NAMED_TO_CLIT_ENT_DICT = {'A. bulbi vestibuli': 'art', 'A. bulbi vestibuli vagin
 def key_elemType(propElem):
     elemOrder = ["zus", "narg", "farg", "pspez", "gspez"]
     try:
-        keyword = propElem[0].label.split()[0]
+        keyword = propElem[0].RelationzumPrdikat
+        propElemText = propElem[0].get_covered_text()
     except:
-        keyword = propElem[0][0].label.split()[0]
-    rank = elemOrder.index(keyword)
+        keyword = propElem[0][0].RelationzumPrdikat
+        propElemText = propElem[0][0].get_covered_text()
+    try:
+        rank = elemOrder.index(keyword)
+    except ValueError as e:
+        rank = 0
+        print("An error occured:", e, "processed Elem:", propElem, propElemText)
     #print(rank)
     return rank
 
@@ -62,54 +70,85 @@ def key_propDict(item):
     rank = keyOrder.index(key)
     return rank
 
-
-def check_for_sub_elems(cas, span):
-    subElems = [r.Dependent for r in cas.select(RELATION_TYPE) if r.Governor.xmiID==span[0].xmiID]
+def getSubSpans(cas, span):
+    #gibt alle spans zurück, auf die eine relation vom ursprungs-span zeigt -> argSubs oder konjunktions-elems
+    subSpans = [r.Dependent for r in cas.select(RELATION_TYPE) if r.Governor.xmiID==span.xmiID]
     
-    try:
-        [rec_subElems] = [check_for_sub_elems(cas, [s]) for s in subElems]
-        print("It worked")
-    except:
-        rec_subElems = subElems
+    for subSpan in subSpans:
+        if subSpan.label.count("/") == 0:
+            if subSpan.label.lower().endswith("elem"):
+                new_label = span.label
+                new_label += " /"
+                new_label += subSpan.label
+                subSpan.set('label', new_label)
+                elemType = span.RelationzumPrdikat
+                subSpan.set('RelationzumPrdikat', elemType)
+            else:
+                new_label = span.label
+                new_label += " /"
+                new_label += subSpan.label
+                subSpan.set('label', new_label)
+                elemType = span.RelationzumPrdikat
+                subSpan.set('RelationzumPrdikat', elemType)
     
-    rec_subElems.sort(key=lambda s: s.begin)
+    return subSpans
     
-    enumElems = []
-    struct_subElems = []
-    enumerations = False
+def isSpanConj(cas, span):
+    return span.label.lower().endswith("elem")
     
-    for subElem in rec_subElems:
-        if subElem.label.lower().endswith("elem"):
-            enumerations = True
-            new_label = span[0].label
-            new_label += " /"
-            new_label += subElem.label
-            subElem.set('label', new_label)
-            enumElems.append(subElem)
+def flattenNonConjTuples(tuplesFromNonConjSpans):
+    flattenedTuples = []
+    for tuplesFromNonConjSpan in tuplesFromNonConjSpans:
+        if flattenedTuples == []:
+            flattenedTuples.extend(tuplesFromNonConjSpan)
         else:
-            if enumElems != []:
-                struct_subElems.append(enumElems)
-                enumElems = []
-            new_label = span[0].label
-            new_label += " /"
-            new_label += subElem.label
-            subElem.set('label', new_label)
-            struct_subElems.append([subElem])
-    if enumElems != []:
-        struct_subElems.append(enumElems)
-    elif struct_subElems != [] and enumerations==False:
-        struct_subElems.append(span)
+            newFlattenedTuples = []
+            for existingTuple in flattenedTuples:
+                for additionalTuple in tuplesFromNonConjSpan:
+                    newFlattenedTuples.append(existingTuple+additionalTuple)
+            flattenedTuples = newFlattenedTuples
+    return flattenedTuples
     
-    if struct_subElems == []:
-        return span
-    elif len(struct_subElems)==1:
-        #TODO: Wenn ein Span ein subArg hat, das aber den Span ergänzen und nicht ersetzen soll, dann fällt hier der Span ungewollterweise weg, oder? -> ergänzungen liegen nur und immer vor, wenn es keine enumelems gibt. -> mit elif Zeile 81-82 gelöst, oder?
-        [struct_subElems_] = struct_subElems
-        return struct_subElems_
+def flattenConjTuples(tuplesFromConjSpans):
+    result = []
+    for tuplesFromConjSpan in tuplesFromConjSpans:
+        result.extend(tuplesFromConjSpan)
+    return result
+    
+def getTuplesForSpan_imperative(cas, topSpan):
+    subSpans = getSubSpans(cas, topSpan)
+    tuplesFromNonConjSpans = []
+    tuplesFromConjSpans = []
+    for span in subSpans:
+        tuplesFromSubSpan = getTuplesForSpan_imperative(cas, span)
+        if isSpanConj(cas, span):
+            tuplesFromConjSpans.append(tuplesFromSubSpan)
+        else:
+            tuplesFromNonConjSpans.append(tuplesFromSubSpan)
+    
+    flattenedNonConjTuples = flattenNonConjTuples(tuplesFromNonConjSpans)
+    if tuplesFromConjSpans == []:
+        if flattenedNonConjTuples == []:
+            return [(topSpan,)]
+        else:
+            newFlattenedNonConjTuples = []
+            for nonConjTuple in flattenedNonConjTuples:
+                # add topSpan and sort tuple
+                newNonConjTuple = tuple(sorted(nonConjTuple + (topSpan,), key=lambda s: s.begin))
+                newFlattenedNonConjTuples.append(newNonConjTuple)
+            return newFlattenedNonConjTuples
     else:
-        struct_subElems = list(itertools.product(*struct_subElems))
-        #print("return:", struct_subElems)
-        return struct_subElems
+        flattenedConjTuples = flattenConjTuples(tuplesFromConjSpans)
+        if flattenedNonConjTuples == []:
+            sortedFlattenedConjTuples = list(map(lambda t: tuple(sorted(t, key=lambda s: s.begin)), flattenedConjTuples))
+            return sortedFlattenedConjTuples
+        else:
+            combinedTuples = []
+            for tupleFromNonConj in flattenedNonConjTuples:
+                for tupleFromConj in flattenedConjTuples:
+                    sortedCombinedTuple = tuple(sorted(tupleFromNonConj+tupleFromConj, key=lambda s: s.begin))
+                    combinedTuples.append(sortedCombinedTuple)
+            return combinedTuples
 
 def elementString(arg):
     propArgStr = ""
@@ -173,17 +212,6 @@ def get_elem_clitents(elem, runType='default'):
     clitEnts = []
     begins = []
     ends = []
-    # if type(elem)==tuple:
-        # for span in elem:
-            # if span.clitEnt:
-                # clitEnts.append((span.clitEnt, span.clitEnt.begin, span.clitEnt.end))
-                # begins.append(span.begin)
-                # ends.append(span.end)
-            # elif span.coreference:
-                # if span.coreference.head.clitEnt:
-                    # clitEnts.append((span.coreference.head.clitEnt, span.coreference.begin, span.coreference.end))
-                    # begins.append(span.begin)
-                    # ends.append(span.end)
     if type(elem) in [list, tuple]:
         for item in elem:
             output = get_elem_clitents(item, runType='raw')
@@ -217,13 +245,6 @@ def get_elem_comments(elem, runType='default'):
     comments = []
     begins = []
     ends = []
-    # if type(elem)==tuple:
-        # for span in elem:
-            # if span.Anmerkungen: 
-                # commentStr = '; '.join(span.Anmerkungen.elements)
-                # comments.append((commentStr, span.begin, span.end))
-                # begins.append(span.begin)
-                # ends.append(span.end)
     if type(elem) in [list, tuple]:
         for item in elem:
             output = get_elem_comments(item, runType='raw')
@@ -272,20 +293,23 @@ def isEnumElem(elem):
         try:
             return [s for s in elem if s.label.endswith('Elem')]!=[]
         except:
-            for e in elem:
-                print(get_surface_text(e))
-            return [s for s in elem if s[0].label.endswith('Elem')]!=[]
+            #for e in elem:
+                #print(get_surface_text(e))
+            try:
+                return [s for s in elem if s[0].label.endswith('Elem')]!=[]
+            except:
+                return [s for s in elem if s[0][0].label.endswith('Elem')]!=[]
     else:
         return elem.label.endswith('Elem')
 
 def getElemType(elem):
     try:
-        type_ = elem[0].label.split()[0]
+        type_ = elem[0].RelationzumPrdikat
     except:
         try:
-            type_ = elem[0][0].label.split()[0]
+            type_ = elem[0][0].RelationzumPrdikat
         except:
-            type_ = elem.label.split()[0]
+            type_ = elem.RelationzumPrdikat
     return type_
 
 def getElemTypes(elemList):
@@ -293,7 +317,7 @@ def getElemTypes(elemList):
     for elem in elemList: ret.append(getElemType(elem))
     return ret
     
-def makePartProps(subLemmata, propZuss, propNargs, propElems):    
+def makePartProps(subLemmata, propNargs, propElems):    
     partProps = []
     c_lemma=ord('A')
     for subLemma in subLemmata:
@@ -310,8 +334,12 @@ def makePartProps(subLemmata, propZuss, propNargs, propElems):
         if len(subLemmata) > 0: prop['elements'][f"lemmaSubs{c_}"] = subLemma
         c_lemma+=1
         
+        # save current state of proposition
+        curProp = {'elements': prop['elements'].copy()}
         c_nargs=ord('A')
         for nargs in itertools.product(*propNargs):
+            # reset prop to state of proposition with just the subLemma
+            prop = {'elements': curProp['elements'].copy()}
             i=1
             for narg in nargs:
                 i_ = i if len(nargs)>1 else ""
@@ -344,7 +372,6 @@ def makePartProps(subLemmata, propZuss, propNargs, propElems):
                     prop['elements'][f"{type_}{i_}"] = elem[0]
                     #saveProp = {'elements': prop['elements'].copy()}
                     partProps.append({'elements': prop['elements'].copy()})
-                    
     return partProps
     
 def addInformationDict(prop, dictKey, func_get_elem_info):
@@ -364,7 +391,10 @@ def addInformationDict(prop, dictKey, func_get_elem_info):
 def addMetaInformation(dict_, cas):
     bookId = cas.get_document_annotation().documentTitle.split('_')[0]
     excerptId = cas.get_document_annotation().documentTitle.split('_')[1]
-    page = cas.get_document_annotation().documentTitle.split('_')[2].split('.')[0]
+    try:
+        page = cas.get_document_annotation().documentTitle.split('_')[2].split('.')[0]
+    except:
+        page = None
     
     dict_['bookId'] = bookId
     dict_['excerptId'] = excerptId
@@ -373,13 +403,6 @@ def addMetaInformation(dict_, cas):
     
 def makeStrPartProp(prop, mergeLemma=True):
     newProp = prop.copy()
-        
-    #copy metainformation
-    #newProp['inceptionDocId'] = prop['inceptionDocId']
-    #newProp['bookId'] = prop['bookId']
-    #newProp['excerptId'] = prop['excerptId']
-    #newProp['page'] = prop['page']
-    #newProp['infoId'] = prop['infoId']
     
     newProp['elements'] = {}
     newProp['coreferences'] = {}
@@ -422,13 +445,10 @@ def makeStrPartProp(prop, mergeLemma=True):
                 
     for key, value in prop['clitorisEntities'].items(): #for clitEnt entries
         if value != '':
-            try:
-                valueStr = value.Struktur
-                if value.Bezug:
-                    valueStr += "; -> "
-                    valueStr += str(value.Bezug)
-            except:
-                valueStr = value.value
+            valueStr = value.Struktur
+            if value.Bezug:
+                valueStr += " → "
+                valueStr += ", ".join(value.Bezug.elements)
             if key.find('*')>0: 
                 valueStr += ' ("'
                 valueStr += get_surface_text(value)
@@ -511,14 +531,14 @@ def prepareDocument(typesystem_xml, annotation_xmi):
             if coref.Referenzen==None:
                 coref.set('clitEnt', ent)
             #print(span)
-            
+    '''       
     for ent in cas.select(NAMED_ENTITY_TYPE):
         newValue = NAMED_TO_CLIT_ENT_DICT[ent.value]
         ent.set('value', newValue)
         for span in cas.select_covering(SPAN_TYPE, ent):
             span.set('clitEnt', ent)
             #print(span)
-
+    '''
     for surfaceForm in cas.select(SURFACE_FORM_TYPE):
         for span in cas.select_covering(SPAN_TYPE, surfaceForm):
             if surfaceForm.begin >= span.begin and surfaceForm.end <= span.end:
@@ -542,7 +562,10 @@ def prepareDocument(typesystem_xml, annotation_xmi):
 #initializing the client
 client = Pycaprio(INCEPTION_URL, authentication=(INCEPTION_USER, INCEPTION_PW))
 
-for inceptionDocId in tqdm(range(1,120)):
+documents = client.api.documents(PROJECT_ID)
+docIds = [x.document_id for x in documents]
+
+for inceptionDocId in tqdm(docIds):
 
     #make a request at Inception and put the response doc into a ZipFile
     try:
@@ -573,13 +596,12 @@ for inceptionDocId in tqdm(range(1,120)):
     excerpt['excerptString'] = textStr
 
     df = pd.DataFrame([excerpt])
-    df.to_csv("excerpt_strings.csv", mode='a', header=False, index=False)
+    df.to_csv("data/excerpt_strings.csv", mode='a', header=False, index=False)
 
     #iterate through all predicate heads in the current document / excerpt
     i_pred = 0
     for pred in filter(lambda s: s.label == "pred", cas.select(SPAN_TYPE)):
         i_pred +=1
-        propZuss = []
         lemmaSubs = []
         propNargs = []
         propElems = []
@@ -589,20 +611,17 @@ for inceptionDocId in tqdm(range(1,120)):
             #print("relation:", relation)
             if relation.Dependent.label in ["predAVZ", "predSub"]:
                 lemmaSubs.append([relation.Dependent])
-            #elif relation.Dependent.label.startswith("zus"):
-            #    propZuss.append(relation.Dependent)
-            elif relation.Dependent.label.startswith("narg"):
+            elif relation.Dependent.RelationzumPrdikat == "narg":
                 propNargs.append([relation.Dependent])
             else:
                 propElems.append([relation.Dependent])
         
-        #sort those 3 sublists and check for enumerations and other sub-Spans. "zusätze" mustn't have sub-elements, so the last step is skipped for them. -> untrue, they can't have enums, but they can have subArgs -> TODO!!! -> putting zusätze into 'propElems'
-        #propZuss.sort(key=lambda s: s[0].begin)
+        #sort those 3 sublists and check for enumerations and other sub-Spans
         lemmaSubs.sort(key=lambda s: s[0].begin)
-        lemmaSubs = [check_for_sub_elems(cas, s) for s in lemmaSubs]
+        lemmaSubs = [getTuplesForSpan_imperative(cas, s) for [s] in lemmaSubs]
         propNargs.sort(key=lambda s: s[0].begin)
-        propNargs = [check_for_sub_elems(cas, s) for s in propNargs]
-        propElems = [check_for_sub_elems(cas, s) for s in propElems]
+        propNargs = [getTuplesForSpan_imperative(cas, s) for [s] in propNargs]
+        propElems = [getTuplesForSpan_imperative(cas, s) for [s] in propElems]
         propElems.sort(key=key_elemType)
         
         subLemmata = list(itertools.product(*lemmaSubs))
@@ -615,7 +634,7 @@ for inceptionDocId in tqdm(range(1,120)):
         #print(f'{lemmaProducts=:<15}{propNargsProducts=:<15}{numPropElems=:<15}')
         #print(f'min number of infos:    {minNumInfos}')
         
-        partProps = makePartProps(subLemmata, propZuss, propNargs, propElems)
+        partProps = makePartProps(subLemmata, propNargs, propElems)
         if len(partProps)<minNumInfos:
             warnings.warn_explicit(f'The calculated number of infos ({len(partProps)}) is below the expected amount (min. {minNumInfos})! ({inceptionDocId=}, predHead number {i_pred})', UserWarning, getframeinfo(currentframe()).filename, getframeinfo(currentframe()).lineno-2)
         
@@ -651,7 +670,7 @@ for inceptionDocId in tqdm(range(1,120)):
         
         #save propositions on disc
         df = pd.DataFrame(partPropStrs)
-        df.to_csv("partPropStrs.csv", mode='a', header=False, index=False)
+        df.to_csv("data/partPropStrs_corrections.csv", mode='a', header=False, index=False)
         
         
 """    
